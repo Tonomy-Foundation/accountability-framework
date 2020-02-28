@@ -1,0 +1,6 @@
+FROM eostudio/eos:v2.0.3
+WORKDIR $HOME
+ADD ./
+RUN start_nodeos.sh
+RUN activate_features.sh
+RUN stop_nodeos.sh

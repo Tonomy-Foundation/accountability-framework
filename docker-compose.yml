@@ -1,0 +1,29 @@
+version: '3'
+services:
+  eosio:
+    image: eostudio/eos:v2.0.3
+    ports:
+      - "8888"
+    volumes:
+      - repo
+  mongo:
+    image: mongo
+    ports:
+      - "27017"
+  back-end:
+    image: node
+    ports:
+      - "3000"
+    volumes:
+      - repo
+  front-end:
+    image: node
+    ports:
+      - "3100"
+    volumes:
+      - repo
+volumes:
+  repo:
+    - type: volume
+      source: ./
+      target: ./
