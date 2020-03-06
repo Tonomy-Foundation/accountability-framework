@@ -1,7 +1,16 @@
 FROM eostudio/eos:v2.0.3
 
+
 # RUN ADD WORKDIR
+RUN mkdir /var/config
 
-ADD ./blockchain/config.ini /var/config/config.ini
+ADD ./config.ini /var/config/config.ini
 
-CMD nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config
+# Shut down eosio gracefully to prevent need for replay
+ADD docker-stop-cleanup.sh /var/docker-stop-cleanup.sh
+RUN chmod u+x /var/docker-stop-cleanup.sh
+ENTRYPOINT [ "sh", "-c", "/var/docker-stop-cleanup.sh"]
+
+#CMD nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config --disable-replay-opts --replay-blockchain
+
+#CMD sleep 10
