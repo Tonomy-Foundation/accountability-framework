@@ -1,12 +1,15 @@
 version: '3'
 services:
+  eosio-cdt:
+    image: eostudio/eosio.cdt:v1.7.0
+    container_name: "eosio-cdt"
+    volumes:
+      - ./:/var/repo
   eosio:
     build:
       context: ./blockchain
       dockerfile: Dockerfile-eosio
-    # image: eostudio/eos:v2.0.3
     container_name: "eosio"
-    # stop_grace_period: 1m
     ports:
       - 8888:8888
     volumes:

@@ -4,6 +4,8 @@ App to ...
 
 ## Prerequisites
 
+Git (https://git.com)
+
 Install [Docker](https://www.docker.com/) on your system.
 
 * [Install instructions](https://docs.docker.com/installation/mac/) for Mac OS X
