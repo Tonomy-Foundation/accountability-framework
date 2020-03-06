@@ -1,0 +1,7 @@
+FROM eostudio/eos:v2.0.3
+
+# RUN ADD WORKDIR
+
+ADD ./blockchain/config.ini /var/config/config.ini
+
+CMD nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config

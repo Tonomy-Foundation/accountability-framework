@@ -1,12 +1,16 @@
 version: '3'
 services:
-  # eosio:
-  #   image: eostudio/eos:v2.0.3
-  #   container_name: "eosio"
-  #   ports:
-  #     - 8888:8888
-  #   volumes:
-  #     - ./:/var/repo
+  eosio:
+    build:
+      context: ./scripts
+      dockerfile: Dockerfile-eosio
+    # image: eostudio/eos:v2.0.3
+    container_name: "eosio"
+    ports:
+      - 8888:8888
+    volumes:
+      - ./:/var/repo
+      - ./temp/eosio:/data
   # mongo:
   #   image: mongo:latest
   #   container_name: "mongodb"
@@ -19,14 +23,13 @@ services:
   #     - MONGODB_PASS="pass"
   #   volumes:
   #     - ./temp/mongo:/data
-  back-end:
-    image: node
-    container_name: "back-end"
-    ports:
-      - 3000:3000
-    volumes:
-     - ./:/var/repo
-    working_dir: /var/repo/back-end
-    command:
-      sh -c 'npm start'
-# 
+  # back-end:
+  #   image: node
+  #   container_name: "back-end"
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #    - ./:/var/repo
+  #   working_dir: /var/repo/back-end
+  #   command:
+  #     sh -c 'npm start'
