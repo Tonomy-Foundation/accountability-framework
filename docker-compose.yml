@@ -1,29 +1,26 @@
 version: '3'
 services:
-  eosio:
-    image: eostudio/eos:v2.0.3
-    ports:
-      - "8888"
-    volumes:
-      - repo
+  # eosio:
+  #   image: eostudio/eos:v2.0.3
+  #   ports:
+  #     - 8888:8888
+  #   volumes:
+  #     - ./:/var/repo
   mongo:
-    image: mongo
+    image: mongo:latest
+    container_name: "mongodb"
     ports:
-      - "27017"
-  back-end:
-    image: node
-    ports:
-      - "3000"
+      - 27017:27017
+    environment:
+      - MONGO_DATA_DIR=/data
+      - MONGO_LOG_DIR=/dev/null
+      - MONGODB_USER="user" 
+      - MONGODB_PASS="pass"
     volumes:
-      - repo
-  front-end:
-    image: node
-    ports:
-      - "3100"
-    volumes:
-      - repo
-volumes:
-  repo:
-    - type: volume
-      source: ./
-      target: ./
+      - ./temp:/data
+  # back-end:
+  #   image: node
+  #   ports:
+  #     - 3000
+  #   volumes:
+  #     - ./:~/repo
