@@ -16,11 +16,11 @@ Install [Docker Compose](http://docs.docker.com/compose/) on your system.
 
 'docker-compose build'
 
-* If you install new software dependancies you may need to build again
+* If you install new software dependancies you may need to stop and build again
 
 ## Run
 
-'docker-compose up'
+'docker-compose up -d'
 
 
 ## Stop

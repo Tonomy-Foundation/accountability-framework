@@ -3,7 +3,18 @@ FROM eostudio/eos:v2.0.3
 
 # RUN ADD WORKDIR
 RUN mkdir /var/config
+RUN mkdir /var/eosio
 
 ADD ./config.ini /var/config/config.ini
 
-CMD nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config --disable-replay-opts
+WORKDIR /var/eosio
+RUN wget -o /var/eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb https://github.com/EOSIO/eosio.cdt/releases/download/v1.7.0/eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb
+RUN dpkg -i ./eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb
+
+RUN apt update && apt install git -y
+RUN git clone --branch add-boot-contract https://github.com/EOSIO/eosio.contracts.git
+
+ADD ./install_eosio_features.sh ./install_eosio_features.sh
+RUN ./install_eosio_features.sh
+
+CMD nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config --disable-replay-opts >> nodeos.log 2>&1 &
