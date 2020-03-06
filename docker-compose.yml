@@ -6,21 +6,21 @@ services:
   #     - 8888:8888
   #   volumes:
   #     - ./:/var/repo
-  mongo:
-    image: mongo:latest
-    container_name: "mongodb"
-    ports:
-      - 27017:27017
-    environment:
-      - MONGO_DATA_DIR=/data
-      - MONGO_LOG_DIR=/dev/null
-      - MONGODB_USER="user" 
-      - MONGODB_PASS="pass"
-    volumes:
-      - ./temp:/data
-  # back-end:
-  #   image: node
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: "mongodb"
   #   ports:
-  #     - 3000
+  #     - 27017:27017
+  #   environment:
+  #     - MONGO_DATA_DIR=/data
+  #     - MONGO_LOG_DIR=/dev/null
+  #     - MONGODB_USER="user" 
+  #     - MONGODB_PASS="pass"
   #   volumes:
-  #     - ./:~/repo
+  #     - ./temp/mongo:/data
+  back-end:
+    image: node
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/var/repo
