@@ -2,6 +2,7 @@ version: '3'
 services:
   # eosio:
   #   image: eostudio/eos:v2.0.3
+  #   container_name: "eosio"
   #   ports:
   #     - 8888:8888
   #   volumes:
@@ -20,7 +21,12 @@ services:
   #     - ./temp/mongo:/data
   back-end:
     image: node
+    container_name: "back-end"
     ports:
       - 3000:3000
     volumes:
-      - ./:/var/repo
+     - ./:/var/repo
+    working_dir: /var/repo/back-end
+    command:
+      sh -c 'npm start'
+# 
