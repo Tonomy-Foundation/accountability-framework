@@ -25,4 +25,6 @@ Install [Docker Compose](http://docs.docker.com/compose/) on your system.
 
 ## Stop
 
-'docker-compose down'
+'docker exec -it eosio pkill nodeos && docker-compose down'
+
+If you do not stop nodeos (eosio) properly then you may need to replay the blockchain #TODO
