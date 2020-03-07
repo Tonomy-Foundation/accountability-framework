@@ -4,7 +4,7 @@ App to ...
 
 ## Prerequisites
 
-Git (https://git.com)
+Linux or Mac
 
 Install [Docker](https://www.docker.com/) on your system.
 
