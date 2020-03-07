@@ -11,4 +11,6 @@ cd ../contracts/eosio.boot
 # allow for block production to start
 sleep 10
 
-docker exec -it eosio /bin/bash /var/repo/blockchain/init.sh
+docker exec -it eosio /bin/bash /var/repo/blockchain/activate_features.sh
+
+dock-compose up -d

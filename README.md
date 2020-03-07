@@ -20,10 +20,17 @@ Install [Docker Compose](http://docs.docker.com/compose/) on your system.
 
 * If you install new software dependancies you may need to stop and build again
 
+## Initialize and reset blockchain
+
+Do this before first run to initialize blockchain
+
+And also use if you need to reset the blockchain
+
+`./blockchain/init_reset_eosio.sh`
+
 ## Run
 
 'docker-compose up -d'
-
 
 ## Stop
 
