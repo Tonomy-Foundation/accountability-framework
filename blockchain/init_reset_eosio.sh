@@ -1,8 +1,11 @@
 #!/bin/bash
-nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config --disable-replay-opts --plugin eosio::producer_api_plugin >> nodeos.log 2>&1 &
+rm /data/data-dir -R
+
+git clone --branch add-boot-contract https://github.com/EOSIO/eosio.contracts.git
 
 # allow for block production to start
-sleep 20
+sleep 15
+docker run -it eosio-cdt cd ./eosio.contracts/contracts/eosio.boot && eosio-cpp -abigen -I include -R resource -contract eosio.boot -o eosio.boot.wasm src/eosio.boot.cpp
 
 # Create a new wallet with the eosio and other keys
 cleos wallet create --file ./wallet.txt

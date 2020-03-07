@@ -1,19 +1,7 @@
 FROM eostudio/eos:v2.0.3
 
 RUN mkdir /var/config
-RUN mkdir /var/eosio
 
 ADD ./config.ini /var/config/config.ini
 
-#WORKDIR /var/eosio
-#RUN apt update && apt install git -y
-#RUN git clone --branch add-boot-contract https://github.com/EOSIO/eosio.contracts.git
-#WORKDIR ./eosio.contracts/contracts/eosio.boot
-#RUN eosio-cpp -abigen -I include -R resource -contract eosio.boot -o eosio.boot.wasm src/eosio.boot.cpp
-
-
-#WORKDIR /var/eosio
-#ADD ./install_eosio_features.sh ./install_eosio_features.sh
-#RUN ./install_eosio_features.sh
-
-CMD nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config --disable-replay-opts
+CMD nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config --disable-replay-opts >> /data/nodeos.log 2>&1
