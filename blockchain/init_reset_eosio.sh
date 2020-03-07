@@ -12,5 +12,3 @@ cd ../contracts/eosio.boot
 sleep 10
 
 docker exec -it eosio /bin/bash /var/repo/blockchain/activate_features.sh
-
-dock-compose up -d
