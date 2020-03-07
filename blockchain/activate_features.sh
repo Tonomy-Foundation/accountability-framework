@@ -31,17 +31,18 @@ cleos wallet import --private-key 5KHnMjLZ1jk2ScP4eGHufa8S6SJUSJWTpUqKgsGycVGxHZ
 cleos create account eosio yvo EOS7bNT2DxZVdH2kEoZFkeuWA5KoT5koDW8aeSzczPHSF4EX8WxQs
 
 # Create some other entities
+PERMISSION1='{"permission":{"actor":"'
+PERMISSION2='","permission":"'
+PERMISSION3='"},"weight":1}'    
+addPerson() {
+    PERMISSION=$PERMISSION1$1$PERMISSION2$2$PERMISSION3
+}
 app() {
-    PERMISSION1='{"permission":{"actor":"'
-    PERMISSION2='","permission":"'
-    PERMISSION3='"},"weight":1}'
-    DATA1='{"creator":"jack","name":"app","owner":{"threshold":1,"keys":[],"accounts":['
+    DATA1='{"creator":"jack","name":"app","owner":{"threshold":2,"keys":[],"accounts":['
     DATA2='],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":['
     DATA3='],"waits":[]}}'
     DATA=$DATA1
-    addPerson() {
-        PERMISSION=$PERMISSION1$1$PERMISSION2$2$PERMISSION3
-    }
+    
     addPerson "jack" "active"
     DATA=$DATA$PERMISSION','
     addPerson "kirsten" "active"
@@ -60,3 +61,13 @@ app() {
 
 app
 cleos push action eosio "newaccount" $DATA -p jack@active
+
+gov() {
+    DATA1='{"creator":"yvo","name":"gov","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"yvo","permission":"owner"},"weight":1}],'
+    DATA2='"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"yvo","permission":"active"},"weight":1}],"waits":[]}}'
+    DATA=$DATA1$DATA2
+    echo $DATA
+}
+
+gov
+cleos push action eosio "newaccount" $DATA -p yvo@active
