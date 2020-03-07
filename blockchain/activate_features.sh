@@ -24,15 +24,6 @@ cleos create account eosio jack EOS7Jj43XvkrBiNw8Q6zUECcGK9ktbMv8jz6Vjn1qAid9338
 cleos wallet import --private-key 5Kbbe6k8TT5ejHVvy4iiy2qQvt3MF43oMF7j6GqiQ6FHRT1fVLz
 cleos create account eosio kirsten EOS57RkHk6FVCstEPJbm3ezfJ9wSGtKytvx4fZGj72qHEbHvQjy4j
 
-cleos wallet import --private-key 5JhF3wh9QJBKp5KdczJwBDjLqGi9c6LdJuf1Nz1bjmsp8hsh3vA
-cleos create account eosio john EOS6YTGETTAWFkqvfsBb9EGmygjjymaTm269bC76ztP5WmfeTYWYr
-
-cleos wallet import --private-key 5JdxENXYpURenv7FXv4U1opRizoLkPcv3Tx7UwQ8vhHgntrVhT5
-cleos create account eosio gangadhar EOS8HyxBjq6WDyM8dTLRFFPER327uuSXvet8RqpARmSHm5dYKzvW3
-
-cleos wallet import --private-key 5J6AF1Fpib9GmmGb9WX6GyzV3ZX6z1nmrQafxYqrE9PJ1LY28KW
-cleos create account eosio chris EOS8A41tHe4yyapZiu6dFU65pdbGhVfTPjL5b6iBREnxUXGBqjofc
-
 cleos wallet import --private-key 5JJY2YCoMRVVFrYv8SffzdjcvVneFqHWKRz2DsZRBfEZjRWNgEM
 cleos create account eosio matej EOS59cUZp45bh7hX2Q6V9ebCdBShQXmr14ANG1VZ55mESLipeCsCE
 
@@ -52,29 +43,17 @@ app() {
         PERMISSION=$PERMISSION1$1$PERMISSION2$2$PERMISSION3
     }
     addPerson "jack" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "kirsten" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "john" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "gangadhar" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "chris" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "matej" "active"
+    DATA=$DATA$PERMISSION','
+    addPerson "kirsten" "active"
+    DATA=$DATA$PERMISSION','
+    addPerson "matej" "active"
     DATA=$DATA$PERMISSION$DATA2
     
     addPerson "jack" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "kirsten" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "john" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "gangadhar" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "chris" "active"
-    # DATA=$DATA$PERMISSION','
-    # addPerson "matej" "active"
+    DATA=$DATA$PERMISSION','
+    addPerson "kirsten" "active"
+    DATA=$DATA$PERMISSION','
+    addPerson "matej" "active"
     DATA=$DATA$PERMISSION$DATA3
     echo $DATA
 }
