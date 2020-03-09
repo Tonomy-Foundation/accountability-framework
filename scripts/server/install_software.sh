@@ -11,4 +11,4 @@ sudo usermod -aG docker ${USER}
 # May need to reboot machine for sudo usermod to take effects
 
 # node
-sudo apt install npm -y
+sudo apt install nodejs npm -y
