@@ -50,4 +50,4 @@ services:
       - ./temp/front-end:/data
     working_dir: /var/repo/front-end
     command:
-      sh -c 'npm start >> /data/nodejs.log 2>&1'
+      sh -c 'npm start >> /data/react.log 2>&1'

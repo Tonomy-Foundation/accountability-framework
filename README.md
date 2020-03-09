@@ -4,7 +4,7 @@ App to ...
 
 ## Prerequisites
 
-Linux or Mac
+Linux debian distribution
 
 Install [Docker](https://www.docker.com/) on your system.
 
@@ -16,7 +16,7 @@ Install [Docker Compose](http://docs.docker.com/compose/) on your system.
 
 ## Build
 
-'docker-compose build'
+`docker-compose build`
 
 * If you install new software dependancies you may need to stop and build again
 
@@ -34,10 +34,11 @@ Do this if you need to reset the blockchain state
 
 If new packages are installed then stop docker-compose, and run again.
 
-'docker-compose up -d'
+`docker-compose up -d`
 
 ## Stop
 
-'docker exec -it eosio pkill nodeos && docker-compose down'
+`docker exec -it eosio pkill nodeos`
+`docker-compose down`
 
 If you do not stop nodeos (eosio) properly then you may need to replay the blockchain #TODO
