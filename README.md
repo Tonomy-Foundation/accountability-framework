@@ -16,6 +16,7 @@ Install [Docker Compose](http://docs.docker.com/compose/) on your system.
 
 ## Build
 
+(may require `sudo`)
 'docker-compose build'
 
 * If you install new software dependancies you may need to stop and build again
@@ -30,6 +31,8 @@ And also use if you need to reset the blockchain
 
 ## Run
 
+Ensure that `npm install` has been run in all node project folders. If new packages are installed then stop docker-compose, and run again with scripts from this readme.
+(may require `sudo`)
 'docker-compose up -d'
 
 ## Stop

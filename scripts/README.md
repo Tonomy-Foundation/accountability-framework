@@ -15,6 +15,10 @@ Custom  TCP 9418  git
 
 ## CloudFront
 New CloudFront distribution
+- Origin: ec2 instance url
 - Origin Protocol Policy: HTTP only
 - HTTP port: 8888
 - Allowed HTTP Methods: GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE
+
+You can now connect with block explorer
+`https://local.bloks.io/?nodeUrl=du0rtkac8px3u.cloudfront.net&systemDomain=eosio`

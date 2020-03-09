@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# Use on server
-sudo apt update
-sudo apt install docker-compose -y
+# Ubuntu 18 machine
 
-# Use locally for Ubuntu 18 machine
 # Docker
 sudo apt update
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
@@ -21,3 +18,7 @@ sudo usermod -aG docker ${USER}
 sudo curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
+
+
+# node
+sudo apt install nodejs npm -y

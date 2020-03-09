@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd $HOME
 git clone https://github.com/Conscious-Cities/eosio-react-app.git
 cat eosio-react-app/scripts/keys/ec2-ssh.pub >> ~/.ssh/authorized_keys
 
@@ -11,5 +12,5 @@ git init --bare
 
 git worktree add $HOME/project.git-working-tree master
 
-cp $HOME/eosio-react-app/scripts/post-receive $HOME/project.git/hooks/
+cp $HOME/eosio-react-app/scripts/server/post-receive $HOME/project.git/hooks/
 chmod +x $HOME/project.git/hooks/post-receive

@@ -15,20 +15,20 @@ services:
     volumes:
       - ./:/var/repo
       - ./temp/eosio:/data
-  mongo:
-    image: mongo:latest
-    container_name: "mongodb"
-    ports:
-      - 27017:27017
-    environment:
-      - MONGO_DATA_DIR=/data
-      - MONGO_LOG_DIR=/dev/null
-      - MONGODB_USER="user" 
-      - MONGODB_PASS="pass"
-    volumes:
-      - ./temp/mongo:/data
-    command:
-      sh -c 'mongod >> /data/mongod.log 2>&1'
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: "mongodb"
+  #   ports:
+  #     - 27017:27017
+  #   environment:
+  #     - MONGO_DATA_DIR=/data
+  #     - MONGO_LOG_DIR=/dev/null
+  #     - MONGODB_USER="user" 
+  #     - MONGODB_PASS="pass"
+  #   volumes:
+  #     - ./temp/mongo:/data
+  #   command:
+  #     sh -c 'mongod >> /data/mongod.log 2>&1'
   back-end:
     image: node
     container_name: "back-end"

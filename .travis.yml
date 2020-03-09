@@ -3,6 +3,6 @@
 deploy:
   - provider: script
     script:
-      - git push ec2 master
+      - git push -u ec2 master
     on:
       branch: master
