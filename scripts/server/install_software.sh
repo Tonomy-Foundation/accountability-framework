@@ -10,5 +10,6 @@ sudo apt install docker-compose -y
 sudo usermod -aG docker ${USER}
 # May need to reboot machine for sudo usermod to take effects
 
-# node
-sudo apt install nodejs npm -y
+# nvm with latest node and npm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+nvm install node

@@ -19,6 +19,6 @@ sudo curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-c
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
-
-# node
-sudo apt install nodejs npm -y
+# nvm with latest node and npm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+nvm install node
