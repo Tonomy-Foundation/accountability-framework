@@ -16,23 +16,24 @@ Install [Docker Compose](http://docs.docker.com/compose/) on your system.
 
 ## Build
 
-(may require `sudo`)
 'docker-compose build'
 
 * If you install new software dependancies you may need to stop and build again
 
-## Initialize and reset blockchain
+## Initialize npm projects and blockchain
 
-Do this before first run to initialize blockchain
+Do this before running the first time:
 
-And also use if you need to reset the blockchain
+`./initialize.sh`
+
+Do this if you need to reset the blockchain state
 
 `./blockchain/init_reset_eosio.sh`
 
 ## Run
 
-Ensure that `npm install` has been run in all node project folders. If new packages are installed then stop docker-compose, and run again with scripts from this readme.
-(may require `sudo`)
+If new packages are installed then stop docker-compose, and run again.
+
 'docker-compose up -d'
 
 ## Stop
