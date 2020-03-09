@@ -3,6 +3,6 @@
 deploy:
   - provider: script
     script:
-      - git push -u ec2 master
+      - echo "running CI script"
     on:
       branch: master
