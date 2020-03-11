@@ -2,6 +2,24 @@
 
 namespace eosiobios {
 
+void bios::newaccount( name creator, name name, ignore<authority> owner, ignore<authority> active) {
+   // require_auth(creator); // this is done implicity in apply_eosio_newaccount()...
+
+   // This action can only be called by inline action from the eosio account
+   check(eosio::get_sender() == get_self(), "cannot call newaccount() directly");
+}
+
+void bios::newperson( name creator, name name, authority owner, authority active) {
+   // call newaccount() usnig it's action wrapper
+}
+
+void bios::newentity( name creator, name name, authority owner, authority active) {
+   // check that the owner and active authority do not have any cryptographic keys in them. only linked accounts
+   // do not worry about "wait" type permissions, it is goingg to be depreciated
+
+   // call newaccount() usnig it's action wrapper
+}
+
 void bios::setabi( name account, const std::vector<char>& abi ) {
    abi_hash_table table(get_self(), get_self().value);
    auto itr = table.find( account.value );
