@@ -104,7 +104,22 @@ namespace eosiobios {
          void newaccount( name             creator,
                           name             name,
                           ignore<authority> owner,
-                          ignore<authority> active){}
+                          ignore<authority> active);
+
+         [[eosio::action]]
+         void newperson( name       creator,
+                          name      name,
+                          authority owner,
+                          authority active);
+
+         [[eosio::action]]
+         void newentity(  name      creator,
+                          name      name,
+                          authority owner,
+                          authority active);
+
+
+
          /**
           * Update authorization action updates pemission for an account.
           *
