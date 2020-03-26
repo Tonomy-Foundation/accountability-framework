@@ -10,14 +10,15 @@ void bios::newaccount( name creator, name name, ignore<authority> owner, ignore<
 }
 
 void bios::newperson( name creator, name name, authority owner, authority active) {
-   // call newaccount() usnig it's action wrapper
+   bios::newaccount_action modaction("eosio"_n, {get_self(), "active"_n});
+   modaction.send(creator, name, owner, active);
 }
 
 void bios::newentity( name creator, name name, authority owner, authority active) {
-   // check that the owner and active authority do not have any cryptographic keys in them. only linked accounts
-   // do not worry about "wait" type permissions, it is goingg to be depreciated
-
-   // call newaccount() usnig it's action wrapper
+   check(owner.keys.size()!=0 , "Owner should not contains keys");
+   check(active.keys.size()!=0 , "active should not contains keys");
+   bios::newaccount_action modaction("eosio"_n, {get_self(), "active"_n});
+   modaction.send(creator, name, owner, active);
 }
 
 void bios::setabi( name account, const std::vector<char>& abi ) {
