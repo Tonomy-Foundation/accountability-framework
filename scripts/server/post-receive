@@ -6,6 +6,7 @@ echo "Server script started"
 cd $HOME/project.git-working-tree
 
 ls
-git pull $HOME/project.git devops
+#git pull $HOME/project.git devops
+git pull origin
 
 echo "Server script competed"
