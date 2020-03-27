@@ -10,7 +10,7 @@ git init --bare
 
 # NOW RUN configure_git_local.sh
 
-git worktree add $HOME/project.git-working-tree master
+git worktree add $HOME/project.git-working-tree devops
 
 cp $HOME/eosio-react-app/scripts/server/post-receive $HOME/project.git/hooks/
 chmod +x $HOME/project.git/hooks/post-receive

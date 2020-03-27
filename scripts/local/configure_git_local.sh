@@ -11,6 +11,6 @@ ssh-add ../keys/ec2-ssh
 
 git remote remove ec2
 git remote add ec2 "ubuntu@"$SERVER_DOMAIN":/home/ubuntu/project.git"
-git push -u ec2 master
+git push -u ec2 devops
 
 # RUN 2ND PART OF configure_git_server.sh
