@@ -8,16 +8,16 @@ echo "git stash"
 git --work-tree=$HOME/working-tree-project.git stash
 git --work-tree=$HOME/working-tree-project.git status
 
-echo "git checkout -f devops"
-git --work-tree=$HOME/working-tree-project.git checkout -f devops
-git --work-tree=$HOME/working-tree-project.git status
+# echo "git checkout -f devops"
+# git --work-tree=$HOME/working-tree-project.git checkout -f devops
+# git --work-tree=$HOME/working-tree-project.git status
 
-echo "git reset devops"
-git --work-tree=$HOME/working-tree-project.git reset devops
-git --work-tree=$HOME/working-tree-project.git status
+# echo "git reset devops"
+# git --work-tree=$HOME/working-tree-project.git reset devops
+# git --work-tree=$HOME/working-tree-project.git status
 
-echo "git checkout -f devops"
-git --work-tree=$HOME/working-tree-project.git checkout -f devops
-git --work-tree=$HOME/working-tree-project.git status
+# echo "git checkout -f devops"
+# git --work-tree=$HOME/working-tree-project.git checkout -f devops
+# git --work-tree=$HOME/working-tree-project.git status
 
 echo "Server script competed"
