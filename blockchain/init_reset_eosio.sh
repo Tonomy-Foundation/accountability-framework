@@ -8,6 +8,9 @@ docker-compose up -d
 cd ../contracts/eosio.boot
 ./build.sh
 
+cd ../contracts/eosio.bios.default
+./build.sh
+
 # allow for block production to start
 sleep 10
 
