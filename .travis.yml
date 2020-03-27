@@ -3,7 +3,6 @@ language: shell
 deploy:
   provider: script
   script:
-    - ls
     - ./scripts/local/configure_git_local.sh
   on:
     branch: devops
