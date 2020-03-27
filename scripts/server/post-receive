@@ -1,12 +1,17 @@
 #!/bin/sh
 
-ls
 echo "Server script started"
 
-cd $HOME/project.git-working-tree
+cd $HOME/eosio-react-app
 
-ls
-#git pull $HOME/project.git devops
-git pull origin
+echo "ls -la"
+ls -la
+
+echo "git remote -v"
+git remote -v
+
+echo "git pull origin"
+#git pull origin
+git pull $HOME/project.git devops
 
 echo "Server script competed"
