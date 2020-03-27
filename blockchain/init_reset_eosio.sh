@@ -8,7 +8,10 @@ docker-compose up -d
 cd ../contracts/eosio.boot
 ./build.sh
 
-# allow for block production to start
-sleep 10
+cd ../eosio.bios.default
+./build.sh
 
-docker exec -it eosio /bin/bash /var/repo/blockchain/activate_features.sh
+# allow for block production to start
+sleep 5
+
+docker-compose exec eosio /bin/bash /var/repo/blockchain/activate_features.sh
