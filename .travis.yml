@@ -3,6 +3,6 @@ language: shell
 deploy:
   provider: script
   script:
-    - bash scripts/server/deploy.sh
+    - git push ec2 master
   on:
-    branch: master
+    branch: devops
