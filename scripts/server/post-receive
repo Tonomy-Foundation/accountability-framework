@@ -4,6 +4,9 @@
 
 echo "Server script started"
 
+
+
+
 #echo "git stash"
 #git --work-tree=$HOME/working-tree-project.git stash
 #git --work-tree=$HOME/working-tree-project.git status
