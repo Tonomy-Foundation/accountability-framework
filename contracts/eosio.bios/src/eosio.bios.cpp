@@ -14,9 +14,10 @@ void bios::newperson( name creator, name name, authority owner, authority active
    modaction.send(creator, name, owner, active);
 }
 
-void bios::newentity( name creator, name name, authority owner, authority active) {
+void bios::neworg( name creator, name name, authority owner, authority active) {
    check(owner.keys.size()!=0 , "Owner should not contains keys");
    check(active.keys.size()!=0 , "active should not contains keys");
+   
    bios::newaccount_action modaction("eosio"_n, {get_self(), "active"_n});
    modaction.send(creator, name, owner, active);
 }

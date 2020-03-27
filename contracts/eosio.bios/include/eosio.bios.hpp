@@ -113,7 +113,7 @@ namespace eosiobios {
                           authority active);
 
          [[eosio::action]]
-         void newentity(  name      creator,
+         void neworg(  name      creator,
                           name      name,
                           authority owner,
                           authority active);
