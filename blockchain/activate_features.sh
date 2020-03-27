@@ -3,7 +3,7 @@
 . /var/repo/config.sh
 
 # Create a new wallet with the eosio and other keys
-cleos wallet create --file ./data/wallet.txt
+cleos wallet create --file /data/wallet.txt
 
 # import eosio
 echo $PKEY_EOSIO

@@ -12,6 +12,6 @@ cd ../eosio.bios.default
 ./build.sh
 
 # allow for block production to start
-sleep 10
+sleep 5
 
-docker exec -it eosio /bin/bash /var/repo/blockchain/activate_features.sh
+docker-compose exec eosio /bin/bash /var/repo/blockchain/activate_features.sh
