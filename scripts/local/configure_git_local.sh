@@ -7,8 +7,10 @@ eval "$(ssh-agent -s)"
 chmod 400 ../keys/ec2-ssh
 ssh-add ../keys/ec2-ssh
 
+. ../../config.sh
+
 git remote remove ec2
-git remote add ec2 ubuntu@ec2-18-130-79-63.eu-west-2.compute.amazonaws.com:/home/ubuntu/project.git/
+git remote add ec2 "ubuntu@"$SERVER_DOMAIN":/home/ubuntu/project.git"
 git push -u ec2 master
 
 # RUN 2ND PART OF configure_git_server.sh

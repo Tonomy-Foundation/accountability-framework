@@ -64,12 +64,18 @@ app() {
 app
 cleos push action eosio "newaccount" $DATA -p jack@active
 
-gov() {
-    DATA1='{"creator":"yvo","name":"gov","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"yvo","permission":"owner"},"weight":1}],'
-    DATA2='"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"yvo","permission":"active"},"weight":1}],"waits":[]}}'
-    DATA=$DATA1$DATA2
-    echo $DATA
-}
 
-gov
+DATA='{"creator":"yvo","name":"gov","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"yvo","permission":"owner"},"weight":1}],waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"yvo","permission":"active"},"weight":1}],"waits":[]}}'
 cleos push action eosio "newaccount" $DATA -p yvo@active
+
+DATA='{"creator":"jack","name":"test1","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"jack","permission":"owner"},"weight":1}],waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"jack","permission":"active"},"weight":1}],"waits":[]}}'
+cleos push action eosio "newaccount" $DATA -p jack@active
+
+DATA='{"creator":"jack","name":"test2","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"jack","permission":"owner"},"weight":1}],waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"jack","permission":"active"},"weight":1}],"waits":[]}}'
+cleos push action eosio "newaccount" $DATA -p jack@active
+
+DATA='{"creator":"jack","name":"test3","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"jack","permission":"owner"},"weight":1}],waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"jack","permission":"active"},"weight":1}],"waits":[]}}'
+cleos push action eosio "newaccount" $DATA -p jack@active
+
+DATA='{"creator":"jack","name":"test4","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"jack","permission":"owner"},"weight":1}],waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"jack","permission":"active"},"weight":1}],"waits":[]}}'
+cleos push action eosio "newaccount" $DATA -p jack@active
