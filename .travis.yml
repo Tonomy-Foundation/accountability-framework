@@ -3,7 +3,7 @@ language: shell
 deploy:
   provider: script
   script:
-    - git remote -v
-    - git push ec2 devops
+    - ls
+    - ./scripts/local/configure_git_local.sh
   on:
     branch: devops

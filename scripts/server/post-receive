@@ -3,8 +3,10 @@
 echo "Server script started"
 
 cd ../project.git-working-tree
-
+ls
+echo ""
 echo "going to project.git"
+ls
 git pull ../project.git devops
 
 echo "Server script competed"
