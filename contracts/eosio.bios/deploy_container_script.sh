@@ -3,18 +3,18 @@
 DEPLOY_ACCOUNT=$1
 NODE_LOCATION=$2
 
+info() {
+    echo "Usage: deploy.sh account local||server"
+    echo "e.g. deploy.sh test1 local"
+    echo "e.g. deploy.sh test2 server"
+    exit 1
+}
 if [ "$DEPLOY_ACCOUNT" = "" ]
 then
-    echo "Usage: deploy.sh account local||server"
-    echo "e.g. deploy.sh test1 local"
-    echo "e.g. deploy.sh test2 server"
-    exit 1
+    info()    
 elif [ "$NODE_LOCATION" != "local" ] && [ "$NODE_LOCATION" != "server" ]
 then
-    echo "Usage: deploy.sh account local||server"
-    echo "e.g. deploy.sh test1 local"
-    echo "e.g. deploy.sh test2 server"
-    exit 1
+    info()
 fi
 
 . /var/repo/config.sh
