@@ -2,9 +2,9 @@
 
 echo "Server script started"
 
-ls
 cd ../project.git-working-tree
-ls
-git pull ../project.git
+
+echo "going to project.git"
+git pull ../project.git devops
 
 echo "Server script competed"
