@@ -4,6 +4,7 @@
 
 echo "Server script started"
 
+
 echo "git reset devops"
 git --work-tree=$HOME/working-tree-project.git reset devops
 
