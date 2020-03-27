@@ -16,7 +16,7 @@ cleos set contract eosio /var/repo/contracts/eosio.boot eosio.boot.wasm eosio.bo
 # Activate the WTMSIG_BLOCK_SIGNATURES feature for eosio.contract v1.9+
 cleos push action eosio activate '{"feature_digest":"299dcb6af692324b899b39f16d5a530a33062804e41f09dc97e9f156b4476707"}' -p eosio@active
 
-cleos set contract eosio /var/repo/contracts/eosio.boot.default eosio.bios.wasm eosio.bios.abi -p eosio@active
+cleos set contract eosio /var/repo/contracts/eosio.bios.default eosio.bios.wasm eosio.bios.abi -p eosio@active
 
 # Activate the GET_SENDER intrinsic
 cleos push action eosio activate '{"feature_digest":"f0af56d2c5a48d60a4a5b5c903edfb7db3a736a94ed589d0b797df33ff9d3e1d"}' -p eosio@active
@@ -70,7 +70,7 @@ OWNER="yvo"
 DATA='{"creator":"'$OWNER'","name":"gov","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"owner"},"weight":1}],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"active"},"weight":1}],"waits":[]}}'
 cleos push action eosio "newaccount" $DATA -p $OWNER"@active"
 
-OWNER="yvo"
+OWNER="jack"
 DATA='{"creator":"'$OWNER'","name":"test1","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"owner"},"weight":1}],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"active"},"weight":1}],"waits":[]}}'
 cleos push action eosio "newaccount" $DATA -p $OWNER"@active"
 
