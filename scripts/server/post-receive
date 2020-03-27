@@ -4,8 +4,7 @@
 
 echo "Server script started"
 
-
-
+cd $HOME/eosio-react-app
 
 #echo "git stash"
 #git --work-tree=$HOME/working-tree-project.git stash
