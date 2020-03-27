@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#https://gist.github.com/noelboss/3fe13927025b89757f8fb12e9066f2fa
+
 echo "Server script started"
 
 cd $HOME/eosio-react-app
@@ -13,5 +15,7 @@ git remote -v
 echo "git pull origin"
 #git pull origin
 git pull $HOME/project.git devops
+
+git --work-tree=$HOME/working-tree-project.git checkout -f devops
 
 echo "Server script competed"
