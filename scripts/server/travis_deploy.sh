@@ -6,7 +6,7 @@ cd "$PARENT_PATH"
 
 . ../../config.sh
 
-SCRIPT="cd eosio-react-app; git pull origin devops; ./start.sh"
+SCRIPT="cd eosio-react-app; git pull origin master; ./start.sh"
 echo $SCRIPT
 
 SSH_LOCATION="ubuntu@"$SERVER_DOMAIN
