@@ -15,13 +15,16 @@ Install script _should work_ for debian linux distributions
 
 Do this before running the first time or if you need to reset the blockchain. Note this will reset the blockchain state back to having a few accounts with all app history deleted.
 
-`./redeploy.sh`
+`./start.sh reset`
 
 ## Run
 
-IMPORTANT to run with the `-d` command!
+`./start.sh`
+
+or manually (important to run with the `-d` command)
 
 `docker-compose up -d`
+
 
 ## Stop
 
@@ -29,6 +32,4 @@ Note that BOTH commands are needed to safely stop the application, otherwise the
 
 `docker exec -it eosio pkill nodeos & docker-compose down`
 
-If the the blockchain nodeo does not exit properly then you may need to reset the blockchain (see "Initialize npm projects and blockchain")
-
-If new packages are installed then you may need to stop and run again.
+If the the blockchain nodeo does not exit properly then you may need to reset the blockchain (see "Initialize npm projects and blockchain").

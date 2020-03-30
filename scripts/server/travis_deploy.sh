@@ -10,7 +10,7 @@ eval "$(ssh-agent -s)"
 chmod 400 ../keys/ec2-ssh	
 ssh-add ../keys/ec2-ssh
 
-SCRIPT="cd eosio-react-app; git pull origin devops; ls; ./redeploy.sh"
+SCRIPT="cd eosio-react-app; git pull origin devops; ./start.sh"
 echo $SCRIPT
 
 ssh -o "StrictHostKeyChecking no" "ubuntu@"$SERVER_DOMAIN "${SCRIPT}"
