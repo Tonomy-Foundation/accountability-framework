@@ -6,11 +6,9 @@ cd "$PARENT_PATH"
 
 . ../../config.sh
 
-eval "$(ssh-agent -s)"	
-chmod 400 ../keys/ec2-ssh	
-ssh-add ../keys/ec2-ssh
-
 SCRIPT="cd eosio-react-app; git pull origin devops; ./start.sh"
 echo $SCRIPT
 
-ssh -o "StrictHostKeyChecking no" "ubuntu@"$SERVER_DOMAIN "${SCRIPT}"
+SSH_LOCATION="ubuntu@"$SERVER_DOMAIN
+chmod 400 ../keys/ec2.pem
+ssh -o "StrictHostKeyChecking no" -i ../keys/ec2.pem "ubuntu@"$SERVER_DOMAIN "${SCRIPT}"
