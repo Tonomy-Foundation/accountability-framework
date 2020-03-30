@@ -6,7 +6,6 @@
 cleos wallet create --file /data/wallet.txt
 
 # import eosio
-echo $PKEY_EOSIO
 cleos wallet import --private-key $PKEY_EOSIO
 
 # Enable protocol feature pre-activation PREACTIVATE_FEATURE for eosio.contract v1.8+

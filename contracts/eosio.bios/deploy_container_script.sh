@@ -22,7 +22,7 @@ fi
 WALLET_PASSWORD=$(</data/wallet.txt)
 cleos wallet unlock --password $WALLET_PASSWORD
 
-if [NODE_LOCATION != "local"]
+if [NODE_LOCATION == "local"]
 then
     NODE_URL="http://localhost:8888"
 else
