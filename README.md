@@ -4,38 +4,32 @@ App to ...
 
 ## Prerequisites
 
-Linux debian distribution
+- [Docker Compose](http://docs.docker.com/compose/)
+- [Nodejs and npm](https://nodejs.org) - suggested to use [nvm](https://github.com/nvm-sh/nvm)
 
-Install [Docker Compose](http://docs.docker.com/compose/) on your system.
-
-Install docker, nodejs and npm using scripts
+Install script _should work_ for debian linux distributions
 
 `./scripts/local/install_software.sh`
 
-or
+## Initialize project and reset blockchain
 
-`./scripts/server/install_software.sh`
+Do this before running the first time or if you need to reset the blockchain. Note this will reset the blockchain state back to having a few accounts with all app history deleted.
 
-## Initialize npm projects and blockchain
-
-Do this before running the first time
-
-`./initialize.sh`
-
-Do this if you need to reset the blockchain state
-
-`./blockchain/init_reset_eosio.sh`
+`./start.sh reset`
 
 ## Run
 
-If new packages are installed then stop docker-compose, and run again.
+`./start.sh`
+
+or manually (important to run with the `-d` command)
 
 `docker-compose up -d`
 
+
 ## Stop
 
-`docker exec -it eosio pkill nodeos`
+Note that BOTH commands are needed to safely stop the application, otherwise the blockchain node does not exit properly.
 
-`docker-compose down`
+`docker exec -it eosio pkill nodeos & docker-compose down`
 
-If you do not stop nodeos (eosio) properly then you may need to replay the blockchain #TODO
+If the the blockchain nodeo does not exit properly then you may need to reset the blockchain (see "Initialize npm projects and blockchain").

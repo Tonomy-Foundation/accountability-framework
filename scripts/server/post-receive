@@ -1,9 +1,0 @@
-#!/bin/sh
-
-echo "Server script started"
-
-cd ../project.git-working-tree
-git pull ../project.git
-./scripts/deploy.sh
-
-echo "Server script competed"
