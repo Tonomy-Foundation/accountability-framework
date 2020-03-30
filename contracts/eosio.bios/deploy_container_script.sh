@@ -11,10 +11,10 @@ info() {
 }
 if [ "$DEPLOY_ACCOUNT" = "" ]
 then
-    info()    
+    info
 elif [ "$NODE_LOCATION" != "local" ] && [ "$NODE_LOCATION" != "server" ]
 then
-    info()
+    info
 fi
 
 . /var/repo/config.sh
@@ -22,10 +22,11 @@ fi
 WALLET_PASSWORD=$(</data/wallet.txt)
 cleos wallet unlock --password $WALLET_PASSWORD
 
-if [NODE_LOCATION == "local"]
+if [ "$NODE_LOCATION" == "local" ]
 then
     NODE_URL="http://localhost:8888"
 else
     NODE_URL="http://"$SERVER_DOMAIN":8888"
 fi
+echo $NODE_URL
 cleos -u $NODE_URL set contract $DEPLOY_ACCOUNT /var/repo/contracts/eosio.bios eosio.bios.wasm eosio.bios.abi -p $DEPLOY_ACCOUNT"@active"
