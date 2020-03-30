@@ -8,4 +8,5 @@ cd "$PARENT_PATH"
 SSH_LOCATION="ubuntu@"$SERVER_DOMAIN
 
 chmod 400 ../keys/ec2.pem
+echo $SSH_LOCATION
 ssh -i ../keys/ec2.pem $SSH_LOCATION
