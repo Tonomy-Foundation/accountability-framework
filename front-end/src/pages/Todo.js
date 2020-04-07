@@ -1,13 +1,14 @@
 import React from 'react';
 import TodoAdd from '../components/TodoAdd';
 import TodoList from '../components/TodoList';
+import Container from '@material-ui/core/Container';
+import { Redirect } from "react-router-dom";
 
 class Todo extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      list: this.props.list,
       newItem: 'Shampoo',
     }
 
@@ -22,21 +23,21 @@ class Todo extends React.Component {
 
   async refreshItems() {
     const todoContract = this.props.todoContract;
-    const accountName = todoContract.eosio.account.name
-    const items = await todoContract.todo(accountName)
+    // const accountName = todoContract.eosio.account.name
+    // const items = await todoContract.todo(accountName)
 
-    let list = [];
-    items.rows.forEach((item) => {
-      list.push({
-        id: item.id,
-        label: item.todo,
-        done: item.completed === 0 ? false : true
-      })
-    })
+    // let list = [];
+    // items.rows.forEach((item) => {
+    //   list.push({
+    //     id: item.id,
+    //     label: item.todo,
+    //     done: item.completed === 0 ? false : true
+    //   })
+    // })
 
-    this.setState({
-      list: list
-    })
+    // this.setState({
+    //   list: list
+    // })
   }
 
   async newItem() {
@@ -64,13 +65,17 @@ class Todo extends React.Component {
   }
 
   render() {
-    return (
-        <div>
+    if (this.props.todoContract) {
+      return (
+        <Container component="main" maxWidth="xs">
             <h1>Todo list</h1>
             <TodoAdd onSubmit={this.newItem} onChange={this.newItemChange} value={this.state.newItem}/>
             <TodoList list={this.state.list} toggleItem={this.toggleItem}/>
-        </div>
-    );
+        </Container>
+      );
+    } else {
+      return <Redirect to="/login" />
+    }
   }
 }
 

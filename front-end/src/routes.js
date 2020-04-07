@@ -9,8 +9,8 @@ import Todo from './pages/Todo';
 import Login from './pages/Login';
 
 const routes = [
+  { path: '/login', component: Login, exact: true },
   { path: '/', component: Todo, exact: true },
-  { path: '/login', component: Login, exact: true }
 ];
 
 const Routes = () => (
