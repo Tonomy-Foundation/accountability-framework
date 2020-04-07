@@ -11,7 +11,6 @@ Custom  TCP 4000  nodejs
 Custom  TCP 8888  nodeos
 SSH     TCP 22
 Custom  TCP 3000  react app
-Custom  TCP 9418  git
 
 ## CloudFront
 New CloudFront distribution

@@ -2,26 +2,6 @@
 
 namespace eosiobios {
 
-void bios::newaccount( name creator, name name, ignore<authority> owner, ignore<authority> active) {
-   // require_auth(creator); // this is done implicity in apply_eosio_newaccount()...
-
-   // This action can only be called by inline action from the eosio account
-   check(eosio::get_sender() == get_self(), "cannot call newaccount() directly");
-}
-
-void bios::newperson( name creator, name name, authority owner, authority active) {
-   bios::newaccount_action modaction("eosio"_n, {get_self(), "active"_n});
-   modaction.send(creator, name, owner, active);
-}
-
-void bios::neworg( name creator, name name, authority owner, authority active) {
-   check(owner.keys.size()!=0 , "Owner should not contains keys");
-   check(active.keys.size()!=0 , "active should not contains keys");
-   
-   bios::newaccount_action modaction("eosio"_n, {get_self(), "active"_n});
-   modaction.send(creator, name, owner, active);
-}
-
 void bios::setabi( name account, const std::vector<char>& abi ) {
    abi_hash_table table(get_self(), get_self().value);
    auto itr = table.find( account.value );

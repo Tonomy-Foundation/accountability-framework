@@ -6,6 +6,9 @@ cd "$PARENT_PATH"
 
 . ../../config.sh
 
+SCRIPT="cd eosio-react-app; git pull origin master; ./start.sh"
+echo $SCRIPT
+
 SSH_LOCATION="ubuntu@"$SERVER_DOMAIN
 chmod 400 ../keys/ec2.pem
-ssh -i ../keys/ec2.pem $SSH_LOCATION
+ssh -o "StrictHostKeyChecking no" -i ../keys/ec2.pem "ubuntu@"$SERVER_DOMAIN "${SCRIPT}"
