@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const classes = useStyles();
 
+  async function onLogin() {
+    // Redirect to Todo component
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -51,10 +55,7 @@ export default function Login() {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            label="Account name"
             autoFocus
           />
           <TextField
@@ -63,10 +64,8 @@ export default function Login() {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Private key"
             type="password"
-            id="password"
-            autoComplete="current-password"
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -77,6 +76,7 @@ export default function Login() {
             fullWidth
             variant="contained"
             color="primary"
+            onClick={onLogin}
             className={classes.submit}
           >
             Login

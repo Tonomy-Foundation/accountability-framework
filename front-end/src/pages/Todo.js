@@ -3,6 +3,8 @@ import TodoAdd from '../components/TodoAdd';
 import TodoList from '../components/TodoList';
 import Container from '@material-ui/core/Container';
 import { Redirect } from "react-router-dom";
+import Eosio from '../services/Eosio';
+import Contract from '../services/Contract';
 
 class Todo extends React.Component {
   constructor(props) {
@@ -18,6 +20,22 @@ class Todo extends React.Component {
   }
 
   async componentDidMount() {
+    const network = {
+      chainId: 'bc31c358a5aaafb5f7ad73a2ef85625f67fe9dc027f8c441fc272027d53f00f6',
+      node: 'https://eos-studio.api.dfuse.dev'
+    }
+
+    const account = {
+      name: this.props.account,
+      pkey: this.props.pkey,
+      permission: "active"
+    }
+
+    const eosio = new Eosio();
+    await eosio.initializeEosio(account, network);
+    const todoContract = new Contract("todolist", eosio)
+    await todoContract.initializeContract();
+
     await this.refreshItems();
   }
 
