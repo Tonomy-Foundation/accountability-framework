@@ -35,12 +35,13 @@ class Todo extends React.Component {
     await eosio.initializeEosio(account, network);
     const todoContract = new Contract("todolist", eosio)
     await todoContract.initializeContract();
+    this.todoContract = todoContract;
 
     await this.refreshItems();
   }
 
   async refreshItems() {
-    const todoContract = this.props.todoContract;
+    const todoContract = this.todoContract;
     // const accountName = todoContract.eosio.account.name
     // const items = await todoContract.todo(accountName)
 
@@ -59,7 +60,7 @@ class Todo extends React.Component {
   }
 
   async newItem() {
-    const todoContract = this.props.todoContract;
+    const todoContract = this.todoContract;
     const accountName = todoContract.eosio.account.name
 
     await todoContract.createitem(accountName, this.state.newItem);
@@ -74,7 +75,7 @@ class Todo extends React.Component {
   }
 
   async toggleItem(id) {
-    const todoContract = this.props.todoContract;
+    const todoContract = this.todoContract;
     const accountName = todoContract.eosio.account.name
 
     await todoContract.toggledone(accountName, id);

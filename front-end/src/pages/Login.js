@@ -32,11 +32,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// react component instead of function?
 export default function Login() {
   const classes = useStyles();
 
+  // needs to track some state?
+
   async function onLogin() {
     // Redirect to Todo component
+    // send props {
+    //   account: account name,
+    //   pkey: private key
+    // }
   }
 
   return (
