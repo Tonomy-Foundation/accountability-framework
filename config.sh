@@ -1,8 +1,8 @@
 #!/bin/bash
 
 echo "Creating shared environment variables"
-export SERVER_DOMAIN="ec2-3-8-17-63.eu-west-2.compute.amazonaws.com"
-export SERVER_HTTPS_DOMAIN="du0rtkac8px3u.cloudfront.net"
+export SERVER_DOMAIN="ec2-35-176-127-119.eu-west-2.compute.amazonaws.com"
+export SERVER_HTTPS_DOMAIN=""
 
 export KEY_EOSIO="EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV"
 export PKEY_EOSIO="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
