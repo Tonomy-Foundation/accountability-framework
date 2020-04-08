@@ -12,7 +12,10 @@ then
 else
     echo "Adding server key"
     # Need to replace " " with new line and "_" with space to get into correct .pem format from pure string env variable
+    echo "$EC2_PEM"
+    echo "$EC2_PEM"| tr " " "\n" | tr "_" " "
     echo "$EC2_PEM"| tr " " "\n" | tr "_" " " > ../keys/ec2.pem
+    cat ../keys/ec2.pem
     chmod 400 ../keys/ec2.pem
 fi
 
