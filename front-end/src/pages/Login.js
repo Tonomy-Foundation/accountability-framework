@@ -7,24 +7,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,8 +32,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// react component instead of function?
 export default function Login() {
   const classes = useStyles();
+
+  // needs to track some state?
+
+  async function onLogin() {
+    // Redirect to Todo component
+    // send props {
+    //   account: account name,
+    //   pkey: private key
+    // }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -65,10 +62,7 @@ export default function Login() {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            label="Account name"
             autoFocus
           />
           <TextField
@@ -77,10 +71,8 @@ export default function Login() {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Private key"
             type="password"
-            id="password"
-            autoComplete="current-password"
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -91,6 +83,7 @@ export default function Login() {
             fullWidth
             variant="contained"
             color="primary"
+            onClick={onLogin}
             className={classes.submit}
           >
             Login
@@ -109,9 +102,6 @@ export default function Login() {
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

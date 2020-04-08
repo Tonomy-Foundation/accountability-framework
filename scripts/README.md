@@ -1,16 +1,35 @@
 
 ## Infrastructure
 
+### VPC
+VPC:
+ipv4 cidr block: 10.0.0.0/24
+enable dns hostnames
+
+Subnet:
+Auto-assign IPv4
+ipv4 cidr block: 10.0.0.0/24
+
+create intenet gateway and attach to vpc
+
+Routes:
+Add route:
+- Destination: 0.0.0.0/0
+- Target: Internet gateway
+
+create security group for vpc
+- Custom  TCP 4000  nodejs
+- Custom  TCP 8888  nodeos
+- SSH     TCP 22
+- Custom  TCP 3000  react app
+
+
 ### Server
 New EC2 instance
 - Ubuntu 18.0.4 LTS server
 - > 4Gb memory (t2.medium)
 - > 20Gb storage
-- incoming rules
-Custom  TCP 4000  nodejs
-Custom  TCP 8888  nodeos
-SSH     TCP 22
-Custom  TCP 3000  react app
+Add to VPC and use security group
 
 ## CloudFront
 New CloudFront distribution

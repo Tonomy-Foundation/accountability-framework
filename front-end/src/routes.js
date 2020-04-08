@@ -4,13 +4,13 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
+import Todo from './pages/Todo';
 
 import Login from './pages/Login';
 
 const routes = [
-  { path: '/', component: Dashboard, exact: true },
-  { path: '/login', component: Login, exact: true }
+  { path: '/login', component: Login, exact: true },
+  { path: '/', component: Todo, exact: true },
 ];
 
 const Routes = () => (
