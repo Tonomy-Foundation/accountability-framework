@@ -3,6 +3,6 @@ language: shell
 deploy:
   provider: script
   script:
-    - cd scripts/server && source travis_deploy.sh
+    - cd scripts/server && bash travis_deploy.sh
   on:
     branch: devops
