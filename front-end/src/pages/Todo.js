@@ -25,19 +25,21 @@ class Todo extends React.Component {
       node: 'https://eos-studio.api.dfuse.dev'
     }
 
+    // Get account and eosio from redux
+    
     const account = {
       name: this.props.account,
       pkey: this.props.pkey,
       permission: "active"
     }
 
-    const eosio = new Eosio();
-    await eosio.initializeEosio(account, network);
-    const todoContract = new Contract("todolist", eosio)
-    await todoContract.initializeContract();
-    this.todoContract = todoContract;
+    // const eosio = new Eosio();
+    // await eosio.initializeEosio(account, network);
+    // const todoContract = new Contract("todolist", eosio)
+    // await todoContract.initializeContract();
+    // this.todoContract = todoContract;
 
-    await this.refreshItems();
+    // await this.refreshItems();
   }
 
   async refreshItems() {

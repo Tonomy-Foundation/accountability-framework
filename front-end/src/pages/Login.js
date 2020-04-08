@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -39,13 +39,17 @@ export default function Login() {
   // needs to track some state?
 
   async function onLogin() {
-    // Redirect to Todo component
-    // send props {
-    //   account: account name,
-    //   pkey: private key
-    // }
-  }
+    // Take private key and account name and create eosio object
+    const account = {
+      name:"jack",
+      pubKep: "theatheath"
+    }
+    const eosio = {}
+    // Call reducer login(account, eosio)
 
+    // Redirect to Todo
+  }
+  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
