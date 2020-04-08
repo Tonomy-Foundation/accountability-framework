@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /var/repo/config.sh
+source /var/repo/config.sh
 
 # Create a new wallet with the eosio and other keys
 cleos wallet create --file /data/wallet.txt
