@@ -10,5 +10,6 @@ SCRIPT="cd eosio-react-app; git pull origin master; ./start.sh"
 echo $SCRIPT
 
 SSH_LOCATION="ubuntu@"$SERVER_DOMAIN
+echo $EC2_PEM > ../keys/ec2.pem
 chmod 400 ../keys/ec2.pem
 ssh -o "StrictHostKeyChecking no" -i ../keys/ec2.pem "ubuntu@"$SERVER_DOMAIN "${SCRIPT}"
