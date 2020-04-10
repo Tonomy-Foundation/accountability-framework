@@ -17,6 +17,7 @@ else
     echo "$EC2_PEM_1"
     EC2_PEM_2=`echo "$EC2_PEM_1"| tr "_" "\n"`
     echo "$EC2_PEM_2"
+    mkdir ../keys
     echo "$EC2_PEM_2" > ../keys/ec2.pem
     cat ../keys/ec2.pem
     chmod 400 ../keys/ec2.pem
@@ -26,4 +27,4 @@ SCRIPT="cd eosio-react-app; git pull origin master; ./start.sh"
 echo $SCRIPT
 
 SSH_LOCATION="ubuntu@"$SERVER_DOMAIN
-ssh -o "StrictHostKeyChecking no" -i ../keys/ec2.pem $SSH_LOCATION "${SCRIPT}"
+ssh -o "StrictHostKeyChecking no" -i ../keys/ec2.pem $SSH_LOCATION "${SCRIPT}" -v
