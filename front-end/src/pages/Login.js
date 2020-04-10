@@ -11,6 +11,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { connect } from 'react-redux';
+import { login } from '../redux/actions';
+import Eosio from '../services/Eosio';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,22 +35,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// react component instead of function?
-export default function Login() {
-  const classes = useStyles();
+const mapDispatchToProps = {
+  login,
+};
 
-  // needs to track some state?
+function Login() {
+  const classes = useStyles();
 
   async function onLogin() {
     // Take private key and account name and create eosio object
     const account = {
       name:"jack",
-      pubKep: "theatheath"
+      pkey: "heatea"
     }
-    const eosio = {}
-    // Call reducer login(account, eosio)
+    const network = {
+      chainId: 'bc31c358a5aaafb5f7ad73a2ef85625f67fe9dc027f8c441fc272027d53f00f6',
+      node: 'https://eos-studio.api.dfuse.dev'
+    }
 
-    // Redirect to Todo
+    const eosio = new Eosio();
+    eosio.initializeEosio(account, network)
+
+    this.props.login(eosio);
+      // Redirect to Todo
   }
   
   return (
@@ -109,3 +119,6 @@ export default function Login() {
     </Container>
   );
 }
+
+
+export default connect(null, mapDispatchToProps)(Login);

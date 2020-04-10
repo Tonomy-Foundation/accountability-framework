@@ -1,16 +1,23 @@
-/*
+import { createStore } from 'redux';
+import { LOGIN } from './actions';
 
-// store
-account {
-    name: String
-    pubkey: String
+const initialState = {
+    eosio: null
+};
+
+function reducer(state = initialState, action) {
+    console.log('reducer', state, action);
+
+    switch(action.type) {
+        case LOGIN:
+        return {
+            count: state.count + 1
+        };
+        default:
+        return state;
+    }
 }
-eosio: obj
 
-// actions
-setAccount(account, eosio) {}
+const store = createStore(reducer);
 
-// reducers
-login(account, eosio) {}
-
-*/
+export default store;
