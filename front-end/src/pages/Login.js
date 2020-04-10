@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,6 +11,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { connect } from 'react-redux';
+import { login } from '../redux/actions';
+import Eosio from '../services/Eosio';
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,76 +36,110 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// react component instead of function?
-export default function Login() {
+const mapDispatchToProps = {
+  login,
+};
+
+function Login(props) {
   const classes = useStyles();
 
-  // needs to track some state?
+  const [accountName, setAccountName] = useState("jack32"); 
+  const [pkey, setPkey] = useState("5Kdzjm5LdQypEGTZ7eZcqrUS3BtmfjzpU31ELA8HPTC2ha6eVXZ");
+  const [loggedin, setLoggedin] = useState(false);
 
   async function onLogin() {
-    // Redirect to Todo component
-    // send props {
-    //   account: account name,
-    //   pkey: private key
-    // }
+    const account = {
+      name: accountName,
+      pkey: pkey,
+      permission: "active"
+    }
+    const network = {
+      chainId: 'bc31c358a5aaafb5f7ad73a2ef85625f67fe9dc027f8c441fc272027d53f00f6',
+      node: 'https://eos-studio.api.dfuse.dev'
+    }
+
+    const eosio = new Eosio();
+    await eosio.initializeEosio(account, network)
+
+    await props.login(eosio);
+    await setLoggedin(true);
   }
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Login
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Account name"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Private key"
-            type="password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={onLogin}
-            className={classes.submit}
-          >
+  async function onChangeAccount(event) {
+    setAccountName(event.target.value);
+  }
+
+  async function onChangePkey(event) {
+    setPkey(event.target.value);
+  }
+
+  if (loggedin) {
+    return <Redirect to="/" />
+  } else {
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
             Login
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Account name"
+              value={accountName}
+              onChange={onChangeAccount}
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Private key"
+              value={pkey}
+              onChange={onChangePkey}
+              type="password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={onLogin}
+              className={classes.submit}
+            >
+              Login
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
-  );
+          </form>
+        </div>
+      </Container>
+    )
+  }
 }
+
+
+export default connect(null, mapDispatchToProps)(Login);

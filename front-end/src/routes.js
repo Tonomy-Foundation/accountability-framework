@@ -5,7 +5,6 @@ import {
   Route
 } from 'react-router-dom';
 import Todo from './pages/Todo';
-
 import Login from './pages/Login';
 
 const routes = [
