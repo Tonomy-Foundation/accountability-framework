@@ -19,13 +19,8 @@ else
     ./build.sh
 fi
 
-cd ../eosio.bios.default
-if [ -e eosio.bios.wasm ]
-then
-    echo "eosio.bios already built"
-else
-    ./build.sh
-fi
+cd ../eosio.bios
+./build.sh
 
 # allow for block production to start
 echo "Waiting for blockchain node to start"
