@@ -4,7 +4,7 @@
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$PARENT_PATH"
 
-. ../../config.sh
+source ../../config.sh
 
 SSH_LOCATION="ubuntu@"$SERVER_DOMAIN
 chmod 400 ../keys/ec2.pem
