@@ -16,6 +16,7 @@ else
     EC2_PEM_1=`echo "$EC2_PEM"| tr "#" " "`
     echo "$EC2_PEM_1"
     EC2_PEM_2=`echo "$EC2_PEM_1"| tr "_" "\n"`
+    echo "$EC2_PEM_2"
     echo "$EC2_PEM_2" > ../keys/ec2.pem
     cat ../keys/ec2.pem
     chmod 400 ../keys/ec2.pem
