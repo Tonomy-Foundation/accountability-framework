@@ -74,10 +74,8 @@ function Login(props) {
   }
 
   if (loggedin) {
-    console.log("render redirect")
     return <Redirect to="/" />
   } else {
-    console.log("render login")
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />

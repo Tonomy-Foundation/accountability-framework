@@ -27,11 +27,13 @@ class Todo extends React.Component {
 
   async componentDidMount() {
     const eosio = this.props.eosio;
-    const todoContract = new Contract("todolist", eosio)
-    await todoContract.initializeContract();
-    this.todoContract = todoContract;
-
-    await this.refreshItems();
+    if (eosio) {
+      const todoContract = new Contract("todolist", eosio)
+      await todoContract.initializeContract();
+      this.todoContract = todoContract;
+  
+      await this.refreshItems();  
+    }
   }
 
   async refreshItems() {
@@ -78,7 +80,6 @@ class Todo extends React.Component {
   }
 
   render() {
-    console.log("rendering todo", this.props.eosio)
     if (this.props.eosio) {
       return (
         <Container component="main" maxWidth="xs">
