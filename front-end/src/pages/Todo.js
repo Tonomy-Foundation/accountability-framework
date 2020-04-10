@@ -3,8 +3,14 @@ import TodoAdd from '../components/TodoAdd';
 import TodoList from '../components/TodoList';
 import Container from '@material-ui/core/Container';
 import { Redirect } from "react-router-dom";
-import Eosio from '../services/Eosio';
 import Contract from '../services/Contract';
+import { connect } from 'react-redux';
+
+function mapStateToProps(state) {
+  return {
+    eosio: state.eosio
+  };
+}
 
 class Todo extends React.Component {
   constructor(props) {
@@ -20,43 +26,33 @@ class Todo extends React.Component {
   }
 
   async componentDidMount() {
-    const network = {
-      chainId: 'bc31c358a5aaafb5f7ad73a2ef85625f67fe9dc027f8c441fc272027d53f00f6',
-      node: 'https://eos-studio.api.dfuse.dev'
+    const eosio = this.props.eosio;
+    if (eosio) {
+      const todoContract = new Contract("todolist", eosio)
+      await todoContract.initializeContract();
+      this.todoContract = todoContract;
+  
+      await this.refreshItems();  
     }
-
-    const account = {
-      name: this.props.account,
-      pkey: this.props.pkey,
-      permission: "active"
-    }
-
-    const eosio = new Eosio();
-    await eosio.initializeEosio(account, network);
-    const todoContract = new Contract("todolist", eosio)
-    await todoContract.initializeContract();
-    this.todoContract = todoContract;
-
-    await this.refreshItems();
   }
 
   async refreshItems() {
     const todoContract = this.todoContract;
-    // const accountName = todoContract.eosio.account.name
-    // const items = await todoContract.todo(accountName)
+    const accountName = todoContract.eosio.account.name
+    const items = await todoContract.todo(accountName)
 
-    // let list = [];
-    // items.rows.forEach((item) => {
-    //   list.push({
-    //     id: item.id,
-    //     label: item.todo,
-    //     done: item.completed === 0 ? false : true
-    //   })
-    // })
+    let list = [];
+    items.rows.forEach((item) => {
+      list.push({
+        id: item.id,
+        label: item.todo,
+        done: item.completed === 0 ? false : true
+      })
+    })
 
-    // this.setState({
-    //   list: list
-    // })
+    this.setState({
+      list: list
+    })
   }
 
   async newItem() {
@@ -84,7 +80,7 @@ class Todo extends React.Component {
   }
 
   render() {
-    if (this.props.todoContract) {
+    if (this.props.eosio) {
       return (
         <Container component="main" maxWidth="xs">
             <h1>Todo list</h1>
@@ -98,4 +94,4 @@ class Todo extends React.Component {
   }
 }
 
-export default Todo;
+export default connect(mapStateToProps)(Todo);
