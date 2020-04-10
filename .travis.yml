@@ -5,4 +5,4 @@ deploy:
   script:
     - cd scripts/server && bash travis_deploy.sh
   on:
-    branch: devops
+    branch: master
