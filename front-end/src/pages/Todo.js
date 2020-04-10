@@ -3,7 +3,6 @@ import TodoAdd from '../components/TodoAdd';
 import TodoList from '../components/TodoList';
 import Container from '@material-ui/core/Container';
 import { Redirect } from "react-router-dom";
-import Eosio from '../services/Eosio';
 import Contract from '../services/Contract';
 import { connect } from 'react-redux';
 
@@ -27,12 +26,12 @@ class Todo extends React.Component {
   }
 
   async componentDidMount() {
-    // const eosio = this.props.eosio;
-    // const todoContract = new Contract("todolist", eosio)
-    // await todoContract.initializeContract();
-    // this.todoContract = todoContract;
+    const eosio = this.props.eosio;
+    const todoContract = new Contract("todolist", eosio)
+    await todoContract.initializeContract();
+    this.todoContract = todoContract;
 
-    // await this.refreshItems();
+    await this.refreshItems();
   }
 
   async refreshItems() {
@@ -79,7 +78,8 @@ class Todo extends React.Component {
   }
 
   render() {
-    if (this.props.todoContract) {
+    console.log("rendering todo", this.props.eosio)
+    if (this.props.eosio) {
       return (
         <Container component="main" maxWidth="xs">
             <h1>Todo list</h1>

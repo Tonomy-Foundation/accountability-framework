@@ -6,18 +6,16 @@ const initialState = {
 };
 
 function reducer(state = initialState, action) {
-    console.log('reducer', state, action);
-
     switch(action.type) {
         case LOGIN:
-        return {
-            count: state.count + 1
-        };
+            return {
+                eosio: action.payload
+            };
         default:
-        return state;
+            return state;
     }
 }
 
-const store = createStore(reducer);
+const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 export default store;
