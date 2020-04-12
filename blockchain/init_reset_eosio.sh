@@ -6,10 +6,10 @@ echo "Resetting blockchain state and history"
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$PARENT_PATH"
 
-docker exec -it eosio pkill nodeos
+docker-compose exec eosio pkill nodeos
 docker-compose down
 sudo rm ../temp/eosio/* -R
-docker-compose up -d
+docker-compose run eosio nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config --disable-replay-opts --plugin eosio::producer_api_plugin >> /data/nodeos.log 2>&1
 
 cd ../contracts/eosio.boot
 if [ -e eosio.boot.wasm ]
@@ -27,3 +27,7 @@ echo "Waiting for blockchain node to start"
 sleep 10
 
 docker-compose exec eosio /bin/bash /var/repo/blockchain/activate_features.sh
+docker-compose exec eosio pkill nodeos
+docker-compose down eosio
+
+docker-compose up -d
