@@ -8,16 +8,18 @@ const fetch = require('node-fetch');
 const { TextEncoder, TextDecoder } = require('util');
 
 class Eosio {
-    async initializeEosio(account, network) {
+    async connect(network) {
+        let rpc = fetch ? new JsonRpc(network, {fetch}) : new JsonRpc(network);
+        this.rpc = rpc;
+    }
+
+    async login(account) {
         let accountCopy = copyObj(account);
-        const signatureProvider = fetch
-            ? new JsSignatureProvider([accountCopy.pkey], {fetch})
-            : new JsSignatureProvider([accountCopy.pkey]);
+
+        const signatureProvider = new JsSignatureProvider([accountCopy.pkey]);
         accountCopy.pubkey = ecc.privateToPublic(accountCopy.pkey);
 
-        let rpc = new JsonRpc(network);
-
-        const accountRes = await rpc.get_account(accountCopy.name);
+        const accountRes = await this.rpc.get_account(accountCopy.name);
         const permissions = accountRes.permissions.filter((permission) => {
             if (accountCopy.permission === permission.perm_name) {
                 let keys = permission.required_auth.keys.filter((key) => {
@@ -39,9 +41,8 @@ class Eosio {
             : new Api({ rpc, signatureProvider });
 
         this.api = api;
-        this.rpc = rpc;
 
-        this.getTable = async function(code, scope, table) {
+        const getTable = async function(code, scope, table) {
             return await rpc.get_table_rows({
                 json: true,
                 code: code,
@@ -53,7 +54,7 @@ class Eosio {
             });
         }
         
-        this.transact = async function(receiver, action, data, options) {
+        const transact = async function(receiver, action, data, options) {
             try {
                 const tx = await api.transact({
                     actions: [{
@@ -82,6 +83,11 @@ class Eosio {
                     throw Error(e);
             }
         }
+
+        this.myapi = {
+            getTable: getTable,
+            transact: transact,
+        };
     }
 }
 

@@ -1,6 +1,7 @@
 const Eosio = require('../services/Eosio');
 
-const network = "http://localhost:8888";
+// const network = "http://localhost:8888";
+const network = "http://127.0.0.1:8888";
 
 (async function main() {
     console.log("starting blockchain initialization");
@@ -11,8 +12,12 @@ const network = "http://localhost:8888";
     }
     
     const eosio = new Eosio();
-    await eosio.initializeEosio(eosioAccount, network);
-
+    await eosio.connect(network);
+    console.log(eosio);
+    console.log(eosioAccount, network);
+    await eosio.login(eosioAccount);
+    console.log(eosio);
+    
     console.log("fin")
 })();
 // # Create some people accounts

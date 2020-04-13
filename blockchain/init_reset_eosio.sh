@@ -27,3 +27,5 @@ echo "Waiting for blockchain node to start"
 sleep 10
 
 docker-compose exec eosio /bin/bash /var/repo/blockchain/activate_features.sh
+
+docker-compose exec back-end npm run-script bootstrap
