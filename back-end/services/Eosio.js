@@ -7,8 +7,11 @@ const copyObj = require('./objects');
 const fetch = require('node-fetch');
 const { TextEncoder, TextDecoder } = require('util');
 
+const settings = require('../settings');
+const defaultNetwork = settings.eosio.network;
+
 class Eosio {
-    async connect(network) {
+    constructor(network = defaultNetwork) {
         let rpc = fetch ? new JsonRpc(network, {fetch}) : new JsonRpc(network);
         this.rpc = rpc;
     }
@@ -34,7 +37,7 @@ class Eosio {
 
         delete accountCopy.pkey;
         this.account = accountCopy;
-        this.network = network;
+        const rpc = this.rpc;
 
         let api = TextEncoder
             ? new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
