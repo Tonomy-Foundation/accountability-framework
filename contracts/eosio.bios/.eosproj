@@ -1,5 +1,5 @@
 {
-  "main": "src/eosi.bios.cpp",
+  "main": "src/eosio.bios.cpp",
   "contract": "eosio.bios",
   "include": "",
   "resource": "",

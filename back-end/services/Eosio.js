@@ -23,18 +23,18 @@ class Eosio {
         const signatureProvider = new JsSignatureProvider([accountCopy.pkey]);
         accountCopy.pubkey = ecc.privateToPublic(accountCopy.pkey);
 
-        const accountRes = await this.rpc.get_account(accountCopy.name);
-        const permissions = accountRes.permissions.filter((permission) => {
-            if (accountCopy.permission === permission.perm_name) {
-                let keys = permission.required_auth.keys.filter((key) => {
-                    if (key.key === accountCopy.pubkey) return true;
-                    return false;
-                })
-                if (keys.length && keys.length > 0) return true;
-            }
-            return false;
-        });
-        if (!(permissions.length) || permissions.length !== 1) throw Error("Permission " + accountCopy.permission + " with account " + accountCopy.name + " was not found");
+        // const accountRes = await this.rpc.get_account(accountCopy.name);
+        // const permissions = accountRes.permissions.filter((permission) => {
+        //     if (accountCopy.permission === permission.perm_name) {
+        //         let keys = permission.required_auth.keys.filter((key) => {
+        //             if (key.key === accountCopy.pubkey) return true;
+        //             return false;
+        //         })
+        //         if (keys.length && keys.length > 0) return true;
+        //     }
+        //     return false;
+        // });
+        // if (!(permissions.length) || permissions.length !== 1) throw Error("Permission " + accountCopy.permission + " with account " + accountCopy.name + " was not found");
 
         delete accountCopy.pkey;
         this.account = accountCopy;

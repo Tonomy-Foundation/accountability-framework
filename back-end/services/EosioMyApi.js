@@ -60,18 +60,16 @@ class EosioMyApi {
             const abiDefinition = api.abiTypes.get(`abi_def`)
             // need to make sure abi has every field in abiDefinition.fields
             // otherwise serialize throws
-            abi = abiDefinition.fields.reduce(
-            (acc, { name: fieldName }) =>
+            abi = abiDefinition.fields.reduce( (acc, { name: fieldName }) =>
                 Object.assign(acc, { [fieldName]: acc[fieldName] || [] }),
-            abi
+                abi
             )
             abiDefinition.serialize(buffer, abi)
 
             try {
-                if (accountCopy.name !== account) throw Error("Must deploy contract using contract account " + account);
                 const tx = await api.transact({
                     actions: [{
-                        account: account,
+                        account: "eosio",
                         name: "setcode",
                         authorization: [{
                             actor: accountCopy.name,
@@ -84,7 +82,7 @@ class EosioMyApi {
                             code: wasm
                         },
                     }, {
-                        account: account,
+                        account: "eosio",
                         name: "setabi",
                         authorization: [{
                             actor: accountCopy.name,
@@ -94,7 +92,7 @@ class EosioMyApi {
                             account: account,
                             abi: Buffer.from(buffer.asUint8Array()).toString(`hex`)
                         },
-                    }]}, {
+                }]}, {
                         blocksBehind: 3,
                         expireSeconds: 30,
                   }

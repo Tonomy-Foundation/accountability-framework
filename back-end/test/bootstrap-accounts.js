@@ -1,11 +1,10 @@
 const Eosio = require('../services/Eosio');
 const settings = require('../settings');
-const { wait } = require('../services/objects');
 
 (async function main() {
     console.log("starting blockchain initialization");
 
-    const eosioAccount = {
+    let eosioAccount = {
         pkey: settings.eosio.accounts.eosio.pkey,
         name: "eosio",
         permission: "active"
@@ -13,26 +12,45 @@ const { wait } = require('../services/objects');
     
     const eosio = new Eosio();
     await eosio.login(eosioAccount);
-    let tx = await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
-    console.log("eosio.bios deployed to eosio in tx: ", tx.transaction_id);
+    await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
+    console.log("eosio.bios contract deployed");
 
-    await wait(2000);
-
+    await eosio.login(eosioAccount);
+    
     let data = newperson("eosio", "yvo", settings.eosio.accounts.yvo.pubkey, settings.eosio.accounts.yvo.pubkey);
-    console.log(JSON.stringify(data, null, 2));
     await eosio.myapi.transact("eosio", "newperson", data);
     console.log("Person yvo created");
 
     data = neworg("eosio", "gov", ["yvo"], 0.66);
-    console.log(JSON.stringify(data, null, 2));
     await eosio.myapi.transact("eosio", "neworg", data)
     console.log("Organization gov created");
 
     data = newperson("eosio", "jack", settings.eosio.accounts.jack.pubkey);
-    console.log(JSON.stringify(data, null, 2));
     await eosio.myapi.transact("eosio", "newperson", data)
     console.log("Person jack created");
+
+    data = newperson("eosio", "kirsten", settings.eosio.accounts.kirsten.pubkey);
+    await eosio.myapi.transact("eosio", "newperson", data)
+    console.log("Person kirsten created");
+
+    data = newperson("eosio", "matej", settings.eosio.accounts.matej.pubkey);
+    await eosio.myapi.transact("eosio", "newperson", data)
+    console.log("Person matej created");
+
+    data = neworg("eosio", "todolist", ["jack", "kirsten", "matej"], 0.66);
+    await eosio.myapi.transact("eosio", "neworg", data)
+    console.log("Organization todolist created");
+
+    eosioAccount = {
+        pkey: settings.eosio.accounts.jack.pkey,
+        name: "todolist",
+        permission: "active"
+    }
     
+    await eosio.login(eosioAccount);
+    await eosio.myapi.deploy("todolist", "../contracts/todolist");
+    console.log("todolist contract deployed");
+
     console.log("fin")
 })();
 

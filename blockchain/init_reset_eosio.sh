@@ -22,9 +22,12 @@ fi
 cd ../eosio.bios
 ./build.sh
 
+cd ../todolist
+./build.sh
+
 # allow for block production to start
 echo "Waiting for blockchain node to start"
-sleep 10
+sleep 5
 
 docker-compose exec eosio /bin/bash /var/repo/blockchain/activate_features.sh
 
