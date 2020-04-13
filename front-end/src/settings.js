@@ -26,13 +26,11 @@ let settings = {
     }
 };
 
+console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === "production") {
     settings.eosio.network = "ec2-35-178-206-104.eu-west-2.compute.amazonaws.com:8888";
-} else if (process.env.NODE_ENV === "test") {
-    settings.eosio.network = "http://localhost:8888";
 } else {
-    // Use name from docker compose
-    settings.eosio.network = "http://eosio:8888";
+    settings.eosio.network = "http://localhost:8888";
 }
 
 export default settings;
