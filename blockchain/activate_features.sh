@@ -24,7 +24,7 @@ cleos push action eosio activate '{"feature_digest":"299dcb6af692324b899b39f16d5
 
 sleep 1
 
-cleos set contract eosio /var/repo/contracts/eosio.bios eosio.bios.wasm eosio.bios.abi -p eosio@active
-
 # Activate the GET_SENDER intrinsic
 cleos push action eosio activate '{"feature_digest":"f0af56d2c5a48d60a4a5b5c903edfb7db3a736a94ed589d0b797df33ff9d3e1d"}' -p eosio@active
+
+sleep 1

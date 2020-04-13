@@ -9,7 +9,7 @@ cd "$PARENT_PATH"
 docker-compose exec eosio pkill nodeos
 docker-compose down
 sudo rm ../temp/eosio/* -R
-docker-compose run eosio nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config --disable-replay-opts --plugin eosio::producer_api_plugin >> /data/nodeos.log 2>&1
+docker-compose up -d
 
 cd ../contracts/eosio.boot
 if [ -e eosio.boot.wasm ]
@@ -27,7 +27,3 @@ echo "Waiting for blockchain node to start"
 sleep 10
 
 docker-compose exec eosio /bin/bash /var/repo/blockchain/activate_features.sh
-docker-compose exec eosio pkill nodeos
-docker-compose down eosio
-
-docker-compose up -d
