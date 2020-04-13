@@ -1,6 +1,7 @@
 const { RpcError } = require('eosjs');
 const fs = require('fs');
 const path = require('path');
+const { Serialize } = require(`eosjs`);
 
 class EosioMyApi {
     constructor(rpc, api, accountCopy) {
@@ -46,11 +47,26 @@ class EosioMyApi {
             }
         }
 
-        this.deploy = async function(account, folder, wasm, abi) {
-            const wasmFile = fs.readFileSync(path.join(__dirname, folder + "/" + wasm));
-            const abiFile = fs.readFileSync(path.join(__dirname, folder + "/" + abi));
+        this.deploy = async function(account, contractDir, options) {
+            const { wasmPath, abiPath } = getDeployableFilesFromDir(contractDir)
             
-            console.log(abiFile)
+            const wasm = fs.readFileSync(wasmPath).toString(`hex`);
+            const buffer = new Serialize.SerialBuffer({
+                textEncoder: api.textEncoder,
+                textDecoder: api.textDecoder,
+            })
+
+            let abi = JSON.parse(fs.readFileSync(abiPath, `utf8`))
+            const abiDefinition = api.abiTypes.get(`abi_def`)
+            // need to make sure abi has every field in abiDefinition.fields
+            // otherwise serialize throws
+            abi = abiDefinition.fields.reduce(
+            (acc, { name: fieldName }) =>
+                Object.assign(acc, { [fieldName]: acc[fieldName] || [] }),
+            abi
+            )
+            abiDefinition.serialize(buffer, abi)
+
             try {
                 if (accountCopy.name !== account) throw Error("Must deploy contract using contract account " + account);
                 const tx = await api.transact({
@@ -65,7 +81,7 @@ class EosioMyApi {
                             account: account,
                             vmtype: 0,
                             vmversion: 0,
-                            code: wasmFile
+                            code: wasm
                         },
                     }, {
                         account: account,
@@ -76,7 +92,7 @@ class EosioMyApi {
                         }],
                         data: {
                             account: account,
-                            abi: abiFile
+                            abi: Buffer.from(buffer.asUint8Array()).toString(`hex`)
                         },
                     }]}, {
                         blocksBehind: 3,
@@ -98,5 +114,17 @@ class EosioMyApi {
         }
     }
 }
+
+function getDeployableFilesFromDir(dir) {
+    const dirCont = fs.readdirSync(dir)
+    const wasmFileName = dirCont.find(filePath => filePath.match(/.*\.(wasm)$/gi))
+    const abiFileName = dirCont.find(filePath => filePath.match(/.*\.(abi)$/gi))
+    if (!wasmFileName) throw new Error(`Cannot find a ".wasm file" in ${dir}`)
+    if (!abiFileName) throw new Error(`Cannot find an ".abi file" in ${dir}`)
+    return {
+      wasmPath: path.join(dir, wasmFileName),
+      abiPath: path.join(dir, abiFileName),
+    }
+  }
 
 module.exports = EosioMyApi;

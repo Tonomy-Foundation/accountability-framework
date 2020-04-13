@@ -13,8 +13,7 @@ const settings = require('../settings');
     const eosio = new Eosio();
     await eosio.login(eosioAccount);
 
-    await eosio.myapi.deploy("eosio", "../../contracts/eosio.bios", "eosio.bios.wasm", "eosio.bios.abi")
-    console.log(eosio.myapi)
+    await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
     console.log("fin")
 })();
 // # Create some people accounts
