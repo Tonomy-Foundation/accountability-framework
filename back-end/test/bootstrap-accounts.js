@@ -12,20 +12,15 @@ const settings = require('../settings');
     
     const eosio = new Eosio();
     await eosio.login(eosioAccount);
-    
+
+    await eosio.myapi.deploy("eosio", "../../contracts/eosio.bios", "eosio.bios.wasm", "eosio.bios.abi")
+    console.log(eosio.myapi)
     console.log("fin")
 })();
 // # Create some people accounts
-// cleos wallet import --private-key $PKEY_JACK
 // cleos create account eosio jack $KEY_JACK
-
-// cleos wallet import --private-key $PKEY_KIRSTEN
 // cleos create account eosio kirsten $KEY_KIRSTEN
-
-// cleos wallet import --private-key $PKEY_MATEJ
 // cleos create account eosio matej $KEY_MATEJ
-
-// cleos wallet import --private-key $PKEY_YVO
 // cleos create account eosio yvo $KEY_YVO
 
 // # Create some other entities

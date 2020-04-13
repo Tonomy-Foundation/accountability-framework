@@ -1,7 +1,8 @@
-const { Api, JsonRpc, RpcError } = require('eosjs');
+const { Api, JsonRpc } = require('eosjs');
 const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig');
 const ecc = require('eosjs-ecc');
 const copyObj = require('./objects');
+const EosioApi = require('./EosioMyApi');
 
 // Only needed for nodejs execution
 const fetch = require('node-fetch');
@@ -45,52 +46,7 @@ class Eosio {
 
         this.api = api;
 
-        const getTable = async function(code, scope, table) {
-            return await rpc.get_table_rows({
-                json: true,
-                code: code,
-                scope: scope,
-                table: table,
-                limit: 10,
-                reverse: false,
-                show_payer: false
-            });
-        }
-        
-        const transact = async function(receiver, action, data, options) {
-            try {
-                const tx = await api.transact({
-                    actions: [{
-                        account: receiver,
-                        name: action,
-                        authorization: [{
-                            actor: account.name,
-                            permission: account.permission,
-                    }],
-                    data: data,
-                    }]}, {
-                        blocksBehind: 3,
-                        expireSeconds: 30,
-                  }
-                )
-                if (options) {
-                    if (tx.processed.error_code) throw Error("Failed with error code: " + tx.processed.error_code);
-                    if (tx.processed.receipt.status !== options.status) throw Error("Tx status is " + tx.processed.receipt.status);
-                }
-                return tx;
-            } catch (e) {
-                console.log('\nCaught exception: ' + e);
-                if (e instanceof RpcError)
-                  console.error(JSON.stringify(e.json, null, 2));
-                else
-                    throw Error(e);
-            }
-        }
-
-        this.myapi = {
-            getTable: getTable,
-            transact: transact,
-        };
+        this.myapi = new EosioApi(rpc, api, accountCopy);
     }
 }
 
