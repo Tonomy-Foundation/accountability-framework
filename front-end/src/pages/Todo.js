@@ -33,6 +33,14 @@ class Todo extends React.Component {
       this.todoContract = todoContract;
   
       await this.refreshItems();  
+      let account = eosio.account;
+      let rpc = eosio.rpc;
+      console.log(rpc)
+      // console.log(await rpc.history_get_controlled_accounts(account.name));
+      // console.log(await rpc.history_get_key_accounts(account.pubkey));
+      console.log(await rpc.history_get_actions(account.name, -1, -100));
+      // console.log(await rpc.history_get_(account.name));
+      
     }
   }
 
