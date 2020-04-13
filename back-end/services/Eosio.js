@@ -2,7 +2,7 @@ const { Api, JsonRpc } = require('eosjs');
 const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig');
 const ecc = require('eosjs-ecc');
 const { copyObj } = require('./objects');
-const EosioApi = require('./EosioMyApi');
+const EosioMyApi = require('./EosioMyApi');
 
 // Only needed for nodejs execution
 const fetch = require('node-fetch');
@@ -46,7 +46,7 @@ class Eosio {
 
         this.api = api;
 
-        this.myapi = new EosioApi(rpc, api, accountCopy);
+        this.myapi = new EosioMyApi(rpc, api, accountCopy);
     }
 }
 
