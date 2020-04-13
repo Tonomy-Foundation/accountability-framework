@@ -7,7 +7,7 @@ App to ...
 - [Docker Compose](http://docs.docker.com/compose/)
 - [Nodejs and npm](https://nodejs.org) - suggested to use [nvm](https://github.com/nvm-sh/nvm)
 
-Install script _should work_ for debian linux distributions
+Use install script _should work_ for debian distributions to install prerequesits
 
 `./scripts/local/install_software.sh`
 
@@ -21,15 +21,8 @@ Do this before running the first time or if you need to reset the blockchain. No
 
 `./start.sh`
 
-or manually (important to run with the `-d` command)
-
-`docker-compose up -d`
-
-
 ## Stop
 
-Note that BOTH commands are needed to safely stop the application, otherwise the blockchain node does not exit properly.
-
-`docker exec -it eosio pkill nodeos & docker-compose down`
+`./stop.sh`
 
 If the the blockchain nodeo does not exit properly then you may need to reset the blockchain (see "Initialize npm projects and blockchain").
