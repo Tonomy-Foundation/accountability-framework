@@ -29,7 +29,8 @@ let settings = {
 if (process.env.NODE_ENV === "PROD") {
     settings.eosio.network = process.env.SERVER_DOMAIN + ":8888";
 } else {
-    settings.eosio.network = "http://localhost:8888";
+    // Use name from docker compose
+    settings.eosio.network = "http://eosio:8888";
 }
 
 module.exports = settings;

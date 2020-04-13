@@ -1,7 +1,7 @@
 const { Api, JsonRpc } = require('eosjs');
 const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig');
 const ecc = require('eosjs-ecc');
-const copyObj = require('./objects');
+const { copyObj } = require('./objects');
 const EosioApi = require('./EosioMyApi');
 
 // Only needed for nodejs execution

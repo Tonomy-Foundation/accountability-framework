@@ -1,5 +1,6 @@
 const Eosio = require('../services/Eosio');
 const settings = require('../settings');
+const { wait } = require('../services/objects');
 
 (async function main() {
     console.log("starting blockchain initialization");
@@ -12,10 +13,101 @@ const settings = require('../settings');
     
     const eosio = new Eosio();
     await eosio.login(eosioAccount);
+    let tx = await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
+    console.log("eosio.bios deployed to eosio in tx: ", tx.transaction_id);
 
-    await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
+    await wait(2000);
+
+    let data = newperson("eosio", "yvo", settings.eosio.accounts.yvo.pubkey, settings.eosio.accounts.yvo.pubkey);
+    console.log(JSON.stringify(data, null, 2));
+    await eosio.myapi.transact("eosio", "newperson", data);
+    console.log("Person yvo created");
+
+    data = neworg("eosio", "gov", ["yvo"], 0.66);
+    console.log(JSON.stringify(data, null, 2));
+    await eosio.myapi.transact("eosio", "neworg", data)
+    console.log("Organization gov created");
+
+    data = newperson("eosio", "jack", settings.eosio.accounts.jack.pubkey);
+    console.log(JSON.stringify(data, null, 2));
+    await eosio.myapi.transact("eosio", "newperson", data)
+    console.log("Person jack created");
+    
     console.log("fin")
 })();
+
+function newperson(creator, name, key, owner="gov") {
+    let data = {
+        creator: creator,
+        name: name,
+        owner: {
+            threshold:1,
+            keys:[],
+            accounts:[{
+                permission: {
+                    actor:"gov",
+                    permission:"active"
+                },
+                weight:1
+            }],
+            waits:[]
+        },
+        active: {
+            threshold:1,
+            keys:[{
+                key: key,
+                weight: 1
+            }],
+            accounts:[],
+            waits:[]
+        }
+    }
+    if (owner !== "gov") {
+        data.owner.accounts = []
+        data.owner.keys = [{
+            key: owner,
+            weight: 1
+        }]
+    }
+    return data;
+}
+
+function neworg(creator, name, owners, thresholdPercent) {
+    let data = {
+        creator: creator,
+        name: name,
+        owner: {
+            threshold: Math.min(Math.floor(owners.length * thresholdPercent)+1, owners.length),
+            keys:[],
+            accounts:[],
+            waits:[]
+        },
+        active: {
+            threshold:1,
+            keys:[],
+            accounts:[],
+            waits:[]
+        }
+    }
+    
+    for (owner of owners) {
+        data.owner.accounts.push({
+            permission: {
+                actor: owner,
+                permission:"active"
+            },
+            weight:1
+        })
+        data.active.accounts.push({
+            permission: {
+                actor: owner,
+                permission:"active"
+            },
+            weight:1
+        })
+    }
+    return data;
+}
 // # Create some people accounts
 // cleos create account eosio jack $KEY_JACK
 // cleos create account eosio kirsten $KEY_KIRSTEN

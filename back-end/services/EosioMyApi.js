@@ -35,7 +35,7 @@ class EosioMyApi {
                 )
                 if (options) {
                     if (tx.processed.error_code) throw Error("Failed with error code: " + tx.processed.error_code);
-                    if (tx.processed.receipt.status !== options.status) throw Error("Tx status is " + tx.processed.receipt.status);
+                    if (options.status && tx.processed.receipt.status !== options.status) throw Error("Tx status is " + tx.processed.receipt.status);
                 }
                 return tx;
             } catch (e) {
@@ -101,7 +101,7 @@ class EosioMyApi {
                 )
                 if (options) {
                     if (tx.processed.error_code) throw Error("Failed with error code: " + tx.processed.error_code);
-                    if (tx.processed.receipt.status !== options.status) throw Error("Tx status is " + tx.processed.receipt.status);
+                    if (options.status && tx.processed.receipt.status !== options.status) throw Error("Tx status is " + tx.processed.receipt.status);
                 }
                 return tx;
             } catch (e) {

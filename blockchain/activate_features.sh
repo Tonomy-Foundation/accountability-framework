@@ -27,4 +27,4 @@ sleep 1
 # Activate the GET_SENDER intrinsic
 cleos push action eosio activate '{"feature_digest":"f0af56d2c5a48d60a4a5b5c903edfb7db3a736a94ed589d0b797df33ff9d3e1d"}' -p eosio@active
 
-sleep 1
+sleep 2
