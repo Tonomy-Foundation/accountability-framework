@@ -15,8 +15,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon",
-    "bootstrap": ". ../config.sh && node test/bootstrap-accounts.js"
+    "start": "npm run-script config && nodemon",
+    "bootstrap": "npm run-script config && node test/bootstrap-accounts.js",
+    "config": ". ../config.sh"
   },
   "author": "",
   "license": "ISC"

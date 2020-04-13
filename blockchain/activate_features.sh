@@ -6,6 +6,7 @@ source /var/repo/config.sh
 cleos wallet create --file /data/wallet.txt
 
 # import eosio
+PKEY_EOSIO="5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"
 cleos wallet import --private-key $PKEY_EOSIO
 
 # Enable protocol feature pre-activation PREACTIVATE_FEATURE for eosio.contract v1.8+
@@ -27,4 +28,4 @@ sleep 1
 # Activate the GET_SENDER intrinsic
 cleos push action eosio activate '{"feature_digest":"f0af56d2c5a48d60a4a5b5c903edfb7db3a736a94ed589d0b797df33ff9d3e1d"}' -p eosio@active
 
-sleep 2
+sleep 1

@@ -27,7 +27,7 @@ let settings = {
 };
 
 if (process.env.NODE_ENV === "production") {
-    settings.eosio.network = process.env.SERVER_DOMAIN + ":8888";
+    settings.eosio.network = "ec2-35-178-206-104.eu-west-2.compute.amazonaws.com:8888";
 } else if (process.env.NODE_ENV === "test") {
     settings.eosio.network = "http://localhost:8888";
 } else {
@@ -35,4 +35,4 @@ if (process.env.NODE_ENV === "production") {
     settings.eosio.network = "http://eosio:8888";
 }
 
-module.exports = settings;
+export default settings;
