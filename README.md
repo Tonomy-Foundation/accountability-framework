@@ -4,10 +4,11 @@ App to ...
 
 ## Prerequisites
 
+- Linux debian distribution
 - [Docker Compose](http://docs.docker.com/compose/)
 - [Nodejs and npm](https://nodejs.org) - suggested to use [nvm](https://github.com/nvm-sh/nvm)
 
-Use install script _should work_ for debian distributions to install prerequesits
+Use install script _should work_ for debian distributions to install prerequesits as needed.
 
 `./scripts/local/install_software.sh`
 
@@ -20,6 +21,10 @@ Do this before running the first time or if you need to reset the blockchain. No
 ## Run
 
 `./start.sh`
+
+For production deployment:
+
+`./start.sh prod`
 
 ## Stop
 
