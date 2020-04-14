@@ -32,7 +32,7 @@ class Todo extends React.Component {
       await todoContract.initializeContract();
       this.todoContract = todoContract;
   
-      await this.refreshItems();  
+      await this.refreshItems();
     }
   }
 

@@ -1,10 +1,14 @@
-import { Api, JsonRpc } from 'eosjs';
-import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
-import ecc from 'eosjs-ecc';
-import { copyObj } from './objects';
-import EosioMyApi from './EosioMyApi';
+const { Api, JsonRpc } = require('eosjs');
+const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig');
+const ecc = require('eosjs-ecc');
+const { copyObj } = require('./objects');
+const EosioMyApi = require('./EosioMyApi');
 
-import settings from '../settings';
+// Only needed for nodejs execution
+const fetch = require('node-fetch');
+const { TextEncoder, TextDecoder } = require('util');
+
+const settings = require('../settings');
 const defaultNetwork = settings.eosio.network;
 
 class Eosio {
@@ -46,4 +50,4 @@ class Eosio {
     }
 }
 
-export default Eosio
+module.exports = Eosio

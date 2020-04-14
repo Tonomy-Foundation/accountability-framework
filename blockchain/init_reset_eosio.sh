@@ -6,7 +6,7 @@ echo "Resetting blockchain state and history"
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$PARENT_PATH"
 
-docker exec -it eosio pkill nodeos
+docker-compose exec eosio pkill nodeos
 docker-compose down
 sudo rm ../temp/eosio/* -R
 docker-compose up -d
@@ -19,16 +19,16 @@ else
     ./build.sh
 fi
 
-cd ../eosio.bios.default
-if [ -e eosio.bios.wasm ]
-then
-    echo "eosio.bios already built"
-else
-    ./build.sh
-fi
+cd ../eosio.bios
+./build.sh
+
+cd ../todolist
+./build.sh
 
 # allow for block production to start
 echo "Waiting for blockchain node to start"
-sleep 10
+sleep 5
 
 docker-compose exec eosio /bin/bash /var/repo/blockchain/activate_features.sh
+
+docker-compose exec back-end npm run-script bootstrap

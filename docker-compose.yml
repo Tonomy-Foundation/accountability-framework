@@ -41,13 +41,15 @@ services:
     command:
       sh -c 'npm start >> /data/nodejs.log 2>&1'
   front-end:
-    image: node
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile-react
     container_name: "front-end"
+    environment:
+      - NODE_ENV=$NODE_ENV
     ports:
       - 3000:3000
+      - 5000:5000
     volumes:
       - ./:/var/repo
       - ./temp/front-end:/data
-    working_dir: /var/repo/front-end
-    command:
-      sh -c 'npm start >> /data/react.log 2>&1'

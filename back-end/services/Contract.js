@@ -53,4 +53,4 @@ class Contract {
     }
 }
 
-export default Contract;
+module.exports = Contract;

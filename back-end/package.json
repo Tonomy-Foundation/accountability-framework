@@ -4,13 +4,20 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "eosjs": "^20.0.3",
+    "eosjs-ecc": "^4.0.7",
     "express": "^4.17.1",
     "nodemon": "^2.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "node-fetch": "^2.6.0",
+    "util": "^0.12.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon"
+    "start": "npm run-script config && nodemon",
+    "bootstrap": "npm run-script config && node test/bootstrap-accounts.js",
+    "config": ". ../config.sh"
   },
   "author": "",
   "license": "ISC"

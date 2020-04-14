@@ -1,4 +1,4 @@
-export async function wait(ms) {
+module.exports.wait = async function(ms) {
     return new Promise((res) => {
         setTimeout(() => {
             res();
@@ -6,6 +6,6 @@ export async function wait(ms) {
     })
 }
 
-export function copyObj(obj) {
+module.exports.copyObj = function copyObj(obj) {
     return Object.assign({}, obj);
 }

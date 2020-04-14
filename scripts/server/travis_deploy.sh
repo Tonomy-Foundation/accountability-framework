@@ -19,7 +19,7 @@ else
     chmod 400 ../keys/ec2.pem
 fi
 
-SCRIPT="cd eosio-react-app; git pull origin master; ./start.sh"
+SCRIPT="cd eosio-react-app; git pull origin master; ./start.sh prod"
 echo $SCRIPT
 
 SSH_LOCATION="ubuntu@"$SERVER_DOMAIN

@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { login } from '../redux/actions';
 import Eosio from '../services/Eosio';
 import { Redirect } from "react-router-dom";
+import settings from '../settings';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,8 +44,8 @@ const mapDispatchToProps = {
 function Login(props) {
   const classes = useStyles();
 
-  const [accountName, setAccountName] = useState("jack32"); 
-  const [pkey, setPkey] = useState("5Kdzjm5LdQypEGTZ7eZcqrUS3BtmfjzpU31ELA8HPTC2ha6eVXZ");
+  const [accountName, setAccountName] = useState("jack"); 
+  const [pkey, setPkey] = useState(settings.eosio.accounts.jack.pkey);
   const [loggedin, setLoggedin] = useState(false);
 
   async function onLogin() {
@@ -53,13 +54,9 @@ function Login(props) {
       pkey: pkey,
       permission: "active"
     }
-    const network = {
-      chainId: 'bc31c358a5aaafb5f7ad73a2ef85625f67fe9dc027f8c441fc272027d53f00f6',
-      node: 'https://eos-studio.api.dfuse.dev'
-    }
 
     const eosio = new Eosio();
-    await eosio.initializeEosio(account, network)
+    await eosio.login(account)
 
     await props.login(eosio);
     await setLoggedin(true);
