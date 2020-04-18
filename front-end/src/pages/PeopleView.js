@@ -11,7 +11,8 @@ function mapStateToProps(state) {
   };
 }
 
-function PeopleViewProfile() {
+function PeopleViewProfile(props) {
+  console.log("PeopleViewProfile", props);
   return (
     <div>
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
@@ -28,7 +29,8 @@ function PeopleViewProfile() {
   )
 }
 
-function PeopleViewTransactions() {
+function PeopleViewTransactions(props) {
+  console.log("PeopleViewTransactions", props);
   return PeopleViewProfile();
 }
 
@@ -41,16 +43,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PeopleView() {
+function PeopleView(props) {
   const classes = useStyles();
 
+  const loggedinAccount = props.match.params.accountName;
+  let accountName, isMyAccount=false, organizations;
+  if (props.eosio) {
+    accountName = props.eosio.account.name;
+    if (loggedinAccount===accountName) isMyAccount = true;
+  }
+
+  console.log("PeopleView", props)
   return (
     <Grid container className={classes.root} spacing={0}>
           <Grid key={0} item xs={6}>
-            <PeopleViewProfile/>
+            <PeopleViewProfile
+              accountName={accountName}
+              isMyAccount={isMyAccount}
+              organizations={[{
+                name: "Facebook Inc.",
+                accountName: "facebook"
+              }]}/>
           </Grid>
           <Grid key={1} item xs={6}>
-            <PeopleViewTransactions/>
+            <PeopleViewTransactions
+              accountName="jack"
+              transactions={[{
+                tx_id: "43243243",
+                timestamp: new Date(),
+                auth: "jack",
+                account: "kirsten",
+                data: "Jack paid Kirsten $10.00",
+                type: "payment"
+              }]}/>
           </Grid>
     </Grid>
   )

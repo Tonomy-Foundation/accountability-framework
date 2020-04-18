@@ -10,8 +10,7 @@ import PeopleView from './pages/PeopleView';
 
 const routes = [
   { path: '/login', component: Login, exact: true },
-  // { path: '/people/@:account_name', component: PeopleView, exact: true },
-  { path: '/people', component: PeopleView, exact: true },
+  { path: '/people/:accountName', component: PeopleView, exact: true },
   { path: '/', component: Todo, exact: true },
 ];
 
