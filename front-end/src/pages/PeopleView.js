@@ -45,25 +45,32 @@ const useStyles = makeStyles((theme) => ({
 function PeopleView(props) {
   const classes = useStyles();
 
-  const loggedinAccount = props.match.params.accountName;
-  let accountName, isMyAccount=false;
-  let eosio, organizations, transactions;
+  const accountName = props.match.params.accountName;
+  let isMyAccount=false;
+  let eosio, organizations, transactions = [];
   if (props.eosio) {
     eosio = props.eosio;
-    accountName = eosio.account.name;
+    let loggedinAccount = eosio.account.name;
     if (loggedinAccount===accountName) isMyAccount = true;
   } else {
     eosio = new Eosio();
   }
 
-  // useEffect(() => {
-  //   async function getAccount() {
-  //     let accountRes = await eosio.rpc.get_account(accountName);
-  //     let transactionsRes = await eosio.rpc.history_get_actions(accountName, -1, -100);
-  //     console.log(accountRes, transactionsRes)
-  //   }
-  //   getAccount();
-  // })
+  useEffect(() => {
+    async function getAccount() {
+      console.log(accountName)
+      let accountRes = await eosio.rpc.get_account(accountName);
+      organizations = accountRes.organizations;
+      let transactionsRes = await eosio.rpc.history_get_actions(accountName, -1, -100);
+      for (let action of transactionsRes.actions) {
+        // if (transactions.filter((trx) => {
+        //   // if (trx.tx_id === action.)
+        // }))
+      }
+      console.log(transactionsRes.actions);
+    }
+    getAccount();
+  })
 
   console.log("PeopleView", props)
   return (
@@ -72,10 +79,7 @@ function PeopleView(props) {
             <PeopleViewProfile
               accountName={accountName}
               isMyAccount={isMyAccount}
-              organizations={[{
-                name: "Facebook Inc.",
-                accountName: "facebook"
-              }]}/>
+              organizations={organizations}/>
           </Grid>
           <Grid key={1} item xs={6}>
             <PeopleViewTransactions
