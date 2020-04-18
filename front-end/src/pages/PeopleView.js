@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
-import { Redirect } from "react-router-dom";
-import settings from '../settings';
+import Eosio from '../services/Eosio';
 
 function mapStateToProps(state) {
   return {
@@ -47,11 +46,24 @@ function PeopleView(props) {
   const classes = useStyles();
 
   const loggedinAccount = props.match.params.accountName;
-  let accountName, isMyAccount=false, organizations;
+  let accountName, isMyAccount=false;
+  let eosio, organizations, transactions;
   if (props.eosio) {
-    accountName = props.eosio.account.name;
+    eosio = props.eosio;
+    accountName = eosio.account.name;
     if (loggedinAccount===accountName) isMyAccount = true;
+  } else {
+    eosio = new Eosio();
   }
+
+  // useEffect(() => {
+  //   async function getAccount() {
+  //     let accountRes = await eosio.rpc.get_account(accountName);
+  //     let transactionsRes = await eosio.rpc.history_get_actions(accountName, -1, -100);
+  //     console.log(accountRes, transactionsRes)
+  //   }
+  //   getAccount();
+  // })
 
   console.log("PeopleView", props)
   return (
@@ -67,7 +79,7 @@ function PeopleView(props) {
           </Grid>
           <Grid key={1} item xs={6}>
             <PeopleViewTransactions
-              accountName="jack"
+              accountName={accountName}
               transactions={[{
                 tx_id: "43243243",
                 timestamp: new Date(),
