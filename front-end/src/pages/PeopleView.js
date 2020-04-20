@@ -11,7 +11,6 @@ function mapStateToProps(state) {
 }
 
 function PeopleViewProfile(props) {
-  console.log("PeopleViewProfile", props);
   return (
     <div>
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
@@ -29,7 +28,6 @@ function PeopleViewProfile(props) {
 }
 
 function PeopleViewTransactions(props) {
-  console.log("PeopleViewTransactions", props);
   return PeopleViewProfile();
 }
 
@@ -45,21 +43,13 @@ const useStyles = makeStyles((theme) => ({
 function PeopleView(props) {
   const classes = useStyles();
 
-  // const [state, setState] = useState({
-  //   accountName: props.match.params.accountName,
-  //   isMyAccount: false,
-  //   actions: [],
-  //   organizations: [],
-  //   count: 0
-  // });
-
-  let state = {
+  const [state, setState] = useState({
     accountName: props.match.params.accountName,
     isMyAccount: false,
     actions: [],
     organizations: [],
     count: 0
-  }
+  });
 
   useEffect(() => {
     let eosio;
@@ -101,18 +91,17 @@ function PeopleView(props) {
         }
       }
 
-      state = {
+      setState({
         accountName: state.accountName,
-        isMyAccount: loggedinAccount === state.accountName,
+        isMyAccount: loggedinAccount  === state.accountName,
         actions: actionsToSet,
         organizations: accountRes.organizations
-      };
+      })
     }
 
     getAccount();
-  })
-
-  console.log("PeopleView", props)
+  }, [])
+  
   return (
     <Grid container className={classes.root} spacing={0}>
           <Grid key={0} item xs={6}>
@@ -136,14 +125,14 @@ function getType(account, actionName, actionData) {
     return ["payment", data];
   }
   if (account === "eosio") {
-    if (actionName === "setcode") return ["smart contract", ""];
+    if (actionName === "setcode") return ["contract", ""];
     if (actionName === "newperson") {
       const data = actionData.name + " joined Conscious Cities";
-      return ["new account", data];
+      return ["account", data];
     }
     if (actionName === "neworg") {
       const data = 'New organization "' + actionData.name + '" was created';
-      return ["new account", data];
+      return ["account", data];
     }
     else return ["other", ""];
   }
