@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
@@ -45,30 +45,54 @@ const useStyles = makeStyles((theme) => ({
 function PeopleView(props) {
   const classes = useStyles();
 
-  const accountName = props.match.params.accountName;
-  let isMyAccount=false;
-  let eosio, organizations, transactions = [];
-  if (props.eosio) {
-    eosio = props.eosio;
-    let loggedinAccount = eosio.account.name;
-    if (loggedinAccount===accountName) isMyAccount = true;
-  } else {
-    eosio = new Eosio();
-  }
+  const [organizations, setOrganizations] = useState([]);
+  const [actions, setActions] = useState([]);
+  const [accountName, setAccountName] = useState(props.match.params.accountName);
+  const [isMyAccount, setIsMyAccount] = useState(false); 
 
   useEffect(() => {
     async function getAccount() {
-      console.log(accountName)
       let accountRes = await eosio.rpc.get_account(accountName);
-      organizations = accountRes.organizations;
-      let transactionsRes = await eosio.rpc.history_get_actions(accountName, -1, -100);
-      for (let action of transactionsRes.actions) {
-        // if (transactions.filter((trx) => {
-        //   // if (trx.tx_id === action.)
-        // }))
+      setOrganizations(accountRes.organizations);
+      let actionsRes = await eosio.rpc.history_get_actions(accountName, -1, -100);
+      let actionsToSet = [];
+      for (let action of actionsRes.actions) {
+        // console.log(action.action_trace.trx_id, action.action_trace.act.account, action.action_trace.act.name, 
+        //   action.account_action_seq, // increases when new action in transaction. start 1
+        //   action.global_action_seq,
+        //   action.action_trace.action_ordinal, // increases when new action in transaction. start 1
+        //   action.action_trace.creator_action_ordinal // increases for all new actions including inline action. start 0
+        //   )
+        // Only look at top level actions, no inline actions
+        if (!action.action_trace.error_code && action.action_trace.creator_action_ordinal === 0) {
+          let actionToPush = {
+            tx_id: action.action_trace.trx_id,
+            timestamp: action.block_time,
+            account: action.action_trace.act.account,
+          }
+          const auth = action.action_trace.act.authorization[0].actor;
+          if (auth === actionToPush.account) actionToPush.direction = "self";
+          else if (auth === accountName) actionToPush.direction = "outbound";
+          else actionToPush.direction = "inbound";
+  
+          const [type, data] = getType(actionToPush.account, action.action_trace.act.name, action.action_trace.act.data);
+          actionToPush.type = type;
+          actionToPush.data = data;
+          actionsToSet.push(actionToPush);
+        }
       }
-      console.log(transactionsRes.actions);
+      setActions(actionsToSet)
     }
+
+    let eosio;
+    if (props.eosio) {
+      eosio = props.eosio;
+      let loggedinAccount = eosio.account.name;
+      if (loggedinAccount === accountName) setIsMyAccount(true);
+    } else {
+      eosio = new Eosio();
+    }
+
     getAccount();
   })
 
@@ -84,17 +108,30 @@ function PeopleView(props) {
           <Grid key={1} item xs={6}>
             <PeopleViewTransactions
               accountName={accountName}
-              transactions={[{
-                tx_id: "43243243",
-                timestamp: new Date(),
-                auth: "jack",
-                account: "kirsten",
-                data: "Jack paid Kirsten $10.00",
-                type: "payment"
-              }]}/>
+              transactions={actions}/>
           </Grid>
     </Grid>
   )
+}
+
+function getType(account, actionName, actionData) {
+  if (actionName === "transfer") {
+    const data = "Sent " + actionData.quantity + " from " + actionData.from + " to " + actionData.to;
+    return ["payment", data];
+  }
+  if (account === "eosio") {
+    if (actionName === "setcode") return ["smart contract", ""];
+    if (actionName === "newperson") {
+      const data = actionData.name + " joined Conscious Cities";
+      return ["new account", data];
+    }
+    if (actionName === "neworg") {
+      const data = 'New organization "' + actionData.name + '" was created';
+      return ["new account", data];
+    }
+    else return ["other", ""];
+  }
+  else return ["other", ""];
 }
 
 export default connect(mapStateToProps)(PeopleView);
