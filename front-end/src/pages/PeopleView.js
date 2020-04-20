@@ -45,16 +45,35 @@ const useStyles = makeStyles((theme) => ({
 function PeopleView(props) {
   const classes = useStyles();
 
-  const [organizations, setOrganizations] = useState([]);
-  const [actions, setActions] = useState([]);
-  const [accountName, setAccountName] = useState(props.match.params.accountName);
-  const [isMyAccount, setIsMyAccount] = useState(false); 
+  // const [state, setState] = useState({
+  //   accountName: props.match.params.accountName,
+  //   isMyAccount: false,
+  //   actions: [],
+  //   organizations: [],
+  //   count: 0
+  // });
+
+  let state = {
+    accountName: props.match.params.accountName,
+    isMyAccount: false,
+    actions: [],
+    organizations: [],
+    count: 0
+  }
 
   useEffect(() => {
+    let eosio;
+    let loggedinAccount;
+    if (props.eosio) {
+      eosio = props.eosio;
+      loggedinAccount = eosio.account.name;
+    } else {
+      eosio = new Eosio();
+    }
+
     async function getAccount() {
-      let accountRes = await eosio.rpc.get_account(accountName);
-      setOrganizations(accountRes.organizations);
-      let actionsRes = await eosio.rpc.history_get_actions(accountName, -1, -100);
+      let accountRes = await eosio.rpc.get_account(state.accountName);
+      let actionsRes = await eosio.rpc.history_get_actions(state.accountName, -1, -100);
       let actionsToSet = [];
       for (let action of actionsRes.actions) {
         // console.log(action.action_trace.trx_id, action.action_trace.act.account, action.action_trace.act.name, 
@@ -72,7 +91,7 @@ function PeopleView(props) {
           }
           const auth = action.action_trace.act.authorization[0].actor;
           if (auth === actionToPush.account) actionToPush.direction = "self";
-          else if (auth === accountName) actionToPush.direction = "outbound";
+          else if (auth === state.accountName) actionToPush.direction = "outbound";
           else actionToPush.direction = "inbound";
   
           const [type, data] = getType(actionToPush.account, action.action_trace.act.name, action.action_trace.act.data);
@@ -81,16 +100,13 @@ function PeopleView(props) {
           actionsToSet.push(actionToPush);
         }
       }
-      setActions(actionsToSet)
-    }
 
-    let eosio;
-    if (props.eosio) {
-      eosio = props.eosio;
-      let loggedinAccount = eosio.account.name;
-      if (loggedinAccount === accountName) setIsMyAccount(true);
-    } else {
-      eosio = new Eosio();
+      state = {
+        accountName: state.accountName,
+        isMyAccount: loggedinAccount === state.accountName,
+        actions: actionsToSet,
+        organizations: accountRes.organizations
+      };
     }
 
     getAccount();
@@ -101,14 +117,14 @@ function PeopleView(props) {
     <Grid container className={classes.root} spacing={0}>
           <Grid key={0} item xs={6}>
             <PeopleViewProfile
-              accountName={accountName}
-              isMyAccount={isMyAccount}
-              organizations={organizations}/>
+              accountName={state.accountName}
+              isMyAccount={state.isMyAccount}
+              organizations={state.organizations}/>
           </Grid>
           <Grid key={1} item xs={6}>
             <PeopleViewTransactions
-              accountName={accountName}
-              transactions={actions}/>
+              accountName={state.accountName}
+              actions={state.actions}/>
           </Grid>
     </Grid>
   )
