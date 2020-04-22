@@ -1,19 +1,112 @@
 import React from 'react';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+
+const useStyles = makeStyles((theme) => ({
+    mainGrid: {
+        height: '100%',
+        flex: '1',
+    },
+    accountName: {
+        fontFamily: 'Verdana',
+        color: '#5683a6',
+        fontWeight: '600',
+        fontSize: '24px',
+        marginBottom: '40px'
+    },
+    container: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        height: 'calc(100vh - 64px)',
+    },
+    organizationsLabelContainer : {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '50px',
+        marginBottom: '50px',
+        color: '#f6b1c8'
+    },
+    organizationsLabel: {
+        height: '50px',
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '20px',
+        marginRight: '30px',
+        fontWeight: '600'
+    },
+    inputField: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '20px'
+    },
+    menuItem: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '15px',
+        backgroundColor: '#90caf8',
+        width: '120px',
+        height: '120px'
+    },
+    gridMenuItem: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center'
+        },
+    menuAddItem: {
+        border: '8px solid #90caf8',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '15px',
+        width: '120px',
+        height: '120px',
+    }
+  }));
 
 function PeopleViewProfile(props) {
+    const classes = useStyles();
+
     return (
-        <div>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-        Why do we use it?
-
-        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-        Where does it come from?
-
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
-        </div>
+        <Grid item xs>
+            <Container component="div" className={classes.container}>
+                <Typography component="p" className={classes.accountName}>
+                @{props.accountName}
+                </Typography>
+                <Container component="p" className={classes.organizationsLabelContainer}>
+                    <Typography component="p" className={classes.organizationsLabel}>
+                        Organizations 
+                    </Typography>
+                    <TextField label="search" component="div" className={classes.inputField} />
+                </Container>
+                <Grid container spacing={8}>
+                    <Grid container item xs={12} spacing={3}>
+                        {props.organizations.map(data => {
+                            return (
+                                <Grid component="div" className={classes.gridMenuItem}item xs>
+                                    <Box className={classes.menuItem}>
+                                        {data.name}
+                                    </Box>
+                                </Grid>
+                            );
+                        })}
+                        <Grid component="div" className={classes.gridMenuItem} item xs>
+                            <Box className={classes.menuAddItem}>
+                            +
+                            </Box> 
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Container>
+        </Grid>
     )
 }
 
