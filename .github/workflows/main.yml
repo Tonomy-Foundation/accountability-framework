@@ -10,10 +10,12 @@ jobs:
   deploy:    
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2 server
+      - name: Checkout branch
         uses: actions/checkout@v2
         with:
           ref: devops
+      
+      - name: Deploy to EC2 server
         env:
           SUPER_SECRET: ${{ secrets.SuperSecret }}
           EC2_PEM: ${{ secrets.EC2_PEM }}
