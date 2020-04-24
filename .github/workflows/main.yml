@@ -18,4 +18,5 @@ jobs:
           echo "${SUPER_SECRET}"
           echo "$SUPER_SECRET"
           EC2_PEM_2=`echo "$SUPER_SECRET"| tr "S" "SSSS"`
-          echo "$EC2_PEM_2"
+          echo "$EC2_PEM_2" > ec2.pem
+          cat ec2.pem
