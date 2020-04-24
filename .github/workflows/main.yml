@@ -36,6 +36,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to EC2 server
+        env:
+          SUPER_SECRET: ${{ secrets.SuperSecret }}
         run: |
           echo "Going to deploy a script"
-        
+          echo "${SUPER_SECRET}"
+          echo "$SUPER_SECRET"
