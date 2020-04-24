@@ -2,18 +2,18 @@ name: CD
 
 on:
   push:
-    branches: [ devops ]
+    branches: [ master ]
   pull_request:
-    branches: [ devops ]
+    branches: [ master ]
 
 jobs:
-  deploy:    
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
-          ref: devops
+          ref: master
       
       - name: Deploy to EC2 server
         env:

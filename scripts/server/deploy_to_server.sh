@@ -20,5 +20,4 @@ SCRIPT="cd eosio-react-app; git pull origin master; ./start.sh prod"
 echo "$SCRIPT"
 
 SSH_LOCATION="ubuntu@"$SERVER_DOMAIN
-# ssh -o "StrictHostKeyChecking no" -i ../keys/ec2.pem $SSH_LOCATION "${SCRIPT}"
-ssh -o "StrictHostKeyChecking no" -i ../keys/ec2.pem $SSH_LOCATION ls
+ssh -o "StrictHostKeyChecking no" -i ../keys/ec2.pem $SSH_LOCATION "${SCRIPT}"
