@@ -11,6 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to EC2 server
+        uses: actions/checkout@v2
+        with:
+          ref: devops
         env:
           SUPER_SECRET: ${{ secrets.SuperSecret }}
-        run: cd scripts/server && bash travis_deploy.sh
+          EC2_PEM: ${{ secrets.EC2_PEM }}
+        run: |
+          ls
+          ls $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE
+          cd scripts/server && bash travis_deploy.sh
