@@ -13,10 +13,4 @@ jobs:
       - name: Deploy to EC2 server
         env:
           SUPER_SECRET: ${{ secrets.SuperSecret }}
-        run: |
-          echo "Going to deploy a script"
-          echo "${SUPER_SECRET}"
-          echo "$SUPER_SECRET"
-          EC2_PEM_2=`echo "$SUPER_SECRET"| tr "S" "SSSS"`
-          echo "$EC2_PEM_2" > ec2.pem
-          cat ec2.pem
+        run: cd scripts/server && bash travis_deploy.sh
