@@ -17,10 +17,5 @@ jobs:
       
       - name: Deploy to EC2 server
         env:
-          SUPER_SECRET: ${{ secrets.SuperSecret }}
           EC2_PEM: ${{ secrets.EC2_PEM }}
-        run: |
-          ls
-          ls $GITHUB_WORKSPACE
-          cd $GITHUB_WORKSPACE
-          cd scripts/server && bash travis_deploy.sh
+        run: cd scripts/server && bash deploy_to_server.sh
