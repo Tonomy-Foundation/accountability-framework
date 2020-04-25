@@ -18,6 +18,11 @@ Do this before running the first time or if you need to reset the blockchain. No
 
 `./app.sh up reset`
 
+This will call two files used to boostrap the blockchain and database:
+
+- `blockchain/init_reset_eosio.sh` - resets the blockchain and initializes an eosio v2.0 blockchain node with a system contract
+- `back-end/test/bootstrap-accounts.js` - creates initial accounts and contracts on the blockchain with corresponding database information
+
 ## Run
 
 `./app.sh up`
