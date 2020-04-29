@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,6 +10,9 @@ import TextField from '@material-ui/core/TextField';
 import { MdShoppingCart, MdArrowBack, MdArrowForward, MdArrowDownward } from "react-icons/md";
 import { GiHouse } from "react-icons/gi";
 import { FaCar, FaRegMoneyBillAlt, FaVoteYea, FaChevronRight } from "react-icons/fa";
+import Sync from '@material-ui/icons/Sync';
+
+import settings from '../settings';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -135,7 +139,8 @@ const useStyles = makeStyles((theme) => ({
     },
     transactionChevronRightContainer: {
         color: '#247dc1',
-        width: '20px'
+        width: '20px',
+        cursor: 'pointer'
     }
 }));
 
@@ -145,10 +150,10 @@ function PeopleViewTransactions(props) {
     return (
         <Grid className={classes.container} item xs>
             <Container className={classes.container} justify="center">
-                <Typography component="p" className={classes.accountTransactionsTitle}>
+                <Typography component="h2" className={classes.accountTransactionsTitle}>
                     Account Transactions
                 </Typography>
-                <Container component="p" className={classes.categoriesSearchContainer}>
+                <Container component="div" className={classes.categoriesSearchContainer}>
                     <Typography component="p" className={classes.categoriesLabel}>
                         Categories 
                     </Typography>
@@ -197,66 +202,40 @@ function PeopleViewTransactions(props) {
                         All
                     </Typography>
                 </Container>
-                <Container className={classes.transaction}>
-                    <Typography className={classes.transactionLeftDirection}> <MdArrowBack size={24} /> </Typography>
-                    <Container className={classes.transactionDetails}>
-                        <Typography className={classes.transactionDate}>
-                            26/03/2020
-                        </Typography>
-                        <Typography className={classes.transactionAccount}>
-                            @Adidas store
-                        </Typography>
-                        <Typography className={classes.transactionData}>
-                            80$
-                        </Typography>
-                        <Typography className={classes.transactionType}>
-                            payment
-                        </Typography>
-                        <div className={classes.transactionChevronRightContainer}>
-                            <FaChevronRight  />
-                        </div>
+                {props.actions.map(data => (
+                    <Container className={classes.transaction}>
+
+                        {data.direction === 'inbound' && (
+                            <Typography className={classes.transactionRightDirection}> <MdArrowForward size={24} /> </Typography>
+                        )}
+
+                        {data.direction === 'outbound' && (
+                            <Typography className={classes.transactionLeftDirection}> <MdArrowBack size={24} /> </Typography>
+                        )}
+
+                        {data.direction === 'self' && (
+                            <Typography className={classes.transactionSelfDirection}> <Sync size={24} /> </Typography>
+                        )}
+
+                        <Container className={classes.transactionDetails}>
+                            <Typography className={classes.transactionDate}>
+                                {moment(data.timestamp).format('DD-MM-YYYY')}
+                            </Typography>
+                            <Typography className={classes.transactionAccount}>
+                                {data.account}
+                            </Typography>
+                            <Typography className={classes.transactionData}>
+                                {data.data}
+                            </Typography>
+                            <Typography className={classes.transactionType}>
+                                {data.type}
+                            </Typography>
+                            <div className={classes.transactionChevronRightContainer} onClick={() => { window.open(`https://local.bloks.io/transaction/${data.tx_id}?nodeUrl=${settings.eosio.network}&systemDomain=eosio`, "_blank") }}>
+                                <FaChevronRight  />
+                            </div>
+                        </Container>
                     </Container>
-                </Container>
-                <Container className={classes.transaction}>
-                    <Typography className={classes.transactionRightDirection}> <MdArrowForward size={24} /> </Typography>
-                    <Container className={classes.transactionDetails}>
-                        <Typography className={classes.transactionDate}>
-                            26/03/2020
-                        </Typography>
-                        <Typography className={classes.transactionAccount}>
-                            @Adidas store
-                        </Typography>
-                        <Typography className={classes.transactionData}>
-                            80$
-                        </Typography>
-                        <Typography className={classes.transactionType}>
-                            payment
-                        </Typography>
-                        <div className={classes.transactionChevronRightContainer}>
-                            <FaChevronRight  />
-                        </div>
-                    </Container>
-                </Container>
-                <Container className={classes.transaction}>
-                    <Typography className={classes.transactionSelfDirection}> <MdArrowDownward size={24} /> </Typography>
-                    <Container className={classes.transactionDetails}>
-                        <Typography className={classes.transactionDate}>
-                            26/03/2020
-                        </Typography>
-                        <Typography className={classes.transactionAccount}>
-                            @Adidas store
-                        </Typography>
-                        <Typography className={classes.transactionData}>
-                            80$
-                        </Typography>
-                        <Typography className={classes.transactionType}>
-                            payment
-                        </Typography>
-                        <div className={classes.transactionChevronRightContainer}>
-                            <FaChevronRight  />
-                        </div>
-                    </Container>
-                </Container>
+                ))}
             </Container>
         </Grid>
     )
