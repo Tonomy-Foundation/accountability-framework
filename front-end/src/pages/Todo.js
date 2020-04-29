@@ -17,7 +17,7 @@ class Todo extends React.Component {
     super(props);
 
     this.state = {
-      newItem: 'Shampoo',
+      newItem: 'christiaan',
     }
 
     this.newItem = this.newItem.bind(this);
