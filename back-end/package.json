@@ -10,16 +10,20 @@
     "config": ". ../config.sh"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
     "eosjs": "^20.0.3",
     "eosjs-ecc": "^4.0.7",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
+    "express": "^4.16.4",
+    "mongoose": "^5.9.10",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.3",
+    "prettier": "2.0.5",
     "util": "^0.12.2"
   },
   "author": "",
