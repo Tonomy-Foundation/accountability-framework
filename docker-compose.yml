@@ -5,16 +5,28 @@ services:
     container_name: "eosio-cdt"
     volumes:
       - ./:/var/repo
-  eosio:
+  # eosio:
+  #   build:
+  #     context: ./blockchain
+  #     dockerfile: Dockerfile-eosio
+  #   container_name: "eosio"
+  #   ports:
+  #     - 8888:8888
+  #   volumes:
+  #     - ./:/var/repo
+  #     - ./temp/eosio:/data
+  dfuse:
     build:
       context: ./blockchain
-      dockerfile: Dockerfile-eosio
-    container_name: "eosio"
+      dockerfile: Dockerfile-dfuse
+    container_name: "dfuse"
     ports:
-      - 8888:8888
+      - 8080:8080
+      - 8081:8081
+      - 13008:13008
     volumes:
       - ./:/var/repo
-      - ./temp/eosio:/data
+      - ./temp/dfuse:/data
   # mongo:
   #   image: mongo:latest
   #   container_name: "mongodb"
