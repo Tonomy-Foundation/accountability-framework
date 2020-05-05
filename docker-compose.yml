@@ -23,7 +23,8 @@ services:
     ports:
       - 8080:8080
       - 8081:8081
-      - 13008:13008
+      - 13013:13013
+      - 8888:8888
     volumes:
       - ./:/var/repo
       - ./temp/dfuse:/data
