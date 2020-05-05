@@ -11,17 +11,9 @@ RUN wget https://github.com/dfuse-io/dfuse-eosio/releases/download/v0.1.0-beta2/
     && tar -xzvf dfuse-eosio_0.1.0-beta2_linux_x86_64.tar.gz \
     && rm dfuse-eosio_0.1.0-beta2_linux_x86_64.tar.gz
 RUN mv dfuseeos /usr/local/bin/dfuseeos
-RUN (echo "y" && cat) | dfuseeos init
-#RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' dfuse.yaml # does not do anything...
-#RUN apt-get remove -y wget ca-certificates \
-#    && apt-get autoremove -y \
-#    && apt-get clean \
-#RUN rm -rf /var/lib/apt/lists/* \
-#    && cd /usr/opt/eosio.cdt/1.7.0/bin \
-#    # Hack to fix multithreading issue in eosio.cdt 1.7.0
-#RUN mv wasm-ld wasm-ld.real \
-#    && echo '#!/bin/bash' > wasm-ld \
-#    && echo '`dirname $0`/wasm-ld.real --no-threads "$@"' >> wasm-ld \
-#    && chmod +x /usr/opt/eosio.cdt/1.7.0/bin/wasm-ld
+RUN mkdir ./dfuse-init && cd dfuse-init
+RUN (echo "y" && cat) | dfuseeos init # "y" will initialize to run a producing node, "n" will connect to existing node
+RUN apt-get remove -y wget ca-certificates
+RUN apt-get autoremove -y
 
 # docker run -p 13013:13013 -p 8888:8888 -p 8081:8081 -p 8080:8080 -it {{image_name}} dfuseeos start
