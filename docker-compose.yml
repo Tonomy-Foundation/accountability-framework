@@ -15,18 +15,18 @@ services:
     volumes:
       - ./:/var/repo
       - ./temp/eosio:/data
-  # mongo:
-  #   image: mongo:latest
-  #   container_name: "mongodb"
-  #   ports:
-  #     - 27017:27017
-  #   environment:
-  #     - MONGO_DATA_DIR=/data
-  #     - MONGO_LOG_DIR=/data/logs
-  #     - MONGODB_USER="user"
-  #     - MONGODB_PASS="pass"
-  #   volumes:
-  #     - ./temp/mongo:/data
+  mongo:
+    image: mongo:latest
+    container_name: 'mongodb'
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_DATA_DIR=/data
+      - MONGO_LOG_DIR=/data/logs
+      - MONGODB_USER="user"
+      - MONGODB_PASS="pass"
+    volumes:
+      - ./temp/mongo:/data
   back-end:
     build:
       context: ./back-end
