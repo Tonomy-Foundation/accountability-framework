@@ -93,6 +93,22 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         marginBottom: '20px'
     },
+    transactionDetailsHeader: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: '60px',
+        alignItems: 'center',
+        marginLeft: '30px',
+        marginRight: '150px',
+    },
+    transactionDetailsHeaderLabel: {
+        display: 'flex',
+        justifyContent: 'center',
+        color: '#90caf8',
+        fontWeight: '600',
+        fontSize: '16px',
+    },
     transactionDetails: {
         display: 'flex',
         flexDirection: 'row',
@@ -123,7 +139,8 @@ const useStyles = makeStyles((theme) => ({
         color: '#247dc1',
         fontWeight: '600',
         fontSize: '16px',
-        flex: '1'
+        flex: '1',
+        cursor: 'pointer'
     },
     transactionData: {
         color: '#fff',
@@ -202,6 +219,22 @@ function PeopleViewTransactions(props) {
                         All
                     </Typography>
                 </Container>
+                <Container className={classes.transaction}>
+                    <Container className={classes.transactionDetailsHeader}>
+                        <Typography className={classes.transactionDetailsHeaderLabel}>
+                            time
+                        </Typography>
+                        <Typography className={classes.transactionDetailsHeaderLabel}>
+                            account
+                        </Typography>
+                        <Typography className={classes.transactionDetailsHeaderLabel}>
+                            data
+                        </Typography>
+                        <Typography className={classes.transactionDetailsHeaderLabel}>
+                            type
+                        </Typography>
+                    </Container>
+                </Container>
                 {props.actions.map(data => (
                     <Container className={classes.transaction}>
 
@@ -221,7 +254,7 @@ function PeopleViewTransactions(props) {
                             <Typography className={classes.transactionDate}>
                                 {moment(data.timestamp).format('DD-MM-YYYY')}
                             </Typography>
-                            <Typography className={classes.transactionAccount}>
+                            <Typography className={classes.transactionAccount} onClick={() => { props.history.push(`/people/${data.account}`)}}>
                                 {data.account}
                             </Typography>
                             <Typography className={classes.transactionData}>
