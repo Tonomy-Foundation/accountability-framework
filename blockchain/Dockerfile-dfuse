@@ -1,14 +1,14 @@
  
 FROM ubuntu:18.04
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends wget ca-certificates software-properties-common
-RUN wget https://github.com/EOSIO/eosio.cdt/releases/download/v1.7.0/eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends wget ca-certificates software-properties-common \
+    && wget https://github.com/EOSIO/eosio.cdt/releases/download/v1.7.0/eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb \
     && apt install -y ./eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb \
-    && rm eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb
-RUN wget https://github.com/dfuse-io/eos/releases/download/v2.0.3-dm/eosio_2.0.3-dm_ubuntu-18.04_amd64.deb \
+    && rm eosio.cdt_1.7.0-1-ubuntu-18.04_amd64.deb \
+    && wget https://github.com/dfuse-io/eos/releases/download/v2.0.3-dm/eosio_2.0.3-dm_ubuntu-18.04_amd64.deb \
     && apt install -y ./eosio_2.0.3-dm_ubuntu-18.04_amd64.deb \
-    && rm eosio_2.0.3-dm_ubuntu-18.04_amd64.deb
-RUN wget https://github.com/dfuse-io/dfuse-eosio/releases/download/v0.1.0-beta2/dfuse-eosio_0.1.0-beta2_linux_x86_64.tar.gz \
+    && rm eosio_2.0.3-dm_ubuntu-18.04_amd64.deb \
+    && wget https://github.com/dfuse-io/dfuse-eosio/releases/download/v0.1.0-beta2/dfuse-eosio_0.1.0-beta2_linux_x86_64.tar.gz \
     && tar -xzvf dfuse-eosio_0.1.0-beta2_linux_x86_64.tar.gz \
     && rm dfuse-eosio_0.1.0-beta2_linux_x86_64.tar.gz
 RUN mv dfuseeos /usr/local/bin/dfuseeos \
@@ -25,7 +25,9 @@ RUN mv dfuseeos /usr/local/bin/dfuseeos \
 RUN cd / \
     # "y" will initialize to run a producing node, "n" will connect to existing node
     && (echo "y" && cat) | dfuseeos init
+RUN cat producer/config.ini
 RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' producer/config.ini
+RUN cat producer/config.ini
 
 #CMD dfuseeos start --data-dir /data
 # docker run -p 8888:8888 -p 8081:8081 -p 8080:8080 -it 719b3cb3da24 dfuseeos start

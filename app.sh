@@ -8,6 +8,7 @@ PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 function start {
     cd "$PARENT_PATH"
+    mkdir temp
     docker-compose up -d
 }
 
