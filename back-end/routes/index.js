@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const accounts = require("../controllers/accounts.controller.js");
-
+const getAccounts = require('./get-accounts');
 /* GET root route */
 router.get('/', function (req, res, next) {
   res.send('hiiii');
@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
 router.post("/new-account", accounts.create);
 
 // Retrieve all accountss
-// router.get("/get-accounts", accounts.findAll);
+router.get("/get-accounts", getAccounts);
 
 // Retrieve all published accountss
 // router.get("/published", accounts.findAllPublished);
