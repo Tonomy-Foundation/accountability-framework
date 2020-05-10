@@ -18,7 +18,8 @@
     "eosjs-ecc": "^4.0.7",
     "express": "^4.16.4",
     "mongoose": "^5.9.10",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "node-fetch": "^2.6.0",
