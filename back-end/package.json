@@ -4,8 +4,7 @@
   "description": "eosio nodejs backend",
   "private": true,
   "scripts": {
-    "start": "npm run-script config && nodemon ./bin/www",
-    "debugStart": "DEBUG=express:* npm run devstart",
+    "start": "npm run-script config && nodemon server.js",
     "bootstrap": "npm run-script config && node test/bootstrap-accounts.js",
     "config": ". ../config.sh"
   },
