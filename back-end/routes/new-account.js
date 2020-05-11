@@ -20,5 +20,5 @@ module.exports = async function(req, res, next) {
   });
 
   console.log('new account created', newAccount);
-  res.send(success);
+  res.send();
 }

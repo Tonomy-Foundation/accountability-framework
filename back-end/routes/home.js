@@ -1,3 +1,5 @@
 module.exports = async function(req, res, next) {
-  res.send('respond with a resource');
+  let retObj = req.addBlockchainRes({my_message: 'respond with a resource'})
+  res.status(req.blockchainRes.code);
+  res.send(retObj);
 }

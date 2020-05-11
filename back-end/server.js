@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const settings = require('./settings');
 const routes = require('./routes');
 const blockchainProxy = require('./middleware/blockchainProxy');
+const asyncRouter = require('./middleware/asyncRouter');
 
 const app = express();
 
@@ -15,16 +16,24 @@ app.use(cookieParser());
 
 // Blockchain proxy
 // Use the following array for paths that should not be proxied to the blockchain
-const blockchainPathBlacklist = ['/new-account']
-app.use(function(req, res, next) {
-  if (!blockchainPathBlacklist.includes(res.path)) {
-    blockchainProxy(req, res.next);
+const blockchainPathBlacklist = [/new-account']
+app.use(asyncRouter(async function(req, res, next) {
+  if (!blockchainPathBlacklist.includes(req.path)) {
+    await blockchainProxy.pre(req, res, next);
   }
   next();
-});
+}));
 
 // Extended and additional API endpoints
 app.use(routes);
+
+// Return any blockchain data if not returned using a route
+app.use(asyncRouter(async function(req, res, next) {
+  if (!blockchainPathBlacklist.includes(req.path)) {
+    await blockchainProxy.post(req, res, next);
+  }
+  next();
+}));
 
 // Error handler
 app.use(function(err, req, res, next) {

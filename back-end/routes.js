@@ -7,11 +7,11 @@ const newAccount = require('./routes/new-account');
 const getAccounts = require('./routes/get-accounts');
 
 // Blockchain API extensions
-router.post('/new-account', asyncRouter(newAccount));
+router.post("/get-accounts", asyncRouter(getAccounts));
+router.get('/', asyncRouter(home));
 
 // New API endpoints
-router.get('/', asyncRouter(home));
-router.get("/get-accounts", asyncRouter(getAccounts));
+router.post('/new-account', asyncRouter(newAccount));
 
 module.exports = router;
   
