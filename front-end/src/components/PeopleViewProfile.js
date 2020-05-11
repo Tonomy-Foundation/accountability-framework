@@ -78,31 +78,29 @@ function PeopleViewProfile(props) {
     return (
         <Grid item xs>
             <Container component="div" className={classes.container}>
-                <Typography component="p" className={classes.accountName}>
-                @{props.accountName}
-                </Typography>
-                <Container component="p" className={classes.organizationsLabelContainer}>
-                    <Typography component="p" className={classes.organizationsLabel}>
+                <h1 component="p" className={classes.accountName}>
+                    @{props.accountName}
+                </h1>
+                <Container component="div" className={classes.organizationsLabelContainer}>
+                    <h2 component="p" className={classes.organizationsLabel}>
                         Organizations 
-                    </Typography>
+                    </h2>
                     <TextField label="search" component="div" className={classes.inputField} />
                 </Container>
                 <Grid container spacing={8}>
                     <Grid container item xs={12} spacing={3}>
-                        {props.organizations.map(data => {
+                        {props.organizations && props.organizations.map(data => {
                             return (
-                                <Grid component="div" className={classes.gridMenuItem}item xs>
-                                    <Box className={classes.menuItem}>
-                                        {data.name}
-                                    </Box>
-                                </Grid>
+                                <Box className={classes.menuItem}>
+                                    {data.name}
+                                </Box>
                             );
                         })}
-                        <Grid component="div" className={classes.gridMenuItem} item xs>
-                            <Box className={classes.menuAddItem}>
-                            +
+                        {props.isMyAccount && (
+                            <Box className={classes.menuAddItem} onClick={() => {props.history.push('/create-organization')}}>
+                                +
                             </Box> 
-                        </Grid>
+                        )}
                     </Grid>
                 </Grid>
             </Container>

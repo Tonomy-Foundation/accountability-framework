@@ -82,6 +82,12 @@ function PeopleView(props) {
 
     getAccount();
   }, [props.eosio, state.accountName])
+
+  useEffect(() => {
+    console.log(state.organizations)
+    console.log(state.actions)
+  }, [state])
+
   
   return (
     <Grid container className={classes.root} spacing={0}>
@@ -89,12 +95,16 @@ function PeopleView(props) {
             <PeopleViewProfile
               accountName={state.accountName}
               isMyAccount={state.isMyAccount}
-              organizations={state.organizations}/>
+              organizations={state.organizations}
+              history={props.history}
+              />
           </Grid>
           <Grid key={1} item xs={6}>
             <PeopleViewTransactions
               accountName={state.accountName}
-              actions={state.actions}/>
+              actions={state.actions}
+              history={props.history}
+              />
           </Grid>
     </Grid>
   )
