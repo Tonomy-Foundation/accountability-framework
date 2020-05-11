@@ -2,6 +2,7 @@ FROM node
 
 RUN npm install -g serve
 
+
 WORKDIR /var/repo/front-end
 
 CMD ./start.sh >> /data/react.log 2>&1
