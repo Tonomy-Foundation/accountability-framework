@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 // Blockchain proxy
 // Use the following array for paths that should not be proxied to the blockchain
-const blockchainPathBlacklist = [/new-account']
+const blockchainPathBlacklist = ['/new-account']
 app.use(asyncRouter(async function(req, res, next) {
   if (!blockchainPathBlacklist.includes(req.path)) {
     await blockchainProxy.pre(req, res, next);

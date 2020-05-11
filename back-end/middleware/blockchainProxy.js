@@ -21,11 +21,11 @@ module.exports.pre = async function(req, res, next) {
         }
         return retObj;
     }
-  next();
+    next();
 }
 
 module.exports.post = async function(req, res, next) {
-    if (req.blockchainRes) {
+    if (req.blockchainRes && !req.blockchainResSent) {
         res.status(req.blockchainRes.code);
         res.send(req.blockchainRes);
     }
