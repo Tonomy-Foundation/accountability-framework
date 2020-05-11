@@ -14,7 +14,9 @@ module.exports = function (req, res, next) {
   // TODO: replace below fetch call with eosio object
   const account_name = req.body.account_name
   const blockchainData = fetch(`http://localhost:8888/v1/chain/get_account`, {
-    method: 'POST', timeout: 150, body: `account_name=${account_name}`
+    method: 'POST',
+    timeout: 150,
+    body: JSON.stringify({ account_name })
   })
     .then(res => res.json())
     .then(response => {
@@ -22,6 +24,7 @@ module.exports = function (req, res, next) {
       if (response.code === 500) {
         throw new Error(response.message);
       }
+      return response;
     });
   // 2 get data from mongodb
   const dbData = accounts.findOne({ accountName: account_name });
