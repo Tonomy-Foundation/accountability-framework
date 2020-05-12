@@ -8,9 +8,6 @@ module.exports = async function (req, res, next) {
     return;
   }
 
-  // Data from blockchain proxy middleware is already added to body
-  // const blockchainData = res.body;
-
   // Get data from mongodb
   const accountDoc = await accountController.findOne({ accountName: account_name });
   if (!accountDoc) {
