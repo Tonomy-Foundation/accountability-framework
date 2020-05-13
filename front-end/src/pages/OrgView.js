@@ -121,6 +121,18 @@ function OrgView(props) {
               name: "Finance",
               level: 2,
             },
+            {
+              name: "Finance",
+              level: 2,
+            },
+            {
+              name: "Finance",
+              level: 2,
+            },
+            {
+              name: "Finance",
+              level: 2,
+            },
           ]}
         />
       </Grid>

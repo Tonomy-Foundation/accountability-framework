@@ -6,6 +6,9 @@ import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
   mainGrid: {
     height: "100%",
     flex: "1",
@@ -58,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: "10px",
     padding: "20px",
     borderRadius: "15px",
     backgroundColor: "#90caf8",
@@ -105,11 +107,11 @@ function OrgViewProfile(props) {
             Member groups
           </h2>
         </Container>
-        <Grid container spacing={8}>
-          <Grid container item xs={12} spacing={3}>
-            {props.memberGroups &&
-              props.memberGroups.map((data) => {
-                return (
+        <Grid container spacing={5}>
+          {props.memberGroups &&
+            props.memberGroups.map((data) => {
+              return (
+                <Grid item sm={12} md={6} lg={3}>
                   <Box
                     className={classes.menuItem}
                     onClick={() => {
@@ -118,9 +120,11 @@ function OrgViewProfile(props) {
                   >
                     {data.name} (level {data.level})
                   </Box>
-                );
-              })}
-            {props.isMyAccount && (
+                </Grid>
+              );
+            })}
+          {props.isMyAccount && (
+            <Grid item xs={3}>
               <Box
                 className={classes.menuAddItem}
                 onClick={() => {
@@ -129,8 +133,8 @@ function OrgViewProfile(props) {
               >
                 +
               </Box>
-            )}
-          </Grid>
+            </Grid>
+          )}
         </Grid>
       </Container>
     </Grid>
