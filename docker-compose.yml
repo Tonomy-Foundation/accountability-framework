@@ -38,7 +38,9 @@ services:
       - ./:/var/repo
       - ./temp/back-end:/data
     working_dir: /var/repo/back-end
-    command: sh -c 'npm start >> /data/nodejs.log 2>&1'
+    command: sh -c 'npm run-script docker >> /data/nodejs.log 2>&1'
+    # extra_hosts:
+    #   - "mongodb:127.0.0.1"
   front-end:
     build:
       context: ./front-end

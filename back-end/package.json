@@ -4,8 +4,9 @@
   "description": "eosio nodejs backend",
   "private": true,
   "scripts": {
-    "start": "npm run-script config && nodemon server.js",
-    "bootstrap": "npm run-script config && node test/bootstrap-accounts.js",
+    "start": "npm run-script config && NODE_ENV=development nodemon server.js",
+    "docker": "npm run-script config && NODE_ENV=docker nodemon server.js",
+    "bootstrap": "npm run-script config && NODE_ENV=docker node test/bootstrap-accounts.js",
     "config": ". ../config.sh"
   },
   "dependencies": {

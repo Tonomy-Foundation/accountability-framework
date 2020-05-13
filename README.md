@@ -27,6 +27,15 @@ This will call two files used to boostrap the blockchain and database:
 
 `./app.sh up`
 
+The following services will run
+
+- port 4000: nodejs express middleware API
+- port 3000: react app
+- port 8888: nodeos http API to eosio blockchain node
+- port 27017: mongodb database
+
+You can also run the back-end and front-end in a local environment by running `npm start` in their respective folders. See README.md for the local folder for more details.
+
 For production start
 
 `./app.sh up prod`

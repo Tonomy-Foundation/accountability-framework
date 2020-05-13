@@ -43,7 +43,7 @@ app.use(function(err, req, res, next) {
 });
 
 try {
-  mongoose.connect(settings.URL.mongodb, {
+  mongoose.connect(settings.mongodb.url, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }, (rej) => {
@@ -53,8 +53,8 @@ try {
     }
     console.log("Connected to database");
     
-    app.listen(4000, () => {
-      console.log("Server listening on port 4000");
+    app.listen(settings.port, () => {
+      console.log("Server listening on port " + settings.port);
     });
   });
 } catch (err) {

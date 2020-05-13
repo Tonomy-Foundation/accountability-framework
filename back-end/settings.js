@@ -1,6 +1,7 @@
+// these settings are used on npm start
 let settings = {
   eosio: {
-    network: null,
+    network: "http://localhost:8888",
     accounts: {
       eosio: {
         pkey: "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3",
@@ -24,19 +25,19 @@ let settings = {
       }
     }
   },
-  URL: {
-    mongodb: "mongodb://127.0.0.1:27017/eosio"
-  }
+  mongodb: {
+    url: "mongodb://localhost:27017/eosio"
+  },
+  port: 4001
 };
 
 if (process.env.NODE_ENV === "production") {
   settings.eosio.network = process.env.SERVER_DOMAIN + ":8888";
   settings.URL.mongodb = "mongodb://" + process.env.SERVER_DOMAIN + process.env.DB_NAME + ":27017";
-} else if (process.env.NODE_ENV === "test") {
-  settings.eosio.network = "http://localhost:8888";
-} else {
-  // Use name from docker compose
+} else if (process.env.NODE_ENV === "docker") {
   settings.eosio.network = "http://eosio:8888";
+  settings.mongodb.url = "mongodb://mongodb:27017/eosio";
+  settings.port = 4000
 }
 
 module.exports = settings;
