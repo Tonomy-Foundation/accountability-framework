@@ -4,15 +4,14 @@ This application acts as a middleware between front end (React) and eosio blockc
 
 We could do the data manipulation here so that we won't be doing it in React.
 
-## Development
+### `npm start`
 
-This application is bootstrapped with [express generator](https://expressjs.com/en/starter/generator.html).
-
-### Running locally
-
-Just run `npm start` which will starts node application with auto reloading
+Runs the app in local development mode with auto reloading on port `4001`
 
 ### Adding a new route
 
-There is already a dummy route specified which is `users`.
-If you want to add a new route, create a new file in `routes` folder and refer it in `app.js`
+There is already a dummy route specified which is `home.js`.
+If you want to add a new route, create a new file in `routes` folder and refer it in `routes.js`
+
+Routes that should not call the blockchain proxy should be added to the `blockchainPathBlacklist` list in `server.js`
+Routes that extend the blockchain proxy and consume it's response and send it back to the FE should set `req.blockchainResSent = true` as shown in `routes/home.js`
