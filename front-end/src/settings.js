@@ -2,7 +2,7 @@
 let settings = {
     // TODO rename to api.url
     eosio: {
-        network: "http://localhost:8888",
+        network: "http://localhost:4000",
         accounts: {
             jack: {
                 pkey: "5K5cPZHgJaFHWt3Fy4vgzc2WfLw3cLE4E1x5c6A2kx1pjL3mEg4",

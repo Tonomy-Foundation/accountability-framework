@@ -4,10 +4,10 @@ const asyncRouter = require('./middleware/asyncRouter');
 
 const home = require('./routes/home');
 const newAccount = require('./routes/new-account');
-const getAccounts = require('./routes/get-accounts');
+const getAccount = require('./routes/chain/get-account');
 
 // Blockchain API extensions
-router.post("/get-accounts", asyncRouter(getAccounts));
+router.post("/v1/chain/get_account", asyncRouter(getAccount));
 router.get('/', asyncRouter(home));
 
 // New API endpoints

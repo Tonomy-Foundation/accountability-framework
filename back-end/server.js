@@ -6,12 +6,16 @@ const settings = require('./settings');
 const routes = require('./routes');
 const blockchainProxy = require('./middleware/blockchainProxy');
 const asyncRouter = require('./middleware/asyncRouter');
+const bodyParser = require('body-parser')
 
 const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.text());
 app.use(cookieParser());
 
 // Blockchain proxy

@@ -1,4 +1,4 @@
-const accountController = require('../controllers/accounts.controller');
+const accountController = require('../../controllers/accounts.controller');
 
 /* GET acounts listing. */
 module.exports = async function (req, res, next) {
@@ -9,10 +9,10 @@ module.exports = async function (req, res, next) {
   }
 
   // Get data from mongodb
-  const accountDoc = await accountController.findOne({ accountName: account_name });
+  const accountDoc = await accountController.findOne({ accountName: req.body.account_name });
   if (!accountDoc) {
     res.status(404);
-    res.send({ message: "Not found account with account name " + account_name });
+    res.send({ message: "Not found account with account name " + req.body.account_name });
     return; // not sure if this is needed...
   }
 
@@ -20,6 +20,8 @@ module.exports = async function (req, res, next) {
     accountType: accountDoc.accountType,
     organizations: accountDoc.organizations
   };
+  
   req.blockchainResSent = true;
-  res.send(...res.blockchainRes, ...accountDocInfo);
+  let retObj = req.addBlockchainRes(accountDocInfo);
+  res.send(retObj);
 };
