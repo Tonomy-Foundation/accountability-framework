@@ -19,9 +19,10 @@ module.exports = async function (req, res, next) {
     return; // not sure if this is needed...
   }
 
-  if (!res.body) res.body = {};
-  res.body.accountType = accountDoc.accountType,
-  res.body.organizations = accountDoc.organizations
-
-  res.send();
+  accountDocInfo = {
+    accountType: accountDoc.accountType,
+    organizations: accountDoc.organizations
+  };
+  req.blockchainResSent = true;
+  res.send(...res.blockchainRes, ...accountDocInfo);
 };
