@@ -1,15 +1,13 @@
 const nodeFetch = require('node-fetch');
 const settings = require('../settings');
 
-module.exports.pre = async function(req, res, next) {
+exports.pre = async function(req, res, next) {
     const url = settings.eosio.network + req.path;
-    console.log(req.path, req.body)
 
-    req.body = JSON.parse(req.body);
-    const bodyObj = JSON.stringify(req.body);
+    req.body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     const fetchResponse = await nodeFetch(url, {
-        method: 'POST', timeout: 150, body: bodyObj
-    })
+        method: 'POST', timeout: 150, body: JSON.stringify(req.body)
+    })    
 
     const blockchainRes = await fetchResponse.json();
     req.blockchainRes = blockchainRes;
@@ -27,9 +25,11 @@ module.exports.pre = async function(req, res, next) {
     next();
 }
 
-module.exports.post = async function(req, res, next) {
+exports.post = async function(req, res, next) {
+    console.log("3")
     if (req.blockchainRes && !req.blockchainResSent) {
-        res.status(req.blockchainResStatus);
-        res.send(req.blockchainRes);
+        // res.status(req.blockchainResStatus);
+        // res.send(req.blockchainRes);
     }
+    next();
 }

@@ -12,10 +12,10 @@ const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: false })); // unsure if still needed, as using body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.text());
+app.use(bodyParser.text()); // needed to parse eosjs api into req.body
 app.use(cookieParser());
 
 // Blockchain proxy
@@ -47,6 +47,7 @@ app.use(function(err, req, res, next) {
 });
 
 try {
+  // mongoose.Promise = global.Promise;
   mongoose.connect(settings.mongodb.url, {
     useNewUrlParser: true,
     useUnifiedTopology: true

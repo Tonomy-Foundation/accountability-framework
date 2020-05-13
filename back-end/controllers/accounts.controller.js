@@ -10,15 +10,23 @@ exports.insert = async function(doc) {
 
 // Retrieve all Accounts from the database with a regex
 exports.findAllWithRegex = async (regex) => {
-  return AccountsModel.find({ title: { $regex: new RegExp(regex), $options: "i" } });
+  return await AccountsModel.find({ title: { $regex: new RegExp(regex), $options: "i" } }).exec();
 };
 
 // Find a single Account
-exports.findOne = async (condition) => {
-  return await AccountsModel.findOne(condition).lean();
+exports.findOne = async function (condition) {
+  // return await AccountsModel.findOne(condition).lean().exec()
+  return await new Promise(((res, rej) => {
+    AccountsModel.findOne(condition).lean().then((doc) => {
+      res(doc)
+    }).catch((err) => {
+      rej(err)
+    })
+
+  }))
 };
 
 // Update an Account by the id in the request
 exports.updateOneById = async (id, update) => {
-  return await Accounts.findByIdAndUpdate(id, update, { useFindAndModify: false });
+  return await Accounts.findByIdAndUpdate(id, update, { useFindAndModify: false, runValidators: true }).exec();
 };

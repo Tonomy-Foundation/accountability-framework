@@ -96,6 +96,7 @@ const accountController = require('../controllers/accounts.controller');
   console.log("todolist contract deployed");
 
   console.log("fin")
+  process.exit(0)
 })();
 
 function newperson(creator, name, key, owner = "gov") {
