@@ -112,7 +112,7 @@ function PeopleView(props) {
       </Grid>
       <Grid key={1} item xs={6}>
         <TransactionsTable
-          account={state.accountName}
+          accountName={state.accountName}
           transactions={state.actions}
           history={props.history}
           org={false}

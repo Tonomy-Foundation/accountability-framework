@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
@@ -6,14 +6,8 @@ import moment from "moment";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
-import { palette } from "@material-ui/system";
 import TextField from "@material-ui/core/TextField";
-import {
-  MdShoppingCart,
-  MdArrowBack,
-  MdArrowForward,
-  MdArrowDownward,
-} from "react-icons/md";
+import { MdShoppingCart, MdArrowBack, MdArrowForward } from "react-icons/md";
 import { GiHouse } from "react-icons/gi";
 import {
   FaCar,
@@ -247,7 +241,10 @@ function TransactionsTable(props) {
           </Container>
         </Container>
         {props.transactions.map((data) => (
-          <Container className={classes.transaction}>
+          <Container
+            key={`${data.tx_id}${data.type}`}
+            className={classes.transaction}
+          >
             {data.direction === "inbound" && (
               <Typography className={classes.transactionRightDirection}>
                 {" "}
@@ -320,7 +317,7 @@ TransactionsTable.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
-  account: PropTypes.string.isRequired,
+  accountName: PropTypes.string.isRequired,
   org: PropTypes.bool.isRequired,
   transactions: PropTypes.arrayOf(
     PropTypes.shape({

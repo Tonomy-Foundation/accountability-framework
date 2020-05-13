@@ -32,6 +32,14 @@ function OrgView(props) {
     count: 0,
   });
 
+  const [memberGroup, setMemberGroup] = useState(null);
+
+  const selectMemberGroup = (selectedGroupName) => {
+    setMemberGroup(
+      selectedGroupName === memberGroup ? null : selectedGroupName
+    );
+  };
+
   useEffect(() => {
     let eosio;
     let loggedinAccount;
@@ -95,11 +103,6 @@ function OrgView(props) {
     getAccount();
   }, [props.eosio, state.accountName]);
 
-  useEffect(() => {
-    console.log(state.organizations);
-    console.log(state.actions);
-  }, [state]);
-
   return (
     <Grid container className={classes.root} spacing={0}>
       <Grid key={0} item xs={6}>
@@ -107,16 +110,29 @@ function OrgView(props) {
           accountName={state.accountName}
           isMyAccount={state.isMyAccount}
           organizations={state.organizations}
-          history={props.history}
+          description="Duis accumsan venenatis dui, tristique rhoncus elit posuere ut. Vivamus erat lacus, rutrum et iaculis sed, interdum vitae purus. Aliquam turpis nisl, dictum ac mi vel, eleifend placerat sapien."
+          selectMemberGroup={selectMemberGroup}
+          memberGroups={[
+            {
+              name: "Creators",
+              level: 1,
+            },
+            {
+              name: "Finance",
+              level: 2,
+            },
+          ]}
         />
       </Grid>
       <Grid key={1} item xs={6}>
-        <TransactionsTable
-          account={state.accountName}
-          transactions={state.actions}
-          history={props.history}
-          org
-        />
+        {!memberGroup && (
+          <TransactionsTable
+            accountName={state.accountName}
+            transactions={state.actions}
+            history={props.history}
+            org
+          />
+        )}
       </Grid>
     </Grid>
   );
