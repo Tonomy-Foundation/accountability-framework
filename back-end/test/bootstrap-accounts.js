@@ -1,130 +1,179 @@
+const mongoose = require('mongoose');
+
 const Eosio = require('../services/Eosio');
 const settings = require('../settings');
+const accountController = require('../controllers/accounts.controller');
 
 (async function main() {
-    console.log("starting blockchain initialization");
+  console.log("starting blockchain initialization");
 
-    let eosioAccount = {
-        pkey: settings.eosio.accounts.eosio.pkey,
-        name: "eosio",
-        permission: "active"
+  let eosioAccount = {
+    pkey: settings.eosio.accounts.eosio.pkey,
+    name: "eosio",
+    permission: "active"
+  }
+  mongoose.connect(settings.URL.mongodb, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }, (rej) => {
+    if (rej) {
+      console.error(rej.message);
+      process.exit();
     }
-    
-    const eosio = new Eosio();
-    await eosio.login(eosioAccount);
-    await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
-    console.log("eosio.bios contract deployed");
+    console.log("Connected to database");
+  });
 
-    await eosio.login(eosioAccount);
-    
-    let data = newperson("eosio", "yvo", settings.eosio.accounts.yvo.pubkey, settings.eosio.accounts.yvo.pubkey);
-    await eosio.myapi.transact("eosio", "newperson", data);
-    console.log("Person yvo created");
+  const eosio = new Eosio();
+  await eosio.login(eosioAccount);
+  await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
+  console.log("eosio.bios contract deployed");
 
-    data = neworg("eosio", "gov", ["yvo"], 0.66);
-    await eosio.myapi.transact("eosio", "neworg", data)
-    console.log("Organization gov created");
+  await eosio.login(eosioAccount);
 
-    data = newperson("eosio", "jack", settings.eosio.accounts.jack.pubkey);
-    await eosio.myapi.transact("eosio", "newperson", data)
-    console.log("Person jack created");
+  let data = newperson("eosio", "yvo", settings.eosio.accounts.yvo.pubkey, settings.eosio.accounts.yvo.pubkey);
+  await eosio.myapi.transact("eosio", "newperson", data);
+  await accountController.insert({
+    accountName: "yvo",
+    name: "yvo",
+    accountType: "person",
+    organizations: [{
+      accountName: "gov",
+      name: "gov",
+    }],
+  });
+  console.log("Person yvo created");
 
-    data = newperson("eosio", "kirsten", settings.eosio.accounts.kirsten.pubkey);
-    await eosio.myapi.transact("eosio", "newperson", data)
-    console.log("Person kirsten created");
+  data = neworg("eosio", "gov", ["yvo"], 0.66);
+  await eosio.myapi.transact("eosio", "neworg", data)
+  console.log("Organization gov created");
 
-    data = newperson("eosio", "matej", settings.eosio.accounts.matej.pubkey);
-    await eosio.myapi.transact("eosio", "newperson", data)
-    console.log("Person matej created");
+  data = newperson("eosio", "jack", settings.eosio.accounts.jack.pubkey);
+  await eosio.myapi.transact("eosio", "newperson", data)
+  await accountController.insert({
+    accountName: "jack",
+    name: "jack tanner",
+    accountType: "person",
+    organizations: [{
+      accountName: "todolist",
+      name: "todolist org",
+    }],
+  });
+  console.log("Person jack created");
 
-    data = neworg("eosio", "todolist", ["jack", "kirsten", "matej"], 0.66);
-    await eosio.myapi.transact("eosio", "neworg", data)
-    console.log("Organization todolist created");
+  data = newperson("eosio", "kirsten", settings.eosio.accounts.kirsten.pubkey);
+  await eosio.myapi.transact("eosio", "newperson", data)
+  await accountController.insert({
+    accountName: "kirsten",
+    name: "kirsten",
+    accountType: "person",
+    organizations: [{
+      accountName: "todolist",
+      name: "todolist org",
+    }],
+  });
+  console.log("Person kirsten created");
 
-    eosioAccount = {
-        pkey: settings.eosio.accounts.jack.pkey,
-        name: "todolist",
-        permission: "active"
-    }
-    
-    await eosio.login(eosioAccount);
-    await eosio.myapi.deploy("todolist", "../contracts/todolist");
-    console.log("todolist contract deployed");
+  data = newperson("eosio", "matej", settings.eosio.accounts.matej.pubkey);
+  await eosio.myapi.transact("eosio", "newperson", data)
+  await accountController.insert({
+    accountName: "matej",
+    name: "matej",
+    accountType: "person",
+    organizations: [{
+      accountName: "todolist",
+      name: "todolist org",
+    }],
+  });
+  console.log("Person matej created");
 
-    console.log("fin")
+  data = neworg("eosio", "todolist", ["jack", "kirsten", "matej"], 0.66);
+  await eosio.myapi.transact("eosio", "neworg", data)
+  console.log("Organization todolist created");
+
+  eosioAccount = {
+    pkey: settings.eosio.accounts.jack.pkey,
+    name: "todolist",
+    permission: "active"
+  }
+
+  await eosio.login(eosioAccount);
+  await eosio.myapi.deploy("todolist", "../contracts/todolist");
+  console.log("todolist contract deployed");
+
+  console.log("fin")
 })();
 
-function newperson(creator, name, key, owner="gov") {
-    let data = {
-        creator: creator,
-        name: name,
-        owner: {
-            threshold:1,
-            keys:[],
-            accounts:[{
-                permission: {
-                    actor:"gov",
-                    permission:"active"
-                },
-                weight:1
-            }],
-            waits:[]
+function newperson(creator, name, key, owner = "gov") {
+  let data = {
+    creator: creator,
+    name: name,
+    owner: {
+      threshold: 1,
+      keys: [],
+      accounts: [{
+        permission: {
+          actor: "gov",
+          permission: "active"
         },
-        active: {
-            threshold:1,
-            keys:[{
-                key: key,
-                weight: 1
-            }],
-            accounts:[],
-            waits:[]
-        }
+        weight: 1
+      }],
+      waits: []
+    },
+    active: {
+      threshold: 1,
+      keys: [{
+        key: key,
+        weight: 1
+      }],
+      accounts: [],
+      waits: []
     }
-    if (owner !== "gov") {
-        data.owner.accounts = []
-        data.owner.keys = [{
-            key: owner,
-            weight: 1
-        }]
-    }
-    return data;
+  }
+  if (owner !== "gov") {
+    data.owner.accounts = []
+    data.owner.keys = [{
+      key: owner,
+      weight: 1
+    }]
+  }
+  return data;
 }
 
 function neworg(creator, name, owners, thresholdPercent) {
-    let data = {
-        creator: creator,
-        name: name,
-        owner: {
-            threshold: Math.min(Math.floor(owners.length * thresholdPercent)+1, owners.length),
-            keys:[],
-            accounts:[],
-            waits:[]
-        },
-        active: {
-            threshold:1,
-            keys:[],
-            accounts:[],
-            waits:[]
-        }
+  let data = {
+    creator: creator,
+    name: name,
+    owner: {
+      threshold: Math.min(Math.floor(owners.length * thresholdPercent) + 1, owners.length),
+      keys: [],
+      accounts: [],
+      waits: []
+    },
+    active: {
+      threshold: 1,
+      keys: [],
+      accounts: [],
+      waits: []
     }
-    
-    for (owner of owners) {
-        data.owner.accounts.push({
-            permission: {
-                actor: owner,
-                permission:"active"
-            },
-            weight:1
-        })
-        data.active.accounts.push({
-            permission: {
-                actor: owner,
-                permission:"active"
-            },
-            weight:1
-        })
-    }
-    return data;
+  }
+
+  for (owner of owners) {
+    data.owner.accounts.push({
+      permission: {
+        actor: owner,
+        permission: "active"
+      },
+      weight: 1
+    })
+    data.active.accounts.push({
+      permission: {
+        actor: owner,
+        permission: "active"
+      },
+      weight: 1
+    })
+  }
+  return data;
 }
 // # Create some people accounts
 // cleos create account eosio jack $KEY_JACK
@@ -144,14 +193,14 @@ function neworg(creator, name, owners, thresholdPercent) {
 //     DATA2='],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":['
 //     DATA3='],"waits":[]}}'
 //     DATA=$DATA1
-    
+
 //     addPerson "jack" "active"
 //     DATA=$DATA$PERMISSION','
 //     addPerson "kirsten" "active"
 //     DATA=$DATA$PERMISSION','
 //     addPerson "matej" "active"
 //     DATA=$DATA$PERMISSION$DATA2
-    
+
 //     addPerson "jack" "active"
 //     DATA=$DATA$PERMISSION','
 //     addPerson "kirsten" "active"
