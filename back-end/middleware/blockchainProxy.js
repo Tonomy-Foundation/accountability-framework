@@ -1,8 +1,8 @@
 const nodeFetch = require('node-fetch');
-const winston = require('winston');
+const settings = require('../settings');
 
 module.exports.pre = async function(req, res, next) {
-    const url = 'http://localhost:8888' + req.path;
+    const url = settings.eosio.network + req.path;
     const fetchResponse = await nodeFetch(url, {
         method: 'POST', timeout: 150, body: req.body
     })
