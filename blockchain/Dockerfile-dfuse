@@ -16,18 +16,18 @@ RUN mv dfuseeos /usr/local/bin/dfuseeos \
     && apt-get autoremove -y \
 #    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && cd /usr/opt/eosio.cdt/1.7.0/bin \
-    # Hack to fix multithreading issue in eosio.cdt 1.7.0
-    && mv wasm-ld wasm-ld.real \
-    && echo '#!/bin/bash' > wasm-ld \
-    && echo '`dirname $0`/wasm-ld.real --no-threads "$@"' >> wasm-ld \
-    && chmod +x /usr/opt/eosio.cdt/1.7.0/bin/wasm-ld
+    && cd /usr/opt/eosio.cdt/1.7.0/bin
 RUN cd / \
     # "y" will initialize to run a producing node, "n" will connect to existing node
     && (echo "y" && cat) | dfuseeos init
 RUN cat producer/config.ini
 RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' producer/config.ini
 RUN cat producer/config.ini
+# Hack to fix multithreading issue in eosio.cdt 1.7.0
+#RUN mv wasm-ld wasm-ld.real \
+#    && echo '#!/bin/bash' > wasm-ld \
+#    && echo '`dirname $0`/wasm-ld.real --no-threads "$@"' >> wasm-ld \
+#    && chmod +x /usr/opt/eosio.cdt/1.7.0/bin/wasm-ld
 
 CMD dfuseeos start --data-dir /data  >> /data/dfuse.log 2>&1
 # docker run -p 8888:8888 -p 8081:8081 -p 8080:8080 -it 719b3cb3da24 dfuseeos start
