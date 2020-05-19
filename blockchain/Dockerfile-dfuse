@@ -29,5 +29,5 @@ RUN cat producer/config.ini
 RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' producer/config.ini
 RUN cat producer/config.ini
 
-#CMD dfuseeos start --data-dir /data
+CMD dfuseeos start --data-dir /data  >> /data/dfuse.log 2>&1
 # docker run -p 8888:8888 -p 8081:8081 -p 8080:8080 -it 719b3cb3da24 dfuseeos start

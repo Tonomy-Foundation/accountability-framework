@@ -1,9 +1,10 @@
 
+Runs a dfuse node
+https://github.com/dfuse-io/dfuse-eosio
 
-# Connect with bloks.io locally
-https://local.bloks.io
+Services
 
-# Connect with bloks.io to server
-1. Run nodeos on server
-2. Create an SSH API using CloudFront
-3. https://local.bloks.io
+- Dashboard: http://localhost:8081
+- Explorer & APIs:  http://localhost:8080
+- GraphiQL:         http://localhost:8080/graphiql
+- Nodeos:           http://localhost:8888
