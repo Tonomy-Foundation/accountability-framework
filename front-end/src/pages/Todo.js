@@ -80,7 +80,7 @@ class Todo extends React.Component {
   }
 
   render() {
-    if (this.props.eosio) {
+    // if (this.props.eosio) {
       return (
         <Container component="main" maxWidth="xs">
             <h1>Todo list</h1>
@@ -88,9 +88,9 @@ class Todo extends React.Component {
             <TodoList list={this.state.list} toggleItem={this.toggleItem}/>
         </Container>
       );
-    } else {
-      return <Redirect to="/login" />
-    }
+    // } else {
+    //   return <Redirect to="/login" />
+    // }
   }
 }
 

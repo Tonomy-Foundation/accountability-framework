@@ -1,5 +1,6 @@
 import React from 'react';
-import {fade, makeStyles } from '@material-ui/core/styles';
+import { BrowserRouter } from 'react-router';
+import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 // navbar specific imports 
@@ -12,39 +13,77 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 // end of navbar specific imports 
 // importing the redux connect component for export (last line)
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { Redirect } from "react-router-dom";
 
 import Typography from '@material-ui/core/Typography';
 
+
 function mapStateToProps(state) {
   return {
-    eosio: state.eosio,
-   
+    eosio: state.eosio
   };
 }
 
-function NavBarLogin (props){
-  if (props.eosio) {
-    return  <div>You are loggedIn</div>
+function NavBarLogin(props) {
 
-     // return the account of the user
-    //  <div className={classes.sectionDesktop}>
-    //         <IconButton
-    //           edge="end"
-    //           aria-label={props.eosio.account.name}
-    //           aria-controls={menuId}
-    //           aria-haspopup="true"
-    //           onClick={handleProfileMenuOpen}
-    //           color="inherit"
-    //         >
-    //           <AccountCircle />
-    //         </IconButton>
-    //       </div>
-      
-    
-    
+
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+  const menuId = 'primary-search-account-menu';
+  const mobileMenuId = 'primary-search-account-menu-mobile';
+
+  const [loginMe, setLoginMe] = React.useState(false);
+
+  function login() {
+    window.location.href = 'http://localhost:3000/login';
+    // console.log("chiris")
+    // setLoginMe(true);
+  }
+
+  if (props.eosio) {
+    return (
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit">
+          <AccountCircle />
+        </IconButton>
+        <p>{props.eosio.account.name}</p>
+      </MenuItem>
+    );
+  } else if (loginMe) {
+    console.log("Loginmein is true");
+    console.log(loginMe);
+    return <Redirect to="/login" />
+
   } else {
-    return  <div>You are notloggedin</div>
+    return (
+      <button onClick={login}>Login</button>
+    )
   }
 }
 
@@ -70,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    
+
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
@@ -141,7 +180,7 @@ function Navbar(props) {
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
-      // the profile menu button. 
+    // the profile menu button. 
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -179,13 +218,13 @@ function Navbar(props) {
       </MenuItem>
     </Menu>
   );
-// render the application.
-//git push --set-upstream origin navbar
-// how to push as chris git remote set-url origin https://kamitor:password@github.com/Conscious-Cities/eosio-react-app
+  // render the application.
+  //git push --set-upstream origin navbar
+  // how to push as chris git remote set-url origin https://kamitor:password@github.com/Conscious-Cities/eosio-react-app
 
 
-return (
-     
+  return (
+
 
     <div className={classes.grow}>
       <AppBar position="static">
@@ -208,7 +247,9 @@ return (
             />
           </div>
 
-        <NavBarLogin eosio={props.eosio} /> 
+          <NavBarLogin eosio={props.eosio} />
+
+
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
@@ -226,7 +267,7 @@ return (
       {renderMenu}
     </div>
   );
-            }
+}
 // change this logic for login. 
 // render() {
 //   if (this.props.eosio) {
