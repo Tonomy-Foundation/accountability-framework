@@ -11,8 +11,42 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 // end of navbar specific imports 
+// importing the redux connect component for export (last line)
+import {connect} from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
+
+function mapStateToProps(state) {
+  return {
+    eosio: state.eosio,
+   
+  };
+}
+
+function NavBarLogin (props){
+  if (props.eosio) {
+    return  <div>You are loggedIn</div>
+
+     // return the account of the user
+    //  <div className={classes.sectionDesktop}>
+    //         <IconButton
+    //           edge="end"
+    //           aria-label={props.eosio.account.name}
+    //           aria-controls={menuId}
+    //           aria-haspopup="true"
+    //           onClick={handleProfileMenuOpen}
+    //           color="inherit"
+    //         >
+    //           <AccountCircle />
+    //         </IconButton>
+    //       </div>
+      
+    
+    
+  } else {
+    return  <div>You are notloggedin</div>
+  }
+}
 
 
 
@@ -80,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Navbar() {
+function Navbar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -145,8 +179,14 @@ export default function Navbar() {
       </MenuItem>
     </Menu>
   );
+// render the application.
+//git push --set-upstream origin navbar
+// how to push as chris git remote set-url origin https://kamitor:password@github.com/Conscious-Cities/eosio-react-app
 
-  return (
+
+return (
+     
+
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
@@ -167,19 +207,8 @@ export default function Navbar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
-         
-          <div className={classes.sectionDesktop}>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
+
+        <NavBarLogin eosio={props.eosio} /> 
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
@@ -197,7 +226,22 @@ export default function Navbar() {
       {renderMenu}
     </div>
   );
-}
+            }
+// change this logic for login. 
+// render() {
+//   if (this.props.eosio) {
+//     return (
+//       <Container component="main" maxWidth="xs">
+//           <h1>Todo list</h1>
+//           <TodoAdd onSubmit={this.newItem} onChange={this.newItemChange} value={this.state.newItem}/>
+//           <TodoList list={this.state.list} toggleItem={this.toggleItem}/>
+//       </Container>
+//     );
+//   } else {
+//     return <Redirect to="/login" />
+//   }
+// }
 
+// props.eosio.account.name 
 
-
+export default connect(mapStateToProps)(Navbar);
