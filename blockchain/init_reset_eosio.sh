@@ -6,12 +6,6 @@ echo "Resetting blockchain state and history"
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$PARENT_PATH"
 
-docker-compose exec eosio pkill nodeos
-docker-compose down
-sudo rm ../temp/eosio/* -R
-sudo rm ../temp/dfuse/* -R
-docker-compose up -d
-
 cd ../contracts/eosio.boot
 if [ -e eosio.boot.wasm ]
 then
