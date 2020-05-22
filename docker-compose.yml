@@ -27,6 +27,7 @@ services:
     volumes:
       - ./:/var/repo
       - ./temp/dfuse:/data
+    command: ["dfuseeos", "start", "--data-dir", "/data"]
   # mongo:
   #   image: mongo:latest
   #   container_name: "mongodb"
