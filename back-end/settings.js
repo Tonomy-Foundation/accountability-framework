@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === "production") {
     settings.eosio.network = "http://localhost:8888";
 } else {
     // Use name from docker compose
-    settings.eosio.network = "http://eosio:8888";
+    settings.eosio.network = "http://dfuse:8888";
 }
 
 module.exports = settings;

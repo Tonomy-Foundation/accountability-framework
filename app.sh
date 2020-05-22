@@ -6,25 +6,36 @@ ARG2=$2
 # Make sure working dir is same as this dir, so that script can be excuted from another working directory
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
-function start {
-    cd "$PARENT_PATH"
-    mkdir temp
-    export NODE_ENV="development"
+function startdocker {
     docker-compose up -d
 
     # TODO should remove logs process each time
-    docker-compose logs -f -t >> ./temp/docker-compose.log &
-    
+    # kill $(ps aux | grep -i "docker-compose logs" | awk '{print $2}')
+    sudo bash -c "docker-compose logs -f -t >> '$PARENT_PATH/temp/docker-compose.log' &"
+}
+
+function start {
+    cd "$PARENT_PATH"
+    mkdir "$PARENT_PATH/temp"
+
     INIT_FILE="$PARENT_PATH/temp/init"
     if [ -f "$INIT_FILE" ]
     then
         echo "Blockchain already initialized"
+        startdocker
     else
         echo "Blockchain will now be initialized"
         echo ""
+        reset
+
+        startdocker
+
         cd "$PARENT_PATH/blockchain"
         ./init_reset_eosio.sh
-        touch "$INIT_FILE"
+        if [ $? -eq 0 ]
+        then
+            sudo touch "$INIT_FILE"
+        fi
     fi
     upprint
 }
@@ -72,12 +83,15 @@ function upprint {
 }
 
 function reset {
+    stop
     echo "This will reset the blockchain and all databases!!!"
     read -p "Do you want to continue (y/n)? " CHOICE
     if [ "$CHOICE" == 'y' ]
     then
-        sudo rm "$PARENT_PATH/temp" -R
-        mkdir "$PARENT_PATH/temp"
+        if [ -d "$PARENT_PATH/temp" ]
+        then
+            sudo rm "$PARENT_PATH/temp" -R
+        fi
     fi
 }
 

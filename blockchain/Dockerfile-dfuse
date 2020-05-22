@@ -11,7 +11,8 @@ RUN apt-get update \
     && wget https://github.com/dfuse-io/dfuse-eosio/releases/download/v0.1.0-beta3/dfuse-eosio_0.1.0-beta3_linux_x86_64.tar.gz \
     && tar -xzvf dfuse-eosio_0.1.0-beta3_linux_x86_64.tar.gz \
     && rm dfuse-eosio_0.1.0-beta3_linux_x86_64.tar.gz
-RUN mv dfuseeos /usr/local/bin/dfuseeos \
+RUN apt-get install -y curl \
+    && mv dfuseeos /usr/local/bin/dfuseeos \
     && apt-get remove -y wget ca-certificates \
     && apt-get autoremove -y \
 #    && apt-get clean \
@@ -26,33 +27,3 @@ RUN cd / \
     # "y" will initialize to run a producing node, "n" will connect to existing node
     && (echo "y" && cat) | dfuseeos init
 RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' producer/config.ini
-
-# Using docker
-# docker build -t dfuse -f ./blockchain/Dockerfile-dfuse ./blockchain
-
-# CMD dfuseeos start --data-dir /data
-# THIS WILL NOT BE ABLE TO CTR+c EXIT
-# docker run -v $PWD/temp/dfuse:/data -p 8080:8080 -p 8081:8081 -p 8888:8888 dfuse
-# THIS WILL CTR+c CORRECTLY
-# docker run -v $PWD/temp/dfuse:/data -p 8080:8080 -p 8081:8081 -p 8888:8888 dfuse dfuseeos start --data-dir /data
-# bash: /data/dfuse.log: No such file or directory
-# docker run -v $PWD/temp/dfuse:/data -p 8080:8080 -p 8081:8081 -p 8888:8888 dfuse dfuseeos start --data-dir /data >> /data/dfuse.log 2>&1
-
-# CMD dfuseeos start --data-dir /data >> /data/dfuse.log 2>&1
-# THIS WILL NOT BE ABLE TO CTR+c EXIT
-# docker run -v $PWD/temp/dfuse:/data -p 8080:8080 -p 8081:8081 -p 8888:8888 dfuse
-# THIS WILL CTR+c CORRECTLY
-# docker run -v $PWD/temp/dfuse:/data -p 8080:8080 -p 8081:8081 -p 8888:8888 dfuse dfuseeos start --data-dir /data
-
-
-# Using docker-compose
-# docker-compose build && docker-compose up
-
-# THIS WILL GRACEFULLY EXIT ON docker-compose down or Ctr-C
-# in docker-compose.yaml command: ["dfuseeos", "start", "--data-dir", "/data"]
-# THIS WILL not start
-# in docker-compose.yaml command: ["dfuseeos", "start", "--data-dir", "/data", ">>", "/data/dfuse.log", "2>&1"]
-# Unsure if this gracefully starts, but it will continue blockchain correctly
-# CMD dfuseeos start --data-dir /data
-# THIS WILL not exit gracefully, and will restore automatically
-# CMD dfuseeos start --data-dir /data >> /data/dfuse.log 2>&1

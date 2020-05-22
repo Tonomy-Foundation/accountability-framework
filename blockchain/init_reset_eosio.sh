@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -o nounset   ## set -u : exit the script if you try to use an uninitialised variable
+set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
+
 echo "Resetting blockchain state and history"
 
 # Make sure working dir is same as this dir, so that script can be excuted from another working directory
@@ -22,8 +25,16 @@ cd ../todolist
 
 # allow for block production to start
 echo "Waiting for blockchain node to start"
-sleep 5
+sleep 10
 
-docker-compose exec eosio /bin/bash /var/repo/blockchain/activate_features.sh
+docker-compose exec dfuse /bin/bash /var/repo/blockchain/activate_features.sh
+if [ $? -gt 0 ]
+then
+    exit 1
+fi
 
 docker-compose exec back-end npm run-script bootstrap
+if [ $? -gt 0 ]
+then
+    exit 1
+fi
