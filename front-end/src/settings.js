@@ -1,6 +1,5 @@
 let settings = {
     eosio: {
-        network: null,
         accounts: {
             eosio: {
                 pkey: "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3",
@@ -27,9 +26,11 @@ let settings = {
 };
 
 if (process.env.NODE_ENV === "production") {
-    settings.eosio.network = "http://ec2-35-178-206-104.eu-west-2.compute.amazonaws.com:8888";
+    settings.eosio.nodeos = "http://ec2-35-178-206-104.eu-west-2.compute.amazonaws.com:8888";
+    settings.eosio.dfuse = "http://ec2-35-178-206-104.eu-west-2.compute.amazonaws.com:8080";
 } else {
-    settings.eosio.network = "http://localhost:8888";
+    settings.eosio.nodeos = "http://localhost:8888";
+    settings.eosio.dfuse = "http://localhost:8080";
 }
 
 export default settings;
