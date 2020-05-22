@@ -12,17 +12,6 @@ Use install script _should work_ for debian distributions to install prerequesit
 
 `./scripts/local/install_software.sh`
 
-## Initialize project and reset blockchain
-
-Do this before running the first time or if you need to reset the blockchain. Note this will reset the blockchain state back to having a few accounts with all app history deleted.
-
-`./app.sh up reset`
-
-This will call two files used to boostrap the blockchain and database:
-
-- `blockchain/init_reset_eosio.sh` - resets the blockchain and initializes an eosio v2.0 blockchain node with a system contract
-- `back-end/test/bootstrap-accounts.js` - creates initial accounts and contracts on the blockchain with corresponding database information
-
 ## Run
 
 `./app.sh up`
@@ -35,8 +24,19 @@ To (re)install npm packages and start
 
 `./app.sh up install`
 
+---------
+
+IMPORTANT: The first time you run the app, it will initialize the blockchain, executing the following two files. If there is an errer displayed during this then please use the reset script below.
+
+- `blockchain/init_reset_eosio.sh` - resets the blockchain and initializes an eosio v2.0 blockchain node with a system contract
+- `back-end/test/bootstrap-accounts.js` - creates initial accounts and contracts on the blockchain with corresponding database information
+
 ## Stop
 
 `./app.sh down`
 
-If the the blockchain nodeo does not exit properly then you may need to reset the blockchain (see "Initialize npm projects and blockchain").
+## Reset
+
+If there are errors during the first time you run the app, or you wish to reset the blockchain history.
+
+`./app.sh reset`

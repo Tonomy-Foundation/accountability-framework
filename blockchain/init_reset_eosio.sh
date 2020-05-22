@@ -24,8 +24,8 @@ cd ../todolist
 ./build.sh
 
 # allow for block production to start
-echo "Waiting for blockchain node to start"
-sleep 10
+echo "Waiting 20s for blockchain node to start"
+sleep 20
 
 docker-compose exec dfuse /bin/bash /var/repo/blockchain/activate_features.sh
 if [ $? -gt 0 ]
