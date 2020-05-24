@@ -4,6 +4,8 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   mainGrid: {
@@ -74,6 +76,18 @@ const useStyles = makeStyles((theme) => ({
 function PeopleViewProfile(props) {
   const classes = useStyles();
 
+  const history = useHistory();
+
+  const routeOrgPage = () =>{ 
+    let path = `/org/gov`; 
+    history.push(path);
+  }
+
+  const routeCreateOrg = () =>{ 
+    let path = `/create-organization`; 
+    history.push(path);
+  }
+
   return (
     <Grid item xs>
       <Container component="div" className={classes.container}>
@@ -98,17 +112,10 @@ function PeopleViewProfile(props) {
           <Grid container item xs={12} spacing={3}>
             {props.organizations &&
               props.organizations.map((data) => {
-                return <Box className={classes.menuItem}>{data.name}</Box>;
+                return <Button className={classes.menuItem} onClick={routeOrgPage}>{data.name}</Button>;
               })}
             {props.isMyAccount && (
-              <Box
-                className={classes.menuAddItem}
-                onClick={() => {
-                  props.history.push("/create-organization");
-                }}
-              >
-                +
-              </Box>
+              <Button className={classes.menuAddItem} onClick={routeCreateOrg}>+</Button>
             )}
           </Grid>
         </Grid>
