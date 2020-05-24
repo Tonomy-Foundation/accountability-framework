@@ -8,5 +8,5 @@ then
     npm run-script build
     serve -s build
 else
-    npm start
+    npm run-script docker
 fi

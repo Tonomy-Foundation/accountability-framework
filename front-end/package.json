@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "proxy": "http://localhost:4000",
   "dependencies": {
     "@material-ui/core": "^4.9.9",
     "@material-ui/icons": "^4.9.1",
@@ -17,9 +18,10 @@
     "typeface-roboto": "0.0.75"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "REACT_APP_NODE_ENV=development PORT=3001 react-scripts start",
+    "docker": "REACT_APP_NODE_ENV=docker react-scripts start",
+    "build": "REACT_APP_NODE_ENV=production react-scripts build",
+    "test": "REACT_APP_NODE_ENV=test react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
