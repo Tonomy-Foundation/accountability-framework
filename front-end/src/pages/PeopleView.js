@@ -132,11 +132,11 @@ function getType(actionToPush, actionName, actionData) {
   let data;
   if (actionName === "transfer") {
     if (actionToPush.direction === "inbound") {
-      data = "Received " + actionData.quantity + " from " + actionData.from;
+      data = "Received " + actionData.quantity;
       actionToPush.account = actionData.from;
     }
     else {
-      data = "Sent " + actionData.quantity + " to " + actionData.to;
+      data = "Sent " + actionData.quantity;
       actionToPush.account = actionData.to;
     }
     return ["payment", data];

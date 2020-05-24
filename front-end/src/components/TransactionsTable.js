@@ -294,10 +294,10 @@ function TransactionsTable(props) {
                 <Typography
                   className={classes.transactionAccount}
                   onClick={() => {
-                    props.history.push(`/people/${data.account}`);
+                    routeToAccount(data.auth);
                   }}
                 >
-                  {data.account}
+                  {data.auth}
                 </Typography>
               )}
               <div
