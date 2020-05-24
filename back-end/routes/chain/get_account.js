@@ -1,7 +1,7 @@
 const accountController = require('../../controllers/accounts.controller');
 
 /* GET acounts listing. */
-module.exports = async function (req, res, next) {
+module.exports = async function (req, res) {
   if (!req.body.account_name) {
     res.status(400);
     res.send({ message: 'req body should contain all the data!' });
