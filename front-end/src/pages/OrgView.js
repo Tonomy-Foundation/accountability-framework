@@ -26,6 +26,7 @@ function OrgView(props) {
 
   const [state, setState] = useState({
     accountName: props.match.params.accountName,
+    name: null,
     isMyAccount: false,
     actions: [],
     organizations: [],
@@ -94,6 +95,7 @@ function OrgView(props) {
 
       setState({
         accountName: state.accountName,
+        name: accountRes.name,
         isMyAccount: loggedinAccount === state.accountName,
         actions: actionsToSet,
         organizations: accountRes.organizations,
@@ -108,6 +110,7 @@ function OrgView(props) {
       <Grid key={0} item xs={6}>
         <OrgViewProfile
           accountName={state.accountName}
+          name={state.name}
           isMyAccount={state.isMyAccount}
           organizations={state.organizations}
           description="Duis accumsan venenatis dui, tristique rhoncus elit posuere ut. Vivamus erat lacus, rutrum et iaculis sed, interdum vitae purus. Aliquam turpis nisl, dictum ac mi vel, eleifend placerat sapien."

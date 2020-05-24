@@ -26,6 +26,7 @@ function PeopleView(props) {
 
   const [state, setState] = useState({
     accountName: props.match.params.accountName,
+    name: null,
     isMyAccount: false,
     actions: [],
     organizations: [],
@@ -86,6 +87,7 @@ function PeopleView(props) {
 
       setState({
         accountName: state.accountName,
+        name: accountRes.name,
         isMyAccount: loggedinAccount === state.accountName,
         actions: actionsToSet,
         organizations: accountRes.organizations,
@@ -105,6 +107,7 @@ function PeopleView(props) {
       <Grid key={0} item xs={6}>
         <PeopleViewProfile
           accountName={state.accountName}
+          name={state.name}
           isMyAccount={state.isMyAccount}
           organizations={state.organizations}
           history={props.history}

@@ -92,9 +92,10 @@ function OrgViewProfile(props) {
   return (
     <Grid item xs>
       <Container component="div" className={classes.container}>
-        <h1 component="p" className={classes.accountName}>
+        <h1 component="p">{props.name}</h1>
+        <h2 component="p" className={classes.accountName}>
           @{props.accountName}
-        </h1>
+        </h2>
         <div>
           <span className={classes.accountDescriptionTitle}>Description:</span>
           <p className={classes.accountDescription}>{props.description}</p>
