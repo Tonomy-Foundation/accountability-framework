@@ -34,14 +34,14 @@ let settings = {
     }
   },
   mongodb: {
-    url: "mongodb://localhost:27017/eosio"
+    url: "mongodb://localhost:27017/conscious"
   },
   port: 4001
 };
 
 if (process.env.NODE_ENV === "production") {
   settings.eosio.network = "http://eosio:8888";
-  settings.URL.mongodb = "mongodb://mongodb:27017/conscious";
+  settings.mongodb.url = "mongodb://mongodb:27017/conscious";
 } else if (process.env.NODE_ENV === "docker") {
   settings.eosio.network = "http://eosio:8888";
   settings.mongodb.url = "mongodb://mongodb:27017/conscious";
