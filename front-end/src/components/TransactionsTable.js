@@ -175,7 +175,7 @@ function TransactionsTable(props) {
         <Typography component="h2" className={classes.accountTransactionsTitle}>
           Account Transactions
         </Typography>
-        <Container
+        {/* <Container
           component="div"
           className={classes.categoriesSearchContainer}
         >
@@ -189,8 +189,8 @@ function TransactionsTable(props) {
             InputProps={{ className: classes.categoriesInputField }}
             className={classes.categoriesSearchField}
           />
-        </Container>
-        <Container className={classes.menu}>
+        </Container> */}
+        {/* <Container className={classes.menu}>
           <Box className={classes.menuItem}>
             <Typography>Shopping</Typography>
             <MdShoppingCart size={26} style={{ marginTop: "8px" }} />
@@ -211,14 +211,14 @@ function TransactionsTable(props) {
             <Typography>Votes</Typography>
             <FaVoteYea size={26} style={{ marginTop: "8px" }} />
           </Box>
-        </Container>
-        <Container className={classes.timeframeMenu}>
+        </Container> */}
+        {/* <Container className={classes.timeframeMenu}>
           <Typography className={classes.unselectedTimeframe}>April</Typography>
           <Typography className={classes.selectedTimeframe}>
             This month
           </Typography>
           <Typography className={classes.unselectedTimeframe}>All</Typography>
-        </Container>
+        </Container> */}
         <Container className={classes.transaction}>
           <Container className={classes.transactionDetailsHeader}>
             <Typography className={classes.transactionDetailsHeaderLabel}>

@@ -110,8 +110,8 @@ function PeopleViewProfile(props) {
         <Grid container spacing={8}>
           <Grid container item xs={12} spacing={3}>
             {props.organizations &&
-              props.organizations.map((data) => {
-                return <Button className={classes.menuItem} onClick={() => routeOrgPage(data.accountName)}>{data.name}</Button>;
+              props.organizations.map((data, index) => {
+                return <Button className={classes.menuItem} onClick={() => routeOrgPage(data.accountName)} key={index}>{data.name}</Button>;
               })}
             {props.isMyAccount && (
               <Button className={classes.menuAddItem} onClick={routeCreateOrg}>+</Button>

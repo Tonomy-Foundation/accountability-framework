@@ -47,7 +47,6 @@ function PeopleView(props) {
 
     async function getAccount() {
       let accountRes = await eosio.rpc.get_account(state.accountName);
-      console.log(accountRes)
       if(accountRes.accountType === "organization") {
         const orgPath = '/org/' + state.accountName;
         history.push(orgPath);
@@ -103,7 +102,7 @@ function PeopleView(props) {
     }
 
     getAccount();
-  }, [props.eosio, state.accountName]);
+  }, [props.eosio, state.accountName, history]);
 
   return (
     <Grid container className={classes.root} spacing={0}>
