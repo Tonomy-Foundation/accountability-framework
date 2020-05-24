@@ -4,7 +4,6 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
-import Todo from './pages/Todo';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import OrgView from './pages/OrgView';
@@ -14,7 +13,6 @@ const routes = [
   { path: '/org/:accountName', component: OrgView, exact: true },
   { path: '/people/:accountName', component: PeopleView, exact: true },
   { path: '/login', component: Login, exact: true },
-  { path: '/todo', component: Todo, exact: true },
   { path: '/', component: Home, exact: true },
 ];
 
