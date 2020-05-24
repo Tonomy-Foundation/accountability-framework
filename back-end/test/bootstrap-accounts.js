@@ -14,7 +14,6 @@ async function main() {
     useUnifiedTopology: true
   })
   console.log("Connected to database");
-
   // Set up the system contract
   let eosioAccount = {
     pkey: settings.eosio.accounts.eosio.pkey,
