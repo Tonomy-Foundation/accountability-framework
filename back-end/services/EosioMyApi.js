@@ -42,8 +42,10 @@ class EosioMyApi {
                 console.log('\nCaught exception: ' + e);
                 if (e instanceof RpcError)
                   console.error(JSON.stringify(e.json, null, 2));
-                else
+                else {
+                    console.error(e)
                     throw Error(e);
+                }
             }
         }
 

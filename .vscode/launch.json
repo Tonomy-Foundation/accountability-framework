@@ -4,14 +4,24 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Backend server",
             "skipFiles": [
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/back-end/server.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Bootstrap script",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/back-end/test/bootstrap-accounts.js"
         }
     ]
 }
