@@ -22,7 +22,15 @@ let settings = {
       yvo: {
         pkey: "5KHnMjLZ1jk2ScP4eGHufa8S6SJUSJWTpUqKgsGycVGxHZDCidB",
         pubkey: "EOS7bNT2DxZVdH2kEoZFkeuWA5KoT5koDW8aeSzczPHSF4EX8WxQs"
-      }
+      },
+      hidde: {
+        pkey: "5Hs9i9ybXYDKjruScvTP7NRSoEY9ZYMtMx2ncFUdjQwu6nvpZzf",
+        pubkey: "EOS7R4E2iBK5fXpm92y4fNowVtdc9m6muforLV8c2q9bqYUYmR18X"
+      },
+      tijn: {
+        pkey: "5JtoZYtMs5Szi71dvHKyHoj7EjQPfKiMPpeJNWZu3iqE9knCQfz",
+        pubkey: "EOS8MKYqroL3gvHs3wFy4wpxFbsTDRWkMn1xL8A1UE7ThSPA1fvtR"
+      },
     }
   },
   mongodb: {
