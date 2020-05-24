@@ -96,12 +96,7 @@ function PeopleView(props) {
 
     getAccount();
   }, [props.eosio, state.accountName]);
-
-  useEffect(() => {
-    console.log(state.organizations);
-    console.log(state.actions);
-  }, [state]);
-
+  
   return (
     <Grid container className={classes.root} spacing={0}>
       <Grid key={0} item xs={6}>

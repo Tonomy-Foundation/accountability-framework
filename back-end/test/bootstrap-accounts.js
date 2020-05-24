@@ -52,27 +52,26 @@ const accountController = require('../controllers/accounts.controller');
     });
     console.log("Organization ", accountName, " created");
   }
-  
 
   await createNewPerson("yvo", "Yvo Hunink", settings.eosio.accounts.yvo.pubkey, [{accountName: "gov", name: "The Ministry of The Hague"}]);
 
-  const ccOrgs = [{accountName: "todolist", name: "The New Fork Partners"}]
+  const ccOrgs = [{accountName: "thenewfork", name: "The New Fork Partners"}]
   await createNewPerson("jack", "Jack Tanner", settings.eosio.accounts.jack.pubkey, ccOrgs);
   await createNewPerson("kirsten", "Kirsten Coppoolse", settings.eosio.accounts.kirsten.pubkey, ccOrgs);
   await createNewPerson("matej", "Matej Ondrejka", settings.eosio.accounts.matej.pubkey, ccOrgs);
 
-  await createNewOrg("todolist", "The New Fork Partners", ["jack", "kirsten", "matej"], 0.66);
+  await createNewOrg("thenewfork", "The New Fork Partners", ["jack", "kirsten", "matej"], 0.66);
   await createNewOrg("gov", "The Ministry of The Hague", ["yvo"], 0.66);
 
   eosioAccount = {
     pkey: settings.eosio.accounts.jack.pkey,
-    name: "todolist",
+    name: "thenewfork",
     permission: "active"
   }
 
   await eosio.login(eosioAccount);
   await eosio.myapi.deploy("todolist", "../contracts/todolist");
-  console.log("todolist contract deployed");
+  console.log("todolist contract deployed to account thenewfork");
 
   console.log("fin")
   process.exit(0)
