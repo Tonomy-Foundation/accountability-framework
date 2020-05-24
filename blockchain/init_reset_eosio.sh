@@ -22,9 +22,6 @@ fi
 cd ../eosio.bios
 ./build.sh
 
-cd ../todolist
-./build.sh
-
 cd ../eosio.token
 ./build.sh
 
