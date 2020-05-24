@@ -87,8 +87,8 @@ function OrgView(props) {
         //   )
         // Only look at top level actions, no inline actions
         if (
-          !action.action_trace.error_code &&
-          action.action_trace.creator_action_ordinal === 0
+          !action.action_trace.error_code
+          // && action.action_trace.creator_action_ordinal === 0
         ) {
           let actionToPush = {
             tx_id: action.action_trace.trx_id,
@@ -102,7 +102,7 @@ function OrgView(props) {
           else actionToPush.direction = "inbound";
 
           const [type, data] = getType(
-            actionToPush.account,
+            actionToPush,
             action.action_trace.act.name,
             action.action_trace.act.data
           );
@@ -176,28 +176,36 @@ function OrgView(props) {
   );
 }
 
-function getType(account, actionName, actionData) {
+function getType(actionToPush, actionName, actionData) {
+  let data;
   if (actionName === "transfer") {
-    const data =
-      "Sent " +
-      actionData.quantity +
-      " from " +
-      actionData.from +
-      " to " +
-      actionData.to;
+    if (actionToPush.direction === "inbound") {
+      data = "Received " + actionData.quantity + " from " + actionData.from;
+      actionToPush.account = actionData.from;
+    }
+    else {
+      data = "Sent " + actionData.quantity + " to " + actionData.to;
+      actionToPush.account = actionData.to;
+    }
     return ["payment", data];
   }
-  if (account === "eosio") {
+  if (actionToPush.account === "eosio") {
     if (actionName === "setcode") return ["contract", ""];
     if (actionName === "newperson") {
-      const data = actionData.name + " joined Conscious Cities";
+      data = actionData.name + " joined Conscious Cities";
       return ["account", data];
     }
     if (actionName === "neworg") {
-      const data = 'New organization "' + actionData.name + '" was created';
+      data = 'New organization "' + actionData.name + '" was created';
       return ["account", data];
-    } else return ["other", ""];
+    }
+    if (actionName === "policyvote") {
+      data = "Voted '" + actionData.vote + "' on policy " + actionData.policy_id;
+      return ["vote", data];
+    }
+    return ["other", ""];
   } else return ["other", ""];
 }
+
 
 export default connect(mapStateToProps)(OrgView);

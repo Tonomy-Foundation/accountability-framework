@@ -16,7 +16,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import Sync from "@material-ui/icons/Sync";
-
+import { useHistory } from "react-router-dom";
 import settings from "../settings";
 
 const useStyles = makeStyles((theme) => ({
@@ -169,6 +169,12 @@ const useStyles = makeStyles((theme) => ({
 function TransactionsTable(props) {
   const classes = useStyles();
 
+  const history = useHistory();
+
+  const routeToAccount = function(name) {
+    console.log(name)
+    history.push("/people/" + name);
+  }
   return (
     <Grid className={classes.container} item xs>
       <Container className={classes.container} justify="center">
@@ -273,7 +279,7 @@ function TransactionsTable(props) {
               <Typography
                 className={classes.transactionAccount}
                 onClick={() => {
-                  props.history.push(`/people/${data.account}`);
+                  routeToAccount(data.account);
                 }}
               >
                 {data.account}
