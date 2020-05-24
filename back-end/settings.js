@@ -40,11 +40,11 @@ let settings = {
 };
 
 if (process.env.NODE_ENV === "production") {
-  settings.eosio.network = process.env.SERVER_DOMAIN + ":8888";
-  settings.URL.mongodb = "mongodb://" + process.env.SERVER_DOMAIN + process.env.DB_NAME + ":27017";
+  settings.eosio.network = "http://eosio:8888";
+  settings.URL.mongodb = "mongodb://mongodb:27017/conscious";
 } else if (process.env.NODE_ENV === "docker") {
   settings.eosio.network = "http://eosio:8888";
-  settings.mongodb.url = "mongodb://mongodb:27017/eosio";
+  settings.mongodb.url = "mongodb://mongodb:27017/conscious";
   settings.port = 4000
 }
 
