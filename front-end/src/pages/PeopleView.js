@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Eosio from "../services/Eosio";
 import TransactionsTable from "../components/TransactionsTable";
 import PeopleViewProfile from "../components/PeopleViewProfile";
+import { useHistory } from "react-router-dom";
 
 function mapStateToProps(state) {
   return {
@@ -29,9 +30,10 @@ function PeopleView(props) {
     name: null,
     isMyAccount: false,
     actions: [],
-    organizations: [],
-    count: 0,
+    organizations: []
   });
+
+  const history = useHistory();
 
   useEffect(() => {
     let eosio;
@@ -45,6 +47,12 @@ function PeopleView(props) {
 
     async function getAccount() {
       let accountRes = await eosio.rpc.get_account(state.accountName);
+      console.log(accountRes)
+      if(accountRes.accountType === "organization") {
+        const orgPath = '/org/' + state.accountName;
+        history.push(orgPath);
+      }
+
       let actionsRes = await eosio.rpc.history_get_actions(
         state.accountName,
         -1,
@@ -96,7 +104,7 @@ function PeopleView(props) {
 
     getAccount();
   }, [props.eosio, state.accountName]);
-  
+
   return (
     <Grid container className={classes.root} spacing={0}>
       <Grid key={0} item xs={6}>

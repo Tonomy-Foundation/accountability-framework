@@ -110,9 +110,9 @@ function OrgViewProfile(props) {
         </Container>
         <Grid container spacing={5}>
           {props.memberGroups &&
-            props.memberGroups.map((data) => {
+            props.memberGroups.map((data, index) => {
               return (
-                <Grid item sm={12} md={6} lg={3}>
+                <Grid item sm={12} md={6} lg={3} key={index}>
                   <Box
                     className={classes.menuItem}
                     onClick={() => {
