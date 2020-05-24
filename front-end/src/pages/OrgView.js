@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Eosio from "../services/Eosio";
 import TransactionsTable from "../components/TransactionsTable";
 import OrgViewProfile from "../components/OrgViewProfile";
+import OrgMembers from "../components/OrgMembers";
 
 function mapStateToProps(state) {
   return {
@@ -30,15 +31,33 @@ function OrgView(props) {
     isMyAccount: false,
     actions: [],
     organizations: [],
-    memberGroups: []
+    memberGroups: [],
+    permissions: []
   });
 
-  const [memberGroup, setMemberGroup] = useState(null);
+  const [memberGroup, setMemberGroup] = useState({
+    selected: null,
+    members: []
+  });
 
   const selectMemberGroup = (selectedGroupName) => {
-    setMemberGroup(
-      selectedGroupName === memberGroup ? null : selectedGroupName
-    );
+    const selected = selectedGroupName === memberGroup.selected ? null : selectedGroupName;
+    let members = []
+    if (selected) {
+      // console.log(state.permissions)
+      let permission = state.permissions.filter( (perm) => perm.perm_name === selectedGroupName)[0];
+      for(let account of permission.required_auth.accounts) {
+        members.push({
+          name: account.permission.actor,
+          type: "person"
+        })
+      }
+    }
+
+    setMemberGroup({
+      selected: selected,
+      members: members
+    })
   };
 
   useEffect(() => {
@@ -116,7 +135,8 @@ function OrgView(props) {
         isMyAccount: loggedinAccount === state.accountName,
         actions: actionsToSet,
         organizations: accountRes.organizations,
-        memberGroups: memberGroups
+        memberGroups: memberGroups,
+        permissions: accountRes.permissions
       });
     }
 
@@ -137,12 +157,18 @@ function OrgView(props) {
         />
       </Grid>
       <Grid key={1} item xs={6}>
-        {!memberGroup && (
+        {!memberGroup.selected && (
           <TransactionsTable
             accountName={state.accountName}
             transactions={state.actions}
             history={props.history}
             org
+          />
+        )}
+        {memberGroup.selected && (
+          <OrgMembers
+            groupName={memberGroup.selected}
+            members={memberGroup.members}
           />
         )}
       </Grid>
