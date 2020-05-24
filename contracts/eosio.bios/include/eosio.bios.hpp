@@ -287,7 +287,7 @@ namespace eosiobios {
 
          // Dummy action for demonstration
          [[eosio::action]]
-         void policyvote( eosio::name voter, uint16_t vote_id, std::string vote );
+         void policyvote( eosio::name voter, uint16_t policy_id, std::string vote );
 
          struct [[eosio::table]] abi_hash {
             name              owner;

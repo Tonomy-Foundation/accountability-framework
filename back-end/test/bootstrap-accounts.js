@@ -59,6 +59,14 @@ async function main() {
   await transferTokens("kirsten", "jack", 50, "Bonus", settings.eosio.accounts.kirsten.pkey);
   await transferTokens("matej", "jack", 100, "Sneaky tip!", settings.eosio.accounts.matej.pkey);
 
+  // Vote on some policies
+  await voteOnPolicy("yvo", 1, "yes", settings.eosio.accounts.yvo.pkey);
+  await voteOnPolicy("hidde", 1, "no", settings.eosio.accounts.hidde.pkey);
+  await voteOnPolicy("hidde", 32, "abstain", settings.eosio.accounts.hidde.pkey);
+  await voteOnPolicy("matej", 32, "yes", settings.eosio.accounts.matej.pkey);
+  await voteOnPolicy("kirsten", 32, "no", settings.eosio.accounts.kirsten.pkey);
+  await voteOnPolicy("matej", 1, "yes", settings.eosio.accounts.matej.pkey);
+  
   console.log("fin")
   process.exit(0)
 };
@@ -67,6 +75,21 @@ Promise.resolve(main()).catch(err => {
   console.error(err)
   process.exit(1)
 })
+
+async function voteOnPolicy(voter, policyId, vote, key) {
+  eosioAccount = {
+    pkey: key,
+    name: voter,
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  await eosio.myapi.transact("eosio", "policyvote", {
+    voter: voter,
+    policy_id: policyId,
+    vote: vote
+  });
+  console.log(voter + " voted " + vote + " in policy #" + policyId);
+}
 
 async function transferTokens(from, to, amount, memo, key) {
   eosioAccount = {
@@ -83,7 +106,6 @@ async function transferTokens(from, to, amount, memo, key) {
     memo: memo
   });
   console.log("Transfered " + quant + " from " + from + " to " + to);
-
 }
 
 async function deploySetupToken() {

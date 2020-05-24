@@ -14,7 +14,7 @@ void bios::newperson( name creator, name name, authority owner, authority active
    modaction.send(creator, name, owner, active);
 }
 
-void bios::policyvote( name voter, uint16_t vote_id, std::string vote ) {}
+void bios::policyvote( name voter, uint16_t policy_id, std::string vote ) {}
 
 void bios::neworg( name creator, name name, authority owner, authority active) {
    check(owner.keys.size() == 0 , "Owner should not contains keys");
