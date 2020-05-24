@@ -30,7 +30,7 @@ function OrgView(props) {
     isMyAccount: false,
     actions: [],
     organizations: [],
-    count: 0,
+    memberGroups: []
   });
 
   const [memberGroup, setMemberGroup] = useState(null);
@@ -93,12 +93,30 @@ function OrgView(props) {
         }
       }
 
+      let memberGroups = [];
+      for (let perm1 of accountRes.permissions) {
+        let level = 1;
+        function checkParentPerm(perm2) {
+          if (perm2.perm_name === "owner") return;
+          level++;
+          let parent = accountRes.permissions.filter( (perm3) => perm3.perm_name === perm2.parent)[0]
+          checkParentPerm(parent);
+        }
+        checkParentPerm(perm1);
+        memberGroups.push({
+          name: perm1.perm_name,
+          level: level
+        })
+      }
+      memberGroups.sort((a, b) => a.level > b.level)
+
       setState({
         accountName: state.accountName,
         name: accountRes.name,
         isMyAccount: loggedinAccount === state.accountName,
         actions: actionsToSet,
         organizations: accountRes.organizations,
+        memberGroups: memberGroups
       });
     }
 
@@ -115,28 +133,7 @@ function OrgView(props) {
           organizations={state.organizations}
           description="Duis accumsan venenatis dui, tristique rhoncus elit posuere ut. Vivamus erat lacus, rutrum et iaculis sed, interdum vitae purus. Aliquam turpis nisl, dictum ac mi vel, eleifend placerat sapien."
           selectMemberGroup={selectMemberGroup}
-          memberGroups={[
-            {
-              name: "Creators",
-              level: 1,
-            },
-            {
-              name: "Finance",
-              level: 2,
-            },
-            {
-              name: "Finance",
-              level: 2,
-            },
-            {
-              name: "Finance",
-              level: 2,
-            },
-            {
-              name: "Finance",
-              level: 2,
-            },
-          ]}
+          memberGroups={state.memberGroups}
         />
       </Grid>
       <Grid key={1} item xs={6}>
