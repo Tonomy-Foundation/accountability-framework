@@ -18,6 +18,7 @@ module.exports = async function (req, res) {
 
   accountDocInfo = {
     accountType: accountDoc.accountType,
+    name: accountDoc.name,
     organizations: accountDoc.organizations
   };
   
