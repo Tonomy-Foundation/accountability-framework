@@ -12,14 +12,10 @@ let settings = {
     }
 };
 
-console.log("process.env.REACT_APP_NODE_ENV", process.env.REACT_APP_NODE_ENV);
-
 if (process.env.REACT_APP_NODE_ENV === "production") {
     settings.eosio.network = "http://ec2-35-178-206-104.eu-west-2.compute.amazonaws.com:8888";
 } else if (process.env.REACT_APP_NODE_ENV === "docker") {
     //
 }
-
-console.log(settings)
 
 export default settings;
