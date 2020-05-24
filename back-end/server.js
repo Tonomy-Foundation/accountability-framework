@@ -29,7 +29,39 @@ app.use(asyncRouter(async function(req, res, next) {
 }));
 
 // Extended and additional API endpoints
-app.use(routes);
+// app.use(routes);
+app.post("/v1/chain/get_account", function (req, res) {
+  const accountController = require('./controllers/accounts.controller');
+
+  if (!req.body.account_name) {
+    res.status(400);
+    res.send({ message: 'req body should contain all the data!' });
+    return;
+  }
+
+  // Get data from mongodb
+  console.log("1")
+
+  const fn = async function(obj) {
+    await new Promise((res, rej) => {
+      console.log("waiting 4s");
+      setTimeout(() => {
+        console.log("done")
+        res()
+      }, 4000)
+    })
+  }
+  Promise.resolve(fn())
+
+  Promise.resolve(accountController.findOne({ accountName: req.body.account_name }), (accountDoc) => {
+    // control switches to next middleware here... before promise resolves
+    console.log("2", accountDoc)
+    
+    res.send()
+  })
+
+  console.log('3')
+})
 
 // Return any blockchain data if not returned using a route
 app.use(asyncRouter(async function(req, res, next) {

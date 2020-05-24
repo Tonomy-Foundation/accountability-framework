@@ -2,6 +2,7 @@ const nodeFetch = require('node-fetch');
 const settings = require('../settings');
 
 exports.pre = async function(req, res, next) {
+    console.log("Proxy pre")
     const url = settings.eosio.network + req.path;
 
     req.body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
@@ -26,7 +27,7 @@ exports.pre = async function(req, res, next) {
 }
 
 exports.post = async function(req, res, next) {
-    console.log("3")
+    console.log("Proxy post")
     if (req.blockchainRes && !req.blockchainResSent) {
         // res.status(req.blockchainResStatus);
         // res.send(req.blockchainRes);
