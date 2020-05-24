@@ -11,7 +11,7 @@ const pre = async function(req, res, next) {
         next();
         return;
     }
-    console.log("Proxy pre, ", req.path)
+
     const url = settings.eosio.network + req.path;
 
     req.body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
@@ -42,7 +42,8 @@ const post = async function(req, res, next) {
         next();
         return;
     }
-    if (req.blockchainRes && !req.blockchainResSent) {
+
+    if (req.blockchainRes) {
         res.status(req.blockchainResStatus);
         res.send(req.blockchainRes);
     }

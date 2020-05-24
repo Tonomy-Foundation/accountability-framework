@@ -21,7 +21,6 @@ module.exports = async function (req, res) {
     organizations: accountDoc.organizations
   };
   
-  req.blockchainResSent = true;
   let retObj = req.addBlockchainRes(accountDocInfo);
   res.send(retObj);
 };
