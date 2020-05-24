@@ -25,6 +25,9 @@ cd ../eosio.bios
 cd ../todolist
 ./build.sh
 
+cd ../eosio.token
+./build.sh
+
 # allow for block production to start
 echo "Waiting for blockchain node to start"
 sleep 5
