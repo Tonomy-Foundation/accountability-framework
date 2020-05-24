@@ -8,7 +8,6 @@ const blockchainPathBlacklist = ['/new-account'];
 
 const pre = async function(req, res, next) {
     if (blockchainPathBlacklist.includes(req.path)) {
-        console.log("skipping proxy pre")
         next();
         return;
     }
@@ -40,11 +39,9 @@ exports.pre = asyncRouter(pre);
 
 const post = async function(req, res, next) {
     if (blockchainPathBlacklist.includes(req.path)) {
-        console.log("skipping proxy post")
         next();
         return;
     }
-    console.log("Proxy post")
     if (req.blockchainRes && !req.blockchainResSent) {
         res.status(req.blockchainResStatus);
         res.send(req.blockchainRes);

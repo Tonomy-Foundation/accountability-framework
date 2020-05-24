@@ -8,11 +8,7 @@ module.exports = async function (req, res) {
     return;
   }
 
-  // Get data from mongodb
-  console.log("2b")
   const accountDoc = await accountController.findOne({ accountName: req.body.account_name });
-  // control switches to next middleware here... before promise resolves
-  console.log("2c", accountDoc)
   
   if (!accountDoc) {
     res.status(404);

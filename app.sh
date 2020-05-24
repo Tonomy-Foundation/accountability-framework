@@ -57,7 +57,7 @@ then
     elif [ "$ARG2" == "reset" ]
     then
         stop
-        # install
+        install
         cd "$PARENT_PATH/blockchain"
         export NODE_ENV="development"
         ./init_reset_eosio.sh
