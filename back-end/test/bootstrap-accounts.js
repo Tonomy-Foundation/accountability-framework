@@ -16,20 +16,8 @@ async function main() {
   console.log("Connected to database");
 /*
   // Set up the system contract
-  let eosioAccount = {
-    pkey: settings.eosio.accounts.eosio.pkey,
-    name: "eosio",
-    permission: "active"
-  }
-  await eosio.login(eosioAccount);
-  await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
-  console.log("eosio.bios contract deployed");
-  await accountController.insert({
-    accountName: "eosio",
-    name: "System governance",
-    accountType: "organization"
-  });
-  
+  await setupEosioAccount()
+
   // Create some people
   await createNewPerson("yvo", "Yvo Hunink", settings.eosio.accounts.yvo.pubkey, [{accountName: "gov", name: "The Ministry of The Hague"}]);
   const ccOrgs = [{accountName: "todolist", name: "The New Fork Partners"}]
@@ -44,16 +32,10 @@ async function main() {
   
   // Update the system contract to be controlled by the government
   await updateEosioAuth();
-*/
-  // Create the token contract
-  eosioAccount = {
-    pkey: settings.eosio.accounts.yvo.pkey,
-    name: "eosio.token",
-    permission: "active"
-  }
-  await eosio.login(eosioAccount);
-  await eosio.myapi.deploy("eosio.token", "../contracts/eosio.token");
-  console.log("Token contract deployed");
+
+  // Create the token contract and mint tokens to government
+  await deploySetupToken();
+  */
 
   console.log("fin")
   process.exit(0)
@@ -63,6 +45,51 @@ Promise.resolve(main()).catch(err => {
   console.error(err)
   process.exit(1)
 })
+
+async function deploySetupToken() {
+  eosioAccount = {
+    pkey: settings.eosio.accounts.yvo.pkey,
+    name: "eosio.token",
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  // await eosio.myapi.deploy("eosio.token", "../contracts/eosio.token");
+  console.log("Token contract deployed");
+
+  // await eosio.myapi.transact("eosio.token", "create", {
+  //   issuer: "gov",
+  //   maximum_supply: "1000000000.00 EUR"
+  // });
+  
+  eosioAccount = {
+    pkey: settings.eosio.accounts.yvo.pkey,
+    name: "gov",
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  // await eosio.myapi.transact("eosio.token", "issue", {
+  //   to: "gov",
+  //   quantity: "10000.00 EUR",
+  //   memo: ""
+  // });
+}
+
+async function setupEosioAccount() {
+  let eosioAccount = {
+    pkey: settings.eosio.accounts.eosio.pkey,
+    name: "eosio",
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
+  console.log("eosio.bios contract deployed");
+  await accountController.insert({
+    accountName: "eosio",
+    name: "System governance",
+    accountType: "organization"
+  });
+
+}
 
 async function updateEosioAuth() {
   eosioAccount = {
