@@ -22,68 +22,47 @@ const accountController = require('../controllers/accounts.controller');
   await eosio.login(eosioAccount);
   await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
   console.log("eosio.bios contract deployed");
+  await accountController.insert({
+    accountName: "eosio",
+    name: "System account",
+    accountType: "organization"
+  });
 
   await eosio.login(eosioAccount);
 
-  let data = newperson("eosio", "yvo", settings.eosio.accounts.yvo.pubkey, settings.eosio.accounts.yvo.pubkey);
-  await eosio.myapi.transact("eosio", "newperson", data);
-  await accountController.insert({
-    accountName: "yvo",
-    name: "yvo",
-    accountType: "person",
-    organizations: [{
-      accountName: "gov",
-      name: "gov",
-    }],
-  });
-  console.log("Person yvo created");
+  async function createNewPerson(accountName, name, key, organizations) {
+    let data = newPersonData("eosio", accountName, key, key);
+    await eosio.myapi.transact("eosio", "newperson", data);
+    await accountController.insert({
+      accountName: accountName,
+      name: name,
+      accountType: "person",
+      organizations: organizations,
+    });
+    console.log("Person ", accountName, " created");
+  }
+  
+  async function createNewOrg(accountName, name, owners, thresholdPercent) {
+    let data = newOrgData("eosio", accountName, owners, thresholdPercent);
+    await eosio.myapi.transact("eosio", "neworg", data);
+    await accountController.insert({
+      accountName: accountName,
+      name: name,
+      accountType: "organization"
+    });
+    console.log("Organization ", accountName, " created");
+  }
+  
 
-  data = neworg("eosio", "gov", ["yvo"], 0.66);
-  await eosio.myapi.transact("eosio", "neworg", data)
-  console.log("Organization gov created");
+  await createNewPerson("yvo", "Yvo Hunink", settings.eosio.accounts.yvo.pubkey, [{accountName: "gov", name: "The Ministry of The Hague"}]);
 
-  data = newperson("eosio", "jack", settings.eosio.accounts.jack.pubkey);
-  await eosio.myapi.transact("eosio", "newperson", data)
-  await accountController.insert({
-    accountName: "jack",
-    name: "jack tanner",
-    accountType: "person",
-    organizations: [{
-      accountName: "todolist",
-      name: "todolist org",
-    }],
-  });
-  console.log("Person jack created");
+  const ccOrgs = [{accountName: "todolist", name: "The New Fork Partners"}]
+  await createNewPerson("jack", "Jack Tanner", settings.eosio.accounts.jack.pubkey, ccOrgs);
+  await createNewPerson("kirsten", "Kirsten Coppoolse", settings.eosio.accounts.kirsten.pubkey, ccOrgs);
+  await createNewPerson("matej", "Matej Ondrejka", settings.eosio.accounts.matej.pubkey, ccOrgs);
 
-  data = newperson("eosio", "kirsten", settings.eosio.accounts.kirsten.pubkey);
-  await eosio.myapi.transact("eosio", "newperson", data)
-  await accountController.insert({
-    accountName: "kirsten",
-    name: "kirsten",
-    accountType: "person",
-    organizations: [{
-      accountName: "todolist",
-      name: "todolist org",
-    }],
-  });
-  console.log("Person kirsten created");
-
-  data = newperson("eosio", "matej", settings.eosio.accounts.matej.pubkey);
-  await eosio.myapi.transact("eosio", "newperson", data)
-  await accountController.insert({
-    accountName: "matej",
-    name: "matej",
-    accountType: "person",
-    organizations: [{
-      accountName: "todolist",
-      name: "todolist org",
-    }],
-  });
-  console.log("Person matej created");
-
-  data = neworg("eosio", "todolist", ["jack", "kirsten", "matej"], 0.66);
-  await eosio.myapi.transact("eosio", "neworg", data)
-  console.log("Organization todolist created");
+  await createNewOrg("todolist", "The New Fork Partners", ["jack", "kirsten", "matej"], 0.66);
+  await createNewOrg("gov", "The Ministry of The Hague", ["yvo"], 0.66);
 
   eosioAccount = {
     pkey: settings.eosio.accounts.jack.pkey,
@@ -99,7 +78,7 @@ const accountController = require('../controllers/accounts.controller');
   process.exit(0)
 })();
 
-function newperson(creator, name, key, owner = "gov") {
+function newPersonData(creator, name, key, owner = "gov") {
   let data = {
     creator: creator,
     name: name,
@@ -135,7 +114,7 @@ function newperson(creator, name, key, owner = "gov") {
   return data;
 }
 
-function neworg(creator, name, owners, thresholdPercent) {
+function newOrgData(creator, name, owners, thresholdPercent) {
   let data = {
     creator: creator,
     name: name,
