@@ -36,11 +36,7 @@ const pre = async function(req, res, next) {
     next();
 }
 
-exports.pre = function(req, res, next) {
-    console.log("first middleware");
-    const prom = pre(req, res, next);
-    Promise.resolve(prom);
-};
+exports.pre = asyncRouter(pre);
 
 const post = async function(req, res, next) {
     if (blockchainPathBlacklist.includes(req.path)) {
@@ -56,8 +52,4 @@ const post = async function(req, res, next) {
     next();
 }
 
-exports.post = function(req, res, next) {
-    console.log("last middleware");
-    const prom = post(req, res, next);
-    Promise.resolve(prom);
-};
+exports.post = asyncRouter(post);
