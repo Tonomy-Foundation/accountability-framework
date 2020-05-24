@@ -4,7 +4,7 @@ const Eosio = require('../services/Eosio');
 const settings = require('../settings');
 const accountController = require('../controllers/accounts.controller');
 
-(async function main() {
+async function main() {
   console.log("starting blockchain initialization");
 
   let eosioAccount = {
@@ -24,11 +24,9 @@ const accountController = require('../controllers/accounts.controller');
   console.log("eosio.bios contract deployed");
   await accountController.insert({
     accountName: "eosio",
-    name: "System account",
+    name: "System governance",
     accountType: "organization"
   });
-
-  await eosio.login(eosioAccount);
 
   async function createNewPerson(accountName, name, key, organizations) {
     let data = newPersonData("eosio", accountName, key, key);
@@ -42,18 +40,20 @@ const accountController = require('../controllers/accounts.controller');
     console.log("Person ", accountName, " created");
   }
   
-  async function createNewOrg(accountName, name, owners, thresholdPercent) {
+  async function createNewOrg(accountName, name, owners, thresholdPercent, organizations) {
     let data = newOrgData("eosio", accountName, owners, thresholdPercent);
     await eosio.myapi.transact("eosio", "neworg", data);
-    await accountController.insert({
+    let updateAccount = {
       accountName: accountName,
       name: name,
-      accountType: "organization"
-    });
+      accountType: "organization",
+    }
+    if (organizations) updateAccount.organizations = organizations
+    await accountController.insert(updateAccount);
     console.log("Organization ", accountName, " created");
   }
   
-
+  // Create some people
   await createNewPerson("yvo", "Yvo Hunink", settings.eosio.accounts.yvo.pubkey, [{accountName: "gov", name: "The Ministry of The Hague"}]);
 
   const ccOrgs = [{accountName: "todolist", name: "The New Fork Partners"}]
@@ -61,22 +61,75 @@ const accountController = require('../controllers/accounts.controller');
   await createNewPerson("kirsten", "Kirsten Coppoolse", settings.eosio.accounts.kirsten.pubkey, ccOrgs);
   await createNewPerson("matej", "Matej Ondrejka", settings.eosio.accounts.matej.pubkey, ccOrgs);
 
+  // Create some new orgs
   await createNewOrg("todolist", "The New Fork Partners", ["jack", "kirsten", "matej"], 0.66);
-  await createNewOrg("gov", "The Ministry of The Hague", ["yvo"], 0.66);
-
+  await createNewOrg("gov", "The Ministry of The Hague", ["yvo"], 0.66), [{accountName: "eosio", name: "System governance"}, {accountName: "eosio.token", name: "System currency"}];
+  await createNewOrg("eosio.token", "System currency", ["gov"], 0.66);
+  
+  // Update the system contract to be controlled by the government
   eosioAccount = {
-    pkey: settings.eosio.accounts.jack.pkey,
-    name: "todolist",
+    pkey: settings.eosio.accounts.eosio.pkey,
+    name: "eosio",
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  const data = {
+    account: "eosio",
+    permission: "active",
+    parent: "owner",
+    auth: {
+      accounts: [{
+        permission: {actor: "gov", permission: "active"},
+        weight: 1
+      }],
+      keys: [],
+      threshold: 1,
+      waits: []
+    }
+  }
+  console.log(data)
+  await eosio.myapi.transact("eosio", "updateauth", data);
+  eosioAccount = {
+    pkey: settings.eosio.accounts.eosio.pkey,
+    name: "eosio",
+    permission: "owner"
+  }
+  await eosio.login(eosioAccount);
+  const data = {
+    account: "eosio",
+    permission: "owner",
+    parent: "",
+    auth: {
+      accounts: [{
+        permission: {actor: "gov", permission: "owner"},
+        weight: 1
+      }],
+      keys: [],
+      threshold: 1,
+      waits: []
+    }
+  }
+  await eosio.myapi.transact("eosio", "updateauth", data);
+
+  // Create the token contract
+  eosioAccount = {
+    pkey: settings.eosio.accounts.ygo.pkey,
+    name: "gov",
     permission: "active"
   }
 
   await eosio.login(eosioAccount);
-  await eosio.myapi.deploy("todolist", "../contracts/todolist");
-  console.log("todolist contract deployed");
+  await eosio.myapi.deploy("gov", "../contracts/eosio.token");
+  console.log("Token contract deployed");
 
   console.log("fin")
   process.exit(0)
-})();
+};
+
+Promise.resolve(main()).catch(err => {
+  console.error(err)
+  process.exit(1)
+})
 
 function newPersonData(creator, name, key, owner = "gov") {
   let data = {

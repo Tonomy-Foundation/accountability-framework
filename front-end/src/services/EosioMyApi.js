@@ -40,7 +40,8 @@ class EosioMyApi {
                 if (e instanceof RpcError)
                   console.error(JSON.stringify(e.json, null, 2));
                 else
-                    throw Error(e);
+                console.error(e)
+                throw Error(e);
             }
         }
     }
