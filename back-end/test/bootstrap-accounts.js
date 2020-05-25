@@ -1,185 +1,290 @@
+const mongoose = require('mongoose');
+
 const Eosio = require('../services/Eosio');
 const settings = require('../settings');
+const accountController = require('../controllers/accounts.controller');
 
-(async function main() {
-    console.log("starting blockchain initialization");
+let eosio = new Eosio();
 
-    let eosioAccount = {
-        pkey: settings.eosio.accounts.eosio.pkey,
-        name: "eosio",
-        permission: "active"
-    }
-    
-    const eosio = new Eosio();
-    await eosio.login(eosioAccount);
-    await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
-    console.log("eosio.bios contract deployed");
+async function main() {
+  console.log("starting blockchain initialization");
 
-    await eosio.login(eosioAccount);
-    
-    let data = newperson("eosio", "yvo", settings.eosio.accounts.yvo.pubkey, settings.eosio.accounts.yvo.pubkey);
-    await eosio.myapi.transact("eosio", "newperson", data);
-    console.log("Person yvo created");
+  await mongoose.connect(settings.mongodb.url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  console.log("Connected to database");
+  // Set up the system contract
+  let eosioAccount = {
+    pkey: settings.eosio.accounts.eosio.pkey,
+    name: "eosio",
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  await setupEosioAccount();
 
-    data = neworg("eosio", "gov", ["yvo"], 0.66);
-    await eosio.myapi.transact("eosio", "neworg", data)
-    console.log("Organization gov created");
+  // Create some people
+  eosio = new Eosio()
+  await eosio.login(eosioAccount);
+  const govOrg = [{accountName: "gov", name: "The Ministry of The Hague"}]
+  await createNewPerson("yvo", "Yvo Hunink", settings.eosio.accounts.yvo.pubkey, govOrg);
+  await createNewPerson("hidde", "Hidde Kamst", settings.eosio.accounts.hidde.pubkey, govOrg);
+  await createNewPerson("tijn", "Tijn Kyuper", settings.eosio.accounts.tijn.pubkey, govOrg);
+  
+  const ccOrg = [{accountName: "thenewfork", name: "The New Fork Partners"}]
+  await createNewPerson("jack", "Jack Tanner", settings.eosio.accounts.jack.pubkey, ccOrg);
+  await createNewPerson("kirsten", "Kirsten Coppoolse", settings.eosio.accounts.kirsten.pubkey, ccOrg);
+  await createNewPerson("matej", "Matej Ondrejka", settings.eosio.accounts.matej.pubkey, ccOrg);
 
-    data = newperson("eosio", "jack", settings.eosio.accounts.jack.pubkey);
-    await eosio.myapi.transact("eosio", "newperson", data)
-    console.log("Person jack created");
+  // Create some new orgs
+  await createNewOrg("thenewfork", "The New Fork Partners", ["jack", "kirsten", "matej"], 0.66);
+  await createNewOrg("gov", "The Ministry of The Hague", ["hidde", "tijn", "yvo"], 0.66), [{accountName: "eosio", name: "System governance"}, {accountName: "eosio.token", name: "System currency"}];
+  await createNewOrg("eosio.token", "System currency", ["gov"], 0.66);
+  
+  // Update the system contract to be controlled by the government
+  await updateEosioAuth();
 
-    data = newperson("eosio", "kirsten", settings.eosio.accounts.kirsten.pubkey);
-    await eosio.myapi.transact("eosio", "newperson", data)
-    console.log("Person kirsten created");
+  // Create the token contract and mint tokens to government
+  await deploySetupToken();
 
-    data = newperson("eosio", "matej", settings.eosio.accounts.matej.pubkey);
-    await eosio.myapi.transact("eosio", "newperson", data)
-    console.log("Person matej created");
+  // Send some Euros around!
+  await transferTokens("gov", "yvo", 350, "", settings.eosio.accounts.yvo.pkey);
+  await transferTokens("gov", "hidde", 450, "", settings.eosio.accounts.yvo.pkey);
+  await transferTokens("gov", "tijn", 500, "", settings.eosio.accounts.yvo.pkey);
+  await transferTokens("gov", "thenewfork", 3000, "", settings.eosio.accounts.yvo.pkey);
+  await transferTokens("thenewfork", "jack", 600, "", settings.eosio.accounts.jack.pkey);
+  await transferTokens("thenewfork", "kirsten", 600, "", settings.eosio.accounts.jack.pkey);
+  await transferTokens("thenewfork", "matej", 600, "", settings.eosio.accounts.jack.pkey);
+  await transferTokens("kirsten", "jack", 50, "Bonus", settings.eosio.accounts.kirsten.pkey);
+  await transferTokens("matej", "jack", 100, "Sneaky tip!", settings.eosio.accounts.matej.pkey);
 
-    data = neworg("eosio", "todolist", ["jack", "kirsten", "matej"], 0.66);
-    await eosio.myapi.transact("eosio", "neworg", data)
-    console.log("Organization todolist created");
+  // Vote on some policies
+  await voteOnPolicy("yvo", 1, "yes", settings.eosio.accounts.yvo.pkey);
+  await voteOnPolicy("hidde", 1, "no", settings.eosio.accounts.hidde.pkey);
+  await voteOnPolicy("hidde", 32, "abstain", settings.eosio.accounts.hidde.pkey);
+  await voteOnPolicy("matej", 32, "yes", settings.eosio.accounts.matej.pkey);
+  await voteOnPolicy("kirsten", 32, "no", settings.eosio.accounts.kirsten.pkey);
+  await voteOnPolicy("matej", 1, "yes", settings.eosio.accounts.matej.pkey);
+  
+  console.log("fin")
+  process.exit(0)
+};
 
-    eosioAccount = {
-        pkey: settings.eosio.accounts.jack.pkey,
-        name: "todolist",
-        permission: "active"
-    }
-    
-    await eosio.login(eosioAccount);
-    await eosio.myapi.deploy("todolist", "../contracts/todolist");
-    console.log("todolist contract deployed");
+Promise.resolve(main()).catch(err => {
+  console.error(err)
+  process.exit(1)
+})
 
-    console.log("fin")
-})();
-
-function newperson(creator, name, key, owner="gov") {
-    let data = {
-        creator: creator,
-        name: name,
-        owner: {
-            threshold:1,
-            keys:[],
-            accounts:[{
-                permission: {
-                    actor:"gov",
-                    permission:"active"
-                },
-                weight:1
-            }],
-            waits:[]
-        },
-        active: {
-            threshold:1,
-            keys:[{
-                key: key,
-                weight: 1
-            }],
-            accounts:[],
-            waits:[]
-        }
-    }
-    if (owner !== "gov") {
-        data.owner.accounts = []
-        data.owner.keys = [{
-            key: owner,
-            weight: 1
-        }]
-    }
-    return data;
+async function voteOnPolicy(voter, policyId, vote, key) {
+  eosioAccount = {
+    pkey: key,
+    name: voter,
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  await eosio.myapi.transact("eosio", "policyvote", {
+    voter: voter,
+    policy_id: policyId,
+    vote: vote
+  });
+  console.log(voter + " voted " + vote + " in policy #" + policyId);
 }
 
-function neworg(creator, name, owners, thresholdPercent) {
-    let data = {
-        creator: creator,
-        name: name,
-        owner: {
-            threshold: Math.min(Math.floor(owners.length * thresholdPercent)+1, owners.length),
-            keys:[],
-            accounts:[],
-            waits:[]
-        },
-        active: {
-            threshold:1,
-            keys:[],
-            accounts:[],
-            waits:[]
-        }
-    }
-    
-    for (owner of owners) {
-        data.owner.accounts.push({
-            permission: {
-                actor: owner,
-                permission:"active"
-            },
-            weight:1
-        })
-        data.active.accounts.push({
-            permission: {
-                actor: owner,
-                permission:"active"
-            },
-            weight:1
-        })
-    }
-    return data;
+async function transferTokens(from, to, amount, memo, key) {
+  eosioAccount = {
+    pkey: key,
+    name: from,
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  quant = amount.toString() + ".00 EUR";
+  await eosio.myapi.transact("eosio.token", "transfer", {
+    from: from,
+    to: to,
+    quantity: quant,
+    memo: memo
+  });
+  console.log("Transfered " + quant + " from " + from + " to " + to);
 }
-// # Create some people accounts
-// cleos create account eosio jack $KEY_JACK
-// cleos create account eosio kirsten $KEY_KIRSTEN
-// cleos create account eosio matej $KEY_MATEJ
-// cleos create account eosio yvo $KEY_YVO
 
-// # Create some other entities
-// PERMISSION1='{"permission":{"actor":"'
-// PERMISSION2='","permission":"'
-// PERMISSION3='"},"weight":1}'    
-// addPerson() {
-//     PERMISSION=$PERMISSION1$1$PERMISSION2$2$PERMISSION3
-// }
-// app() {
-//     DATA1='{"creator":"jack","name":"app","owner":{"threshold":2,"keys":[],"accounts":['
-//     DATA2='],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":['
-//     DATA3='],"waits":[]}}'
-//     DATA=$DATA1
-    
-//     addPerson "jack" "active"
-//     DATA=$DATA$PERMISSION','
-//     addPerson "kirsten" "active"
-//     DATA=$DATA$PERMISSION','
-//     addPerson "matej" "active"
-//     DATA=$DATA$PERMISSION$DATA2
-    
-//     addPerson "jack" "active"
-//     DATA=$DATA$PERMISSION','
-//     addPerson "kirsten" "active"
-//     DATA=$DATA$PERMISSION','
-//     addPerson "matej" "active"
-//     DATA=$DATA$PERMISSION$DATA3
-//     echo $DATA
-// }
+async function deploySetupToken() {
+  eosioAccount = {
+    pkey: settings.eosio.accounts.yvo.pkey,
+    name: "eosio.token",
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  await eosio.myapi.deploy("eosio.token", "../contracts/eosio.token");
+  console.log("Token contract deployed");
+  
+  await eosio.myapi.transact("eosio.token", "create", {
+    issuer: "gov",
+    maximum_supply: "1000000000.00 EUR"
+  });
+  
+  eosioAccount = {
+    pkey: settings.eosio.accounts.yvo.pkey,
+    name: "gov",
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  await eosio.myapi.transact("eosio.token", "issue", {
+    to: "gov",
+    quantity: "10000.00 EUR",
+    memo: ""
+  });
+}
 
-// app
-// cleos push action eosio "newaccount" $DATA -p jack@active
+async function setupEosioAccount() {
+  await eosio.myapi.deploy("eosio", "../contracts/eosio.bios");
+  console.log("eosio.bios contract deployed");
+  await accountController.insert({
+    accountName: "eosio",
+    name: "System governance",
+    accountType: "organization"
+  });
+}
 
-// OWNER="yvo"
-// DATA='{"creator":"'$OWNER'","name":"gov","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"owner"},"weight":1}],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"active"},"weight":1}],"waits":[]}}'
-// cleos push action eosio "newaccount" $DATA -p $OWNER"@active"
+async function updateEosioAuth() {
+  eosioAccount = {
+    pkey: settings.eosio.accounts.eosio.pkey,
+    name: "eosio",
+    permission: "active"
+  }
+  await eosio.login(eosioAccount);
+  let data = {
+    account: "eosio",
+    permission: "active",
+    parent: "owner",
+    auth: {
+      accounts: [{
+        permission: {actor: "gov", permission: "active"},
+        weight: 1
+      }],
+      keys: [],
+      threshold: 1,
+      waits: []
+    }
+  }
+  await eosio.myapi.transact("eosio", "updateauth", data);
+  
+  eosioAccount = {
+    pkey: settings.eosio.accounts.eosio.pkey,
+    name: "eosio",
+    permission: "owner"
+  }
+  await eosio.login(eosioAccount);
+  data = {
+    account: "eosio",
+    permission: "owner",
+    parent: "",
+    auth: {
+      accounts: [{
+        permission: {actor: "gov", permission: "owner"},
+        weight: 1
+      }],
+      keys: [],
+      threshold: 1,
+      waits: []
+    }
+  }
+  await eosio.myapi.transact("eosio", "updateauth", data);
+}
 
-// OWNER="jack"
-// DATA='{"creator":"'$OWNER'","name":"test1","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"owner"},"weight":1}],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"active"},"weight":1}],"waits":[]}}'
-// cleos push action eosio "newaccount" $DATA -p $OWNER"@active"
+async function createNewPerson(accountName, name, key, organizations) {
+  const data = newPersonData("eosio", accountName, key, key);
+  await eosio.myapi.transact("eosio", "newperson", data);
+  await accountController.insert({
+    accountName: accountName,
+    name: name,
+    accountType: "person",
+    organizations: organizations,
+  });
+  console.log("Person ", accountName, " created");
+}
 
-// DATA='{"creator":"'$OWNER'","name":"test2","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"owner"},"weight":1}],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"active"},"weight":1}],"waits":[]}}'
-// cleos push action eosio "newaccount" $DATA -p $OWNER"@active"
+async function createNewOrg(accountName, name, owners, thresholdPercent, organizations) {
+  const data = newOrgData("eosio", accountName, owners, thresholdPercent);
+  await eosio.myapi.transact("eosio", "neworg", data);
+  let updateAccount = {
+    accountName: accountName,
+    name: name,
+    accountType: "organization",
+  }
+  if (organizations) updateAccount.organizations = organizations
+  await accountController.insert(updateAccount);
+  console.log("Organization ", accountName, " created");
+}
 
-// DATA='{"creator":"'$OWNER'","name":"test3","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"owner"},"weight":1}],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"active"},"weight":1}],"waits":[]}}'
-// cleos push action eosio "newaccount" $DATA -p $OWNER"@active"
+function newPersonData(creator, name, key, owner = "gov") {
+  let data = {
+    creator: creator,
+    name: name,
+    owner: {
+      threshold: 1,
+      keys: [],
+      accounts: [{
+        permission: {
+          actor: "gov",
+          permission: "active"
+        },
+        weight: 1
+      }],
+      waits: []
+    },
+    active: {
+      threshold: 1,
+      keys: [{
+        key: key,
+        weight: 1
+      }],
+      accounts: [],
+      waits: []
+    }
+  }
+  if (owner !== "gov") {
+    data.owner.accounts = []
+    data.owner.keys = [{
+      key: owner,
+      weight: 1
+    }]
+  }
+  return data;
+}
 
-// DATA='{"creator":"'$OWNER'","name":"test4","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"owner"},"weight":1}],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"active"},"weight":1}],"waits":[]}}'
-// cleos push action eosio "newaccount" $DATA -p $OWNER"@active"
+function newOrgData(creator, name, owners, thresholdPercent) {
+  let data = {
+    creator: creator,
+    name: name,
+    owner: {
+      threshold: Math.min(Math.floor(owners.length * thresholdPercent) + 1, owners.length),
+      keys: [],
+      accounts: [],
+      waits: []
+    },
+    active: {
+      threshold: 1,
+      keys: [],
+      accounts: [],
+      waits: []
+    }
+  }
 
-// DATA='{"creator":"'$OWNER'","name":"test5","owner":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"owner"},"weight":1}],"waits":[]},"active":{"threshold":1,"keys":[],"accounts":[{"permission":{"actor":"'$OWNER'","permission":"active"},"weight":1}],"waits":[]}}'
-// cleos push action eosio "newaccount" $DATA -p $OWNER"@active"
+  for (owner of owners) {
+    data.owner.accounts.push({
+      permission: {
+        actor: owner,
+        permission: "active"
+      },
+      weight: 1
+    })
+    data.active.accounts.push({
+      permission: {
+        actor: owner,
+        permission: "active"
+      },
+      weight: 1
+    })
+  }
+  return data;
+}

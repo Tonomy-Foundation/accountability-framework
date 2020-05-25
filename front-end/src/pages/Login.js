@@ -74,7 +74,7 @@ function Login(props) {
   }
 
   if (loggedin) {
-    return <Redirect to="/" />
+    return <Redirect to={"/people/"+accountName} />
   } else {
     return (
       <Container component="main" maxWidth="xs">

@@ -2,51 +2,50 @@ version: '3'
 services:
   eosio-cdt:
     image: eostudio/eosio.cdt:v1.7.0
-    container_name: "eosio-cdt"
+    container_name: 'eosio-cdt'
     volumes:
       - ./:/var/repo
   eosio:
     build:
       context: ./blockchain
       dockerfile: Dockerfile-eosio
-    container_name: "eosio"
+    container_name: 'eosio'
     ports:
       - 8888:8888
     volumes:
       - ./:/var/repo
       - ./temp/eosio:/data
-  # mongo:
-  #   image: mongo:latest
-  #   container_name: "mongodb"
-  #   ports:
-  #     - 27017:27017
-  #   environment:
-  #     - MONGO_DATA_DIR=/data
-  #     - MONGO_LOG_DIR=/dev/null
-  #     - MONGODB_USER="user" 
-  #     - MONGODB_PASS="pass"
-  #   volumes:
-  #     - ./temp/mongo:/data
-  #   command:
-  #     sh -c 'mongod >> /data/mongod.log 2>&1'
+  mongo:
+    image: mongo:latest
+    container_name: 'mongodb'
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_DATA_DIR=/data
+      - MONGO_LOG_DIR=/data/logs
+      - MONGODB_USER="user"
+      - MONGODB_PASS="pass"
+    volumes:
+      - ./temp/mongo:/data
   back-end:
-    build: 
+    build:
       context: ./back-end
       dockerfile: Dockerfile-nodemon
-    container_name: "back-end"
+    container_name: 'back-end'
     ports:
       - 4000:4000
     volumes:
-     - ./:/var/repo
-     - ./temp/back-end:/data
+      - ./:/var/repo
+      - ./temp/back-end:/data
     working_dir: /var/repo/back-end
-    command:
-      sh -c 'npm start >> /data/nodejs.log 2>&1' 
+    command: sh -c 'npm run-script docker >> /data/nodejs.log 2>&1'
+    # extra_hosts:
+    #   - "mongodb:127.0.0.1"
   front-end:
     build:
       context: ./front-end
       dockerfile: Dockerfile-react
-    container_name: "front-end"
+    container_name: 'front-end'
     environment:
       - NODE_ENV=$NODE_ENV
     ports:
