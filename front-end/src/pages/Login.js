@@ -56,10 +56,11 @@ function Login(props) {
     }
 
     const eosio = new Eosio();
-    await eosio.login(account)
-
-    await props.login(eosio);
-    await setLoggedin(true);
+    Promise.all([
+      eosio.login(account), 
+      props.login(eosio),
+      setLoggedin(true)
+    ])
   }
 
   async function onChangeAccount(event) {
