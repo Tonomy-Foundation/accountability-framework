@@ -5,10 +5,7 @@ import "./App.css";
 
 function App() {
   return (
-    <div>
-      <Navbar />
-      <Routes history />
-    </div>
+    <Routes history />
   );
 }
 
