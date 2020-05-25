@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router';
+import {withRouter, useHistory} from 'react-router-dom';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,13 +11,10 @@ import InputBase from '@material-ui/core/InputBase';
 import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MoreIcon from '@material-ui/icons/MoreVert';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
 import Badge from"@material-ui/core/Badge";
 import Typography from '@material-ui/core/Typography';
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MailIcon from "@material-ui/icons/Mail";
 import { logout } from '../redux/actions';
 
 const useStyles = makeStyles((theme) => ({
@@ -86,13 +83,14 @@ const useStyles = makeStyles((theme) => ({
 
 const mapStateToProps = state => {
   return {
-    eosio: state.eosio
+    eosio: state.eosio,
   };
 }
 
 const mapDispatchToProps = {
   logout,
 };
+
 
 function Navbar(props) {
   const classes = useStyles();
@@ -101,6 +99,8 @@ function Navbar(props) {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const { history } = props
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -114,7 +114,7 @@ function Navbar(props) {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-
+  // const history = useHistory();
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     // the profile menu button. 
@@ -128,10 +128,13 @@ function Navbar(props) {
       onClose={handleMenuClose}
     >
       
-      <MenuItem onClick={() => {window.location.href = `/People/${props.eosio.account.name}`  }}>My account</MenuItem>
+      <MenuItem onClick={() => { history.push(`/people/${props.eosio.account.name}`) }}>My account</MenuItem>
+    
+      
       <MenuItem onClick={() => { props.logout(); handleMenuClose() }}>Logout</MenuItem>
     </Menu>
   );
+
   
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -158,6 +161,7 @@ function Navbar(props) {
   );
 
   return (
+    
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
@@ -192,7 +196,7 @@ function Navbar(props) {
               </MenuItem>
             )}
             {!props.eosio && (
-              <Button variant="contained" onClick={() => { window.location.href = 'http://localhost:3000/login' }}>Login</Button>
+              <Button variant="contained" onClick={() => { history.push(`/login`) }}>Login</Button>
             )}
           </div>
         </Toolbar>
@@ -204,3 +208,4 @@ function Navbar(props) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+// Magic

@@ -5,6 +5,8 @@ import Container from '@material-ui/core/Container';
 import { Redirect } from "react-router-dom";
 import Contract from '../services/Contract';
 import { connect } from 'react-redux';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 function mapStateToProps(state) {
   return {
@@ -23,6 +25,7 @@ class Todo extends React.Component {
     this.newItem = this.newItem.bind(this);
     this.newItemChange = this.newItemChange.bind(this);
     this.toggleItem = this.toggleItem.bind(this);
+    this.history = props.history
   }
 
   async componentDidMount() {
@@ -82,11 +85,15 @@ class Todo extends React.Component {
   render() {
     // if (this.props.eosio) {
       return (
-        <Container component="main" maxWidth="xs">
-            <h1>Todo list</h1>
-            <TodoAdd onSubmit={this.newItem} onChange={this.newItemChange} value={this.state.newItem}/>
-            <TodoList list={this.state.list} toggleItem={this.toggleItem}/>
-        </Container>
+        <>
+          <Navbar history={this.history} />
+
+          <Container component="main" maxWidth="xs">
+              <h1>Todo list</h1>
+              <TodoAdd onSubmit={this.newItem} onChange={this.newItemChange} value={this.state.newItem}/>
+              <TodoList list={this.state.list} toggleItem={this.toggleItem}/>
+          </Container>
+        </>
       );
     // } else {
     //   return <Redirect to="/login" />

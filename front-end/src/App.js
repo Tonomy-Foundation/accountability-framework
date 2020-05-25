@@ -6,11 +6,7 @@ import './App.css';
 
 function App() {
   return (
-    <div>
-      <Navbar />
-      <Routes />
-      <Footer />
-    </div>
+    <Routes history />
   );
 }
 
