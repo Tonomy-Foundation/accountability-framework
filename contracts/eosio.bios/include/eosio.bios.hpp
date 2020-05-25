@@ -3,6 +3,7 @@
 #include <eosio/action.hpp>
 #include <eosio/crypto.hpp>
 #include <eosio/eosio.hpp>
+#include <eosio/system.hpp>
 #include <eosio/fixed_bytes.hpp>
 #include <eosio/privileged.hpp>
 #include <eosio/producer_schedule.hpp>
@@ -283,6 +284,10 @@ namespace eosiobios {
           */
          [[eosio::action]]
          void reqactivated( const eosio::checksum256& feature_digest );
+
+         // Dummy action for demonstration
+         [[eosio::action]]
+         void policyvote( eosio::name voter, uint16_t policy_id, std::string vote );
 
          struct [[eosio::table]] abi_hash {
             name              owner;

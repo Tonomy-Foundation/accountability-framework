@@ -39,7 +39,7 @@ class Contract {
                     data[fields[i].name] = args[i]
                 }
 
-                return await this.eosio.transact(contractAccount, name, data, {status: "executed"});
+                return await this.eosio.myapi.transact(contractAccount, name, data, {status: "executed"});
             }
         }
 
@@ -47,7 +47,7 @@ class Contract {
         for (let table of abi.abi.tables) {
             const name = table.name;
             c[name] = async function(scope) {
-                return await this.eosio.getTable(contractAccount, scope, name);
+                return await this.eosio.myapi.getTable(contractAccount, scope, name);
             }
         }
     }

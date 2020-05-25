@@ -11,16 +11,13 @@ then
     echo "Using existing key"
 else
     echo "Adding server key"
-    # Need to replace "_" with new line and "#" with space to get into correct .pem format from pure string env variable
-    EC2_PEM_1=`echo "$EC2_PEM"| tr "#" " "`
-    EC2_PEM_2=`echo "$EC2_PEM_1"| tr "_" "\n"`
     mkdir ../keys
-    echo "$EC2_PEM_2" > ../keys/ec2.pem
+    echo "$EC2_PEM" > ../keys/ec2.pem
     chmod 400 ../keys/ec2.pem
 fi
 
-SCRIPT="cd eosio-react-app; git pull origin master; ./start.sh"
-echo $SCRIPT
+SCRIPT="cd eosio-react-app; git pull origin master; ./app.sh up prod"
+echo "$SCRIPT"
 
 SSH_LOCATION="ubuntu@"$SERVER_DOMAIN
 ssh -o "StrictHostKeyChecking no" -i ../keys/ec2.pem $SSH_LOCATION "${SCRIPT}"
