@@ -22,11 +22,13 @@ services:
       - 27017:27017
     environment:
       - MONGO_DATA_DIR=/data
-      - MONGO_LOG_DIR=/data/logs
+      - MONGO_LOG_DIR=/data-logs
       - MONGODB_USER="user"
       - MONGODB_PASS="pass"
     volumes:
-      - ./temp/mongo:/data
+      - ./temp/mongo/db:/data/db
+      - ./temp/mongo/configdb:/data/configdb
+      - ./temp/mongo/logs:/data-logs
   back-end:
     build:
       context: ./back-end
