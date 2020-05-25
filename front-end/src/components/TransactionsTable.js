@@ -304,7 +304,7 @@ function TransactionsTable(props) {
                 className={classes.transactionChevronRightContainer}
                 onClick={() => {
                   window.open(
-                    `https://local.bloks.io/transaction/${data.tx_id}?nodeUrl=${settings.eosio.network}&systemDomain=eosio`,
+                    `https://local.bloks.io/transaction/${data.tx_id}?nodeUrl=${settings.eosio.blockExplorerUrl}&systemDomain=eosio`,
                     "_blank"
                   );
                 }}

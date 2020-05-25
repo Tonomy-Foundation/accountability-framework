@@ -3,6 +3,7 @@ let settings = {
     // TODO rename to api.url
     eosio: {
         network: "http://localhost:4000",
+        blockExplorerUrl: "localhost:8888",
         accounts: {
             jack: {
                 pkey: "5K5cPZHgJaFHWt3Fy4vgzc2WfLw3cLE4E1x5c6A2kx1pjL3mEg4",
@@ -13,8 +14,8 @@ let settings = {
 };
 
 if (process.env.REACT_APP_NODE_ENV === "production") {
-    settings.eosio.network = "http://ec2-35-178-206-104.eu-west-2.compute.amazonaws.com:4000";
-    settings.eosio.https_network = "http://d1uzqj8k54wt9u.cloudfront.net:8888";
+    settings.eosio.network = "https://d1hxgr8mqh915l.cloudfront.net";
+    settings.eosio.blockExplorerUrl = "d1uzqj8k54wt9u.cloudfront.net";
 } else if (process.env.REACT_APP_NODE_ENV === "docker") {
     //
 }
