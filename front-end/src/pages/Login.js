@@ -16,8 +16,6 @@ import { login } from '../redux/actions';
 import Eosio from '../services/Eosio';
 import { Redirect } from "react-router-dom";
 import settings from '../settings';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -79,70 +77,66 @@ function Login(props) {
     return <Redirect to="/" />
   } else {
     return (
-      <>
-        <Navbar history={history} />
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Login
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Account name"
+              value={accountName}
+              onChange={onChangeAccount}
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Private key"
+              value={pkey}
+              onChange={onChangePkey}
+              type="password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={onLogin}
+              className={classes.submit}
+            >
               Login
-            </Typography>
-            <form className={classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Account name"
-                value={accountName}
-                onChange={onChangeAccount}
-                autoFocus
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Private key"
-                value={pkey}
-                onChange={onChangePkey}
-                type="password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="button"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={onLogin}
-                className={classes.submit}
-              >
-                Login
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
               </Grid>
-            </form>
-          </div>
-        </Container>
-        <Footer />
-      </>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+      </Container>
     )
   }
 }

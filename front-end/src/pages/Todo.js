@@ -5,8 +5,6 @@ import Container from '@material-ui/core/Container';
 import { Redirect } from "react-router-dom";
 import Contract from '../services/Contract';
 import { connect } from 'react-redux';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 function mapStateToProps(state) {
   return {
@@ -86,8 +84,6 @@ class Todo extends React.Component {
     // if (this.props.eosio) {
       return (
         <>
-          <Navbar history={this.history} />
-
           <Container component="main" maxWidth="xs">
               <h1>Todo list</h1>
               <TodoAdd onSubmit={this.newItem} onChange={this.newItemChange} value={this.state.newItem}/>

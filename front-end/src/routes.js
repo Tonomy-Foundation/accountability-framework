@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Todo from './pages/Todo';
 import Login from './pages/Login';
+import { NavbarRoute } from './components/NavbarRoute'
 
 const routes = [
   { path: '/login', component: Login, exact: true },
@@ -17,7 +18,7 @@ const Routes = () => (
   <Router>
     <Switch>
       {routes.map(route => (
-        <Route {...route} key={route.path} />
+        <NavbarRoute {...route} key={route.path} />
       ))}
     </Switch>
   </Router>
