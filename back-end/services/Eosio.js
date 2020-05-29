@@ -3,18 +3,24 @@ const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig');
 const ecc = require('eosjs-ecc');
 const { copyObj } = require('./objects');
 const EosioMyApi = require('./EosioMyApi');
+import { createDfuseClient } from '@dfuse/client';
 
 // Only needed for nodejs execution
 const fetch = require('node-fetch');
 const { TextEncoder, TextDecoder } = require('util');
 
 const settings = require('../settings');
-const defaultNetwork = settings.eosio.network;
 
 class Eosio {
-    constructor(network = defaultNetwork) {
-        let rpc = fetch ? new JsonRpc(network, {fetch}) : new JsonRpc(network);
+    constructor((network = { nodeos: settings.eosio.nodeos, dfuse: settings.eosio.dfuse }) {
+        let rpc = fetch ? new JsonRpc(network.nodeos, {fetch}) : new JsonRpc(network.nodeos);
         this.rpc = rpc;
+        this.dfuseClient = createDfuseClient({
+            apiKey: "web_abcdef123456789",
+            authUrl: "null://",
+            secure: false,
+            network: network.dfuse,
+        })
     }
 
     async login(account) {

@@ -1,7 +1,8 @@
 // these settings are used on npm start
 let settings = {
   eosio: {
-    network: "http://localhost:8888",
+    nodeos: "http://localhost:8888",
+    dfuse: "http://localhost:8080",
     accounts: {
       eosio: {
         pkey: "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3",
@@ -39,11 +40,13 @@ let settings = {
   port: 4001
 };
 
-if (process.env.NODE_ENV === "production") {
-  settings.eosio.network = "http://dfuse:8888";
+if (process.env.REACT_APP_NODE_ENV === "production") {
+  settings.eosio.nodeos = "http://dfuse:8888";
+  settings.eosio.dfuse = "http://dfuse:8080",
   settings.mongodb.url = "mongodb://mongodb:27017/conscious";
-} else if (process.env.NODE_ENV === "docker") {
-  settings.eosio.network = "http://dfuse:8888";
+} else if (process.env.REACT_APP_NODE_ENV === "docker") {
+  settings.eosio.nodeos = "http://dfuse:8888";
+  settings.eosio.dfuse = "http://dfuse:8080",
   settings.mongodb.url = "mongodb://mongodb:27017/conscious";
   settings.port = 4000
 }

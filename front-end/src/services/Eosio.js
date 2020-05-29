@@ -4,19 +4,18 @@ import ecc from 'eosjs-ecc';
 import { copyObj } from './objects';
 import EosioMyApi from './EosioMyApi';
 import { createDfuseClient } from '@dfuse/client';
-
 import settings from '../settings';
 
 class Eosio {
-    constructor(network = { nodeos: settings.eosio.nodeos, dfuse: ettings.eosio.dfuse }) {
-        let rpc = fetch ? new JsonRpc(network, {fetch}) : new JsonRpc(network.nodeos);
+    constructor(network = { nodeos: settings.eosio.nodeos, dfuse: settings.eosio.dfuse }) {
+        let rpc = fetch ? new JsonRpc(network.nodeos, {fetch}) : new JsonRpc(network.nodeos);
         this.rpc = rpc;
         this.dfuseClient = createDfuseClient({
             apiKey: "web_abcdef123456789",
             authUrl: "null://",
             secure: false,
             network: network.dfuse,
-          })
+        })
     }
 
     async login(account) {
