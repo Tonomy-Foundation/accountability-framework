@@ -20,7 +20,7 @@ fi
 cd ../eosio.bios
 ./build.sh
 
-cd ../todolist
+cd ../eosio.token
 ./build.sh
 
 # allow for block production to start

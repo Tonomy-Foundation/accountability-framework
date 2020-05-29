@@ -48,6 +48,8 @@ function Login(props) {
   const [pkey, setPkey] = useState(settings.eosio.accounts.jack.pkey);
   const [loggedin, setLoggedin] = useState(false);
 
+  const { history } = props
+
   async function onLogin() {
     const account = {
       name: accountName,
@@ -56,10 +58,11 @@ function Login(props) {
     }
 
     const eosio = new Eosio();
-    await eosio.login(account)
-
-    await props.login(eosio);
-    await setLoggedin(true);
+    Promise.all([
+      eosio.login(account), 
+      props.login(eosio),
+      setLoggedin(true)
+    ])
   }
 
   async function onChangeAccount(event) {

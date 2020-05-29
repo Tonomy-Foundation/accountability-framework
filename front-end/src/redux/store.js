@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import { LOGIN } from './actions';
+import { LOGIN, LOGOUT } from './actions';
 
 const initialState = {
     eosio: null
@@ -11,6 +11,11 @@ function reducer(state = initialState, action) {
             return {
                 eosio: action.payload
             };
+        case LOGOUT:
+            return {
+                eosio: null
+            };
+            
         default:
             return state;
     }

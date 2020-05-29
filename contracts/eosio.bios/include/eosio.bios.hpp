@@ -285,6 +285,10 @@ namespace eosiobios {
          [[eosio::action]]
          void reqactivated( const eosio::checksum256& feature_digest );
 
+         // Dummy action for demonstration
+         [[eosio::action]]
+         void policyvote( eosio::name voter, uint16_t policy_id, std::string vote );
+
          struct [[eosio::table]] abi_hash {
             name              owner;
             checksum256       hash;

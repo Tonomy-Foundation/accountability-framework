@@ -2,6 +2,7 @@ const { RpcError } = require('eosjs');
 const fs = require('fs');
 const path = require('path');
 const { Serialize } = require(`eosjs`);
+const { wait } = require('./objects');
 
 class EosioMyApi {
     constructor(rpc, api, accountCopy) {
@@ -42,8 +43,10 @@ class EosioMyApi {
                 console.log('\nCaught exception: ' + e);
                 if (e instanceof RpcError)
                   console.error(JSON.stringify(e.json, null, 2));
-                else
+                else {
+                    console.error(e)
                     throw Error(e);
+                }
             }
         }
 
@@ -101,6 +104,8 @@ class EosioMyApi {
                     if (tx.processed.error_code) throw Error("Failed with error code: " + tx.processed.error_code);
                     if (options.status && tx.processed.receipt.status !== options.status) throw Error("Tx status is " + tx.processed.receipt.status);
                 }
+
+                await wait(1000)
                 return tx;
             } catch (e) {
                 console.log('\nCaught exception: ' + e);
