@@ -1,12 +1,12 @@
 #!/bin/bash
 
-echo "Node env"
-echo "$NODE_ENV"
+echo "REACT_APP_NODE_ENV"
+echo "$REACT_APP_NODE_ENV"
 
-if [ "$NODE_ENV" == "production" ]
+if [ "$REACT_APP_NODE_ENV" == "production" ]
 then
-    npm run-script build
+    REACT_APP_NODE_ENV="$REACT_APP_NODE_ENV" npm run-script build
     serve -s build
 else
-    npm run-script docker
+    REACT_APP_NODE_ENV="$REACT_APP_NODE_ENV" npm run-script docker
 fi
