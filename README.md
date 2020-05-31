@@ -14,9 +14,14 @@ Use install script _should work_ for debian distributions to install prerequesit
 
 ## Initialize project
 
-Install all npm packages for FE and BE, and then initialize the blockchain with bootstrap account. You should only need to redo this once before the first time you run.
+Install all npm packages for FE and BE, and then initialize the blockchain with bootstrap account. You should only need to redo this once before the first time you run. You may also wish to reset and initialize if:
+
+- bootstrap-accounts.js or other blockchain initialization fails
+- smart contracts are changed
+- the blockchain gets too big on your computer
 
 `./app.sh init`
+`./app.sh init fast # same as above but does not reinstall software, only resets and initializes blockchain`
 
 ---------
 

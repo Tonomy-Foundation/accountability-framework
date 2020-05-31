@@ -26,4 +26,6 @@ RUN apt-get install -y curl \
 RUN cd / \
     # "y" will initialize to run a producing node, "n" will connect to existing node
     && (echo "y" && cat) | dfuseeos init
-RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' producer/config.ini
+RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' producer/config.ini \
+    && sed -i '9i plugin = eosio::history_plugin' producer/config.ini \
+    && sed -i '10i plugin = eosio::history_api_plugin' producer/config.ini

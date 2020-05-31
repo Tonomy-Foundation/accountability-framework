@@ -12,11 +12,11 @@ const pre = async function(req, res, next) {
         return;
     }
 
-    const url = settings.eosio.network + req.path;
+    const url = settings.eosio.nodeos + req.path;
 
     req.body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     const fetchResponse = await nodeFetch(url, {
-        method: 'POST', timeout: 150, body: JSON.stringify(req.body)
+        method: 'POST', timeout: 600, body: JSON.stringify(req.body)
     })
 
     const blockchainRes = await fetchResponse.json();

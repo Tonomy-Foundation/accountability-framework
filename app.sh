@@ -50,6 +50,8 @@ function init {
 
     cd "$PARENT_PATH/blockchain"
     ./init_reset_eosio.sh
+
+    upprint
 }
 
 function help {
@@ -112,12 +114,10 @@ elif [ "$ARG1" == "init" ]; then
     if [ "$ARG2" == "fast" ]; then
         stop
         init
-        stop
     else
         stop
         install
         init
-        stop
     fi
 elif [ "$ARG1" == "reset" ]; then
     reset
