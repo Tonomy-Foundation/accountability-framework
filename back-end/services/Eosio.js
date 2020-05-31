@@ -45,8 +45,6 @@ class Eosio {
             }
         }
         this.dfuseClient = createDfuseClient(dfuseOptions);
-
-        console.log(this.dfuseClient)
     }
 
     async login(account) {
