@@ -6,6 +6,9 @@ ARG2=$2
 # Make sure working dir is same as this dir, so that script can be excuted from another working directory
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
+set -o nounset   ## set -u : exit the script if you try to use an uninitialised variable
+set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
+
 function startdocker {
     ENV=$1
     echo "REACT_APP_NODE_ENV"
@@ -58,6 +61,8 @@ function help {
     echo ""
     echo "Commands:"
     echo "    init       - initializes the project"
+    echo "    init fast  - initializes the project without reinstalling all packages and building containers"
+    echo "    install    - installs all dependancies"
     echo "    up         - starts application components through docker compose"
     echo "    up prod    - starts application execution on production server"
     echo "    down       - stops application components gracefully"
@@ -81,12 +86,13 @@ function reset {
     stop
     echo "This will reset the blockchain and all databases!!!"
     read -p "Do you want to continue (y/n)? " CHOICE
-    if [ "$CHOICE" == 'y' ]
-    then
+    if [ "$CHOICE" == 'y' ]; then
         if [ -d "$PARENT_PATH/temp" ]
         then
             sudo rm "$PARENT_PATH/temp" -R
         fi
+    else
+        exit 1
     fi
 }
 
@@ -105,12 +111,21 @@ then
 elif [ "$ARG1" == "down" ]; then
     stop
 elif [ "$ARG1" == "init" ]; then
-    stop
-    install
-    init
-    stop
+    if [ "$ARG2" == "fast" ]; then
+        stop
+        init
+        stop
+    else
+        stop
+        install
+        init
+        stop
+    fi
 elif [ "$ARG1" == "reset" ]; then
     reset
+elif [ "$ARG1" == "install" ]; then
+    stop
+    install
 else
     help
 fi

@@ -16,6 +16,8 @@ class Eosio {
             secure: false,
             network: network.dfuse,
         })
+
+        console.log(this.dfuseClient)
     }
 
     async login(account) {
