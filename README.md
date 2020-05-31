@@ -20,12 +20,15 @@ Install all npm packages for FE and BE, and then initialize the blockchain with 
 - smart contracts are changed
 - the blockchain gets too big on your computer
 
-`./app.sh init`
-`./app.sh init fast # same as above but does not reinstall software, only resets and initializes blockchain`
+```
+./app.sh init
+or
+./app.sh init fast # same as above but does not reinstall software
+```
 
 ---------
 
-IMPORTANT: The first time you run the app, it will initialize the blockchain, executing the following two files. If there is an errer displayed during this then please use the reset script below.
+IMPORTANT: The first time you run the app, it will initialize the blockchain, executing the following two files. If there is an errer displayed during this then try run the `./app.sh init fast` again.
 
 - `blockchain/init_reset_eosio.sh` - resets the blockchain and initializes an eosio v2.0 blockchain node with a system contract
 - `back-end/test/bootstrap-accounts.js` - creates initial accounts and contracts on the blockchain with corresponding database information
@@ -37,10 +40,11 @@ IMPORTANT: The first time you run the app, it will initialize the blockchain, ex
 
 The following services will run
 
-- port 4000: nodejs express middleware API
-- port 3000: react app
-- port 8888: nodeos http API to eosio blockchain node
-- port 27017: mongodb database
+- http://localhost:4000:   nodejs express middleware API
+- http://localhost:3000:   react app
+- http://localhost:8888:   nodeos http API to eosio blockchain node
+- http://localhost:27017:  mongodb database
+- https://local.bloks.io/?nodeUrl=localhost:8888&systemDomain=eosio: bloks.io localblock explorer
 
 ### Production 
 
@@ -48,11 +52,11 @@ For production start
 
 `./app.sh up prod`
 
-This will run the react service on port 5000 with an optimized build
+This will run the react app on port 5000 with an optimized build
 
 ### Run front and back end
 
-You can also run the back-end and front-end in a local environment by running `npm start` in their respective folders. See README.md for the local folder for more details. Services will be run on ports 3001 and 4001 for front and back end respectively.
+You can also run the back-end and front-end out of docker for debugging by running `npm start` in their respective folders. See README.md for the local folder for more details. Services will be run on ports 3001 and 4001 for front and back end respectively.
 
 ## Stop
 
@@ -60,6 +64,6 @@ You can also run the back-end and front-end in a local environment by running `n
 
 ## Reset
 
-If there are errors during the first time you run the app, or you wish to reset the blockchain history.
+Resets ALL blockchain history, mongodb data and logs!
 
 `./app.sh reset`
