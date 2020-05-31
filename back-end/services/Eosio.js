@@ -23,6 +23,7 @@ class Eosio {
             secure: false,
             network: network.dfuse
         }
+        if (settings.isLiveEnvironment()) settings.secure = true;
         if (fetch) {
             dfuseOptions.httpClientOptions = {
                 fetch: fetch
@@ -44,6 +45,8 @@ class Eosio {
             }
         }
         this.dfuseClient = createDfuseClient(dfuseOptions);
+
+        console.log(this.dfuseClient)
     }
 
     async login(account) {

@@ -13,26 +13,24 @@ function startdocker {
     ENV=$1
     echo "REACT_APP_NODE_ENV"
     echo "$ENV"
+
+    cd "$PARENT_PATH"
     REACT_APP_NODE_ENV=$ENV docker-compose up -d
 
     # TODO should remove logs process each time
     # kill $(ps aux | grep -i "docker-compose logs" | awk '{print $2}')
-    sudo bash -c "docker-compose logs -f -t >> '$PARENT_PATH/temp/docker-compose.log' &"
+    sudo bash -c "REACT_APP_NODE_ENV=$ENV docker-compose logs -f -t >> '$PARENT_PATH/temp/docker-compose.log' &"
 }
 
 function start {
     ENV=$1
-    
-    cd "$PARENT_PATH"
-    mkdir "$PARENT_PATH/temp"
-
     startdocker $ENV
     upprint
 }
 
 function stop {
     cd "$PARENT_PATH"
-    docker-compose down
+    REACT_APP_NODE_ENV=development docker-compose down
 }
 
 function install {

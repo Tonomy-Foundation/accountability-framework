@@ -14,7 +14,7 @@ Use install script _should work_ for debian distributions to install prerequesit
 
 ## Initialize project
 
-Install all npm packages for FE and BE, and then initialize the blockchain with bootstrap account
+Install all npm packages for FE and BE, and then initialize the blockchain with bootstrap account. You should only need to redo this once before the first time you run.
 
 `./app.sh init`
 
