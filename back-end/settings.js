@@ -1,7 +1,8 @@
 // these settings are used on npm start
 let settings = {
   eosio: {
-    network: "http://localhost:8888",
+    nodeos: "http://localhost:8888",
+    dfuse: "localhost:8080",
     accounts: {
       eosio: {
         pkey: "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3",
@@ -34,18 +35,27 @@ let settings = {
     }
   },
   mongodb: {
-    url: "mongodb://localhost:27017/conscious"
+    url: "mongodb://localhost:27017/conscious_dev"
   },
-  port: 4001
+  port: 4001,
+  env: "development"
 };
 
-if (process.env.NODE_ENV === "production") {
-  settings.eosio.network = "http://eosio:8888";
-  settings.mongodb.url = "mongodb://mongodb:27017/conscious";
-} else if (process.env.NODE_ENV === "docker") {
-  settings.eosio.network = "http://eosio:8888";
-  settings.mongodb.url = "mongodb://mongodb:27017/conscious";
+if (process.env.REACT_APP_NODE_ENV === "production") {
+  settings.env = "production";
+  settings.eosio.nodeos = "http://dfuse:8888";
+  settings.eosio.dfuse = "dfuse:8080",
+  settings.mongodb.url = "mongodb://mongodb:27017/conscious_prod";
+} else if (process.env.REACT_APP_NODE_ENV === "docker") {
+  settings.env = "docker";
+  settings.eosio.nodeos = "http://dfuse:8888";
+  settings.eosio.dfuse = "dfuse:8080",
+  settings.mongodb.url = "mongodb://mongodb:27017/conscious_dev";
   settings.port = 4000
+}
+
+settings.isLiveEnvironment = function() {
+  return settings.env === "production";
 }
 
 module.exports = settings;

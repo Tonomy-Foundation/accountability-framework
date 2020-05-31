@@ -9,7 +9,7 @@ module.exports = async function (req, res) {
   }
 
   const blockchainData = req.blockchainRes;
-  
+
   for(let action of blockchainData.actions) {
     // TODO
     // get the raw transaction and then work out whih person account signed it!

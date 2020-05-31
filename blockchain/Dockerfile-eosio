@@ -1,7 +1,0 @@
-FROM eostudio/eos:v2.0.3
-
-RUN mkdir /var/config
-
-ADD ./config.ini /var/config/config.ini
-
-CMD nodeos -e -p eosio --data-dir /data/data-dir --config-dir /var/config --disable-replay-opts >> /data/nodeos.log 2>&1

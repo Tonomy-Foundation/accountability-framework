@@ -29,8 +29,8 @@ docker-compose --version
 # nvm with latest node and npm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 # Close and open terminal again (via ssh)
-nvm install node v13.12.0
-sudo ln -s -f $NVM_DIR"/versions/node/v13.12.0/bin/npm" /usr/bin/npm
-sudo ln -s -f $NVM_DIR"/versions/node/v13.12.0/bin/node" /usr/bin/node
+nvm install 12.17.0
+sudo ln -s -f $NVM_DIR"/versions/node/v12.17.0/bin/npm" /usr/bin/npm
+sudo ln -s -f $NVM_DIR"/versions/node/v12.17.0/bin/node" /usr/bin/node
 
 # Good idea to restart the server

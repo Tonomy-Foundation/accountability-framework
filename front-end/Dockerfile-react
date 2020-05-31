@@ -1,7 +1,6 @@
-FROM node
+FROM node:12.17.0
 
 RUN npm install -g serve
-
 
 WORKDIR /var/repo/front-end
 
