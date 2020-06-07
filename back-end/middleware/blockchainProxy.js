@@ -12,12 +12,16 @@ const pre = async function(req, res, next) {
         return;
     }
 
-    const url = settings.eosio.nodeos + req.path;
+    const url = settings.eosio.nodeos + req.originalUrl;
+    
+    options = {
+        method: req.method,
+        timeout: 600
+    }
+    if (req.method === "POST")
+        options.body = JSON.stringify(typeof req.body === "string" ? JSON.parse(req.body) : req.body);
 
-    req.body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-    const fetchResponse = await nodeFetch(url, {
-        method: 'POST', timeout: 600, body: JSON.stringify(req.body)
-    })
+    const fetchResponse = await nodeFetch(url, options)
 
     const blockchainRes = await fetchResponse.json();
     req.blockchainRes = blockchainRes;

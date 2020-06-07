@@ -71,13 +71,16 @@ function OrgView(props) {
     }
 
     async function getAccount() {
-      let accountRes = await eosio.rpc.get_account(state.accountName);
+      let accountRes = await eosio.dfuseClient.apiRequest("/v1/chain/get_account", "POST", null, {account_name: state.accountName})
+      // let actionsRes = await eosio.dfuseClient.searchTransactions("account:"+state.accountName);
       let actionsRes = await eosio.rpc.history_get_actions(
         state.accountName,
         -1,
         -100
       );
       let actionsToSet = [];
+
+      // TODO: use Promise.all()
       for (let action of actionsRes.actions) {
         // console.log(action.action_trace.trx_id, action.action_trace.act.account, action.action_trace.act.name,
         //   action.account_action_seq, // increases when new action in transaction. start 1
@@ -108,7 +111,12 @@ function OrgView(props) {
           );
           actionToPush.type = type;
           actionToPush.data = data;
-          actionToPush.auth = action.action_trace.act.authorization[0].actor;
+          // actionToPush.auth = action.action_trace.act.authorization[0].actor;
+          // TODO: get key
+          console.log(action);
+          // const publicKey = ""
+          // let keyRes = await eosio.dfuseClient.stateKeyAccounts(publicKey);
+          // actionToPush.auth = keyRes.account_names[0];
           actionsToSet.push(actionToPush);
         }
       }
