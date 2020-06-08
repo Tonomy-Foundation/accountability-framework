@@ -19,6 +19,7 @@ function startdocker {
 
     # TODO should remove logs process each time
     # kill $(ps aux | grep -i "docker-compose logs" | awk '{print $2}')
+    echo "Starting logging script with sudo privledges"
     sudo bash -c "REACT_APP_NODE_ENV=$ENV docker-compose logs -f -t >> '$PARENT_PATH/temp/docker-compose.log' &"
 }
 

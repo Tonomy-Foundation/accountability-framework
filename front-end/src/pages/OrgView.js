@@ -72,12 +72,12 @@ function OrgView(props) {
 
     async function getAccount() {
       let accountRes = await eosio.dfuseClient.apiRequest("/v1/chain/get_account", "POST", null, {account_name: state.accountName})
-      // let actionsRes = await eosio.dfuseClient.searchTransactions("account:"+state.accountName);
-      let actionsRes = await eosio.rpc.history_get_actions(
-        state.accountName,
-        -1,
-        -100
-      );
+      let actionsRes = await eosio.dfuseClient.searchTransactions("account:"+state.accountName);
+      // let actionsRes = await eosio.rpc.history_get_actions(
+      //   state.accountName,
+      //   -1,
+      //   -100
+      // );
       let actionsToSet = [];
 
       // TODO: use Promise.all()

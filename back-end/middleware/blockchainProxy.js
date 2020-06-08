@@ -12,18 +12,23 @@ const pre = async function(req, res, next) {
         return;
     }
 
-    const url = settings.eosio.nodeos + req.originalUrl;
+    const url = settings.dfuseOptions.secure ? "https://" : "http://" + settings.dfuseOptions.network + req.originalUrl;
     
     options = {
         method: req.method,
         timeout: 600
     }
-    if (req.method === "POST")
-        options.body = JSON.stringify(typeof req.body === "string" ? JSON.parse(req.body) : req.body);
-
+    if (req.method === "POST" || req.method === "PUT") {
+        let body = typeof req.body === "string" ? JSON.parse(req.body) : req.body
+        // body = JSON.stringify(body);
+        options.body = JSON.stringify(body);
+        req.body = body;
+    }
+    console.log("fetching from dfuse", url, options)
     const fetchResponse = await nodeFetch(url, options)
-
     const blockchainRes = await fetchResponse.json();
+    console.log(blockchainRes)
+
     req.blockchainRes = blockchainRes;
     req.blockchainResStatus = fetchResponse.status;
 

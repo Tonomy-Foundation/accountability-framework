@@ -7,15 +7,10 @@ import { createDfuseClient } from '@dfuse/client';
 import settings from '../settings';
 
 class Eosio {
-    constructor(network = { nodeos: settings.eosio.nodeos, dfuse: settings.eosio.dfuse }) {
+    constructor(network = { nodeos: settings.eosio.nodeos, dfuseOptions: settings.dfuseOptions }) {
         let rpc = fetch ? new JsonRpc(network.nodeos, {fetch}) : new JsonRpc(network.nodeos);
         this.rpc = rpc;
-        this.dfuseClient = createDfuseClient({
-            apiKey: "web_abcdef123456789",
-            authUrl: "null://",
-            secure: false,
-            network: network.dfuse,
-        })
+        this.dfuseClient = createDfuseClient(network.dfuseOptions)
     }
 
     async login(account) {

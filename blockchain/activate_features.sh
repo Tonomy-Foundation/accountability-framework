@@ -1,9 +1,10 @@
 #!/bin/bash
 
 source /var/repo/config.sh
+# docker-compose exec dfuse /bin/bash /var/repo/blockchain/activate_features.sh
 
-set -o nounset   ## set -u : exit the script if you try to use an uninitialised variable
-set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
+# set -o nounset   ## set -u : exit the script if you try to use an uninitialised variable
+# set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
 
 # Create a new wallet with the eosio and other keys
 cleos wallet create --file /data/wallet.txt

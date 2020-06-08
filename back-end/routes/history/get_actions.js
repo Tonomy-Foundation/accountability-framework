@@ -1,5 +1,7 @@
 const accountController = require('../../controllers/accounts.controller');
 
+//TODO  delete me as using dfuse search transactions instead...
+
 /* GET acounts listing. */
 module.exports = async function (req, res) {
   if (!req.body.account_name || !req.body.offset || !req.body.pos) {

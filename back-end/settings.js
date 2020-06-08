@@ -2,7 +2,6 @@
 let settings = {
   eosio: {
     nodeos: "http://localhost:8888",
-    dfuse: "localhost:8080",
     accounts: {
       eosio: {
         pkey: "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3",
@@ -34,6 +33,12 @@ let settings = {
       },
     }
   },
+  dfuseOptions: dfuseOptions = {
+    apiKey: "web_abcdef123456789",
+    authUrl: "null://",
+    secure: false,
+    network: "localhost:8080"
+  },
   mongodb: {
     url: "mongodb://localhost:27017/conscious_dev"
   },
@@ -44,12 +49,12 @@ let settings = {
 if (process.env.REACT_APP_NODE_ENV === "production") {
   settings.env = "production";
   settings.eosio.nodeos = "http://dfuse:8888";
-  settings.eosio.dfuse = "dfuse:8080",
+  settings.dfuseOptions.network = "dfuse:8080",
   settings.mongodb.url = "mongodb://mongodb:27017/conscious_prod";
 } else if (process.env.REACT_APP_NODE_ENV === "docker") {
   settings.env = "docker";
   settings.eosio.nodeos = "http://dfuse:8888";
-  settings.eosio.dfuse = "dfuse:8080",
+  settings.dfuseOptions.network = "dfuse:8080",
   settings.mongodb.url = "mongodb://mongodb:27017/conscious_dev";
   settings.port = 4000
 }

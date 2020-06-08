@@ -1,9 +1,6 @@
-// these settings are used on npm start
 let settings = {
-    // TODO rename to api.url
     eosio: {
         nodeos: "http://localhost:4000",
-        dfuse: "localhost:4000",
         blockExplorerUrl: "localhost:8888",
         accounts: {
             jack: {
@@ -11,12 +8,18 @@ let settings = {
                 pubkey: "EOS7Jj43XvkrBiNw8Q6zUECcGK9ktbMv8jz6Vjn1qAid93389mEgr"
             }
         }
-    }
+    },
+    dfuseOptions: {
+        apiKey: "web_abcdef123456789",
+        authUrl: "null://",
+        secure: false,
+        network: "localhost:4000"
+    },
 };
 
 if (process.env.REACT_APP_NODE_ENV === "production") {
     settings.eosio.nodeos = "https://d1hxgr8mqh915l.cloudfront.net";
-    settings.eosio.dfuse = ""
+    settings.dfuseOptions.network = "";
     settings.eosio.blockExplorerUrl = "d1uzqj8k54wt9u.cloudfront.net";
 }
 
