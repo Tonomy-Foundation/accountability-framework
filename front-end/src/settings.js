@@ -3,7 +3,7 @@ let settings = {
     // TODO rename to api.url
     eosio: {
         nodeos: "http://localhost:4000",
-        dfuse: "http://localhost:8080",
+        dfuse: "localhost:8080",
         blockExplorerUrl: "localhost:8888",
         accounts: {
             jack: {
