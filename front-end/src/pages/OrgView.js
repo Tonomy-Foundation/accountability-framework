@@ -72,54 +72,48 @@ function OrgView(props) {
 
     async function getAccount() {
       let accountRes = await eosio.dfuseClient.apiRequest("/v1/chain/get_account", "POST", null, {account_name: state.accountName})
-      let actionsRes = await eosio.dfuseClient.searchTransactions("account:"+state.accountName);
-      // let actionsRes = await eosio.rpc.history_get_actions(
-      //   state.accountName,
-      //   -1,
-      //   -100
-      // );
-      let actionsToSet = [];
+      const query = "(auth:"+state.accountName+" OR receiver:"+state.accountName+")"
+      let transactionRes = await eosio.dfuseClient.searchTransactions(query);
 
-      // TODO: use Promise.all()
-      for (let action of actionsRes.actions) {
-        // console.log(action.action_trace.trx_id, action.action_trace.act.account, action.action_trace.act.name,
-        //   action.account_action_seq, // increases when new action in transaction. start 1
-        //   action.global_action_seq,
-        //   action.action_trace.action_ordinal, // increases when new action in transaction. start 1
-        //   action.action_trace.creator_action_ordinal // increases for all new actions including inline action. start 0
-        //   )
-        // Only look at top level actions, no inline actions
-        if (
-          !action.action_trace.error_code
-          // && action.action_trace.creator_action_ordinal === 0
-        ) {
-          let actionToPush = {
-            tx_id: action.action_trace.trx_id,
-            timestamp: action.block_time,
-            account: action.action_trace.act.account,
+      let trxsToSet = new Array(transactionRes.transactions.length);
+
+      async function parseTransaction(trx, index) {
+        if (trx.transaction_status === "executed") {
+          const receiverAccount = trx.execution_trace.action_traces[0].act.account;
+          let trxToPush = {
+            tx_id: trx.id,
+            timestamp: trx.execution_block_header.timestamp,
+            account: receiverAccount
           };
-          const auth = action.action_trace.act.authorization[0].actor;
-          if (auth === actionToPush.account) actionToPush.direction = "self";
-          else if (auth === state.accountName)
-            actionToPush.direction = "outbound";
-          else actionToPush.direction = "inbound";
+          
+          const sentFrom = trx.execution_trace.action_traces[0].act.authorization[0].actor;
+          if (sentFrom === receiverAccount) trxToPush.direction = "self";
+          else if (sentFrom === state.accountName)
+            trxToPush.direction = "outbound";
+          else trxToPush.direction = "inbound";
 
           const [type, data] = getType(
-            actionToPush,
-            action.action_trace.act.name,
-            action.action_trace.act.data
+            trxToPush,
+            trx.execution_trace.action_traces[0].act.name,
+            trx.execution_trace.action_traces[0].act.data
           );
-          actionToPush.type = type;
-          actionToPush.data = data;
-          // actionToPush.auth = action.action_trace.act.authorization[0].actor;
-          // TODO: get key
-          console.log(action);
-          // const publicKey = ""
-          // let keyRes = await eosio.dfuseClient.stateKeyAccounts(publicKey);
-          // actionToPush.auth = keyRes.account_names[0];
-          actionsToSet.push(actionToPush);
+          trxToPush.type = type;
+          trxToPush.data = data;
+
+          const publicKey = trx.pub_keys[0];
+          let keyRes;
+          try {
+            keyRes = await eosio.dfuseClient.stateKeyAccounts(publicKey, {block_num: 1});
+            console.log(keyRes);
+          } catch(err) {
+            console.error(err);
+          }
+          if (keyRes && keyRes.account_names[0]) trxToPush.auth = keyRes.account_names[0];
+          trxsToSet[index]=trxToPush;
         }
       }
+
+      await Promise.all(transactionRes.transactions.map((trx, index) => parseTransaction(trx.lifecycle, index)));
 
       let memberGroups = [];
       for (let perm1 of accountRes.permissions) {
@@ -142,7 +136,7 @@ function OrgView(props) {
         accountName: state.accountName,
         name: accountRes.name,
         isMyAccount: loggedinAccount === state.accountName,
-        actions: actionsToSet,
+        actions: trxsToSet,
         organizations: accountRes.organizations,
         memberGroups: memberGroups,
         permissions: accountRes.permissions
