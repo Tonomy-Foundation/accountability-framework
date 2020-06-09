@@ -16,7 +16,7 @@ const pre = async function(req, res, next) {
     
     options = {
         method: req.method,
-        timeout: 5000
+        timeout: 10000
     }
     if (req.method === "POST" || req.method === "PUT") {
         let body = typeof req.body === "string" ? JSON.parse(req.body) : req.body

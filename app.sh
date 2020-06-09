@@ -46,11 +46,12 @@ function install {
 }
 
 function init {
+    SUPERFAST=$1
     reset
     startdocker "docker"
 
     cd "$PARENT_PATH/blockchain"
-    ./init_reset_eosio.sh
+    ./init_reset_eosio.sh $SUPERFAST
 
     upprint
 }
@@ -61,13 +62,14 @@ function help {
     echo "    app.sh [commands]"
     echo ""
     echo "Commands:"
-    echo "    init       - initializes the project"
-    echo "    init fast  - initializes the project without reinstalling all packages and building containers"
-    echo "    install    - installs all dependancies"
-    echo "    up         - starts application components through docker compose"
-    echo "    up prod    - starts application execution on production server"
-    echo "    down       - stops application components gracefully"
-    echo "    reset      - resets all application data including blockchain history and database"
+    echo "    init           - installs all containers and packages, starts services and initalizes the blockchain"
+    echo "    init fast      - starts services and initalizes the blockchain"
+    echo "    init superfast - initializes the blockchain"
+    echo "    install        - installs all containers and packages"
+    echo "    up             - starts application components through docker compose"
+    echo "    up prod        - starts application execution on production server"
+    echo "    down           - stops application components gracefully"
+    echo "    reset          - resets all application data including blockchain history and database"
 }
 
 function upprint {
@@ -115,6 +117,8 @@ elif [ "$ARG1" == "init" ]; then
     if [ "$ARG2" == "fast" ]; then
         stop
         init
+    elif [ "$ARG2" == "superfast" ]; then
+        init "superfast"
     else
         stop
         install

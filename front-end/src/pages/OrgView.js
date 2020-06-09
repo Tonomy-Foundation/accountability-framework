@@ -72,6 +72,24 @@ function OrgView(props) {
 
     async function getAccount() {
       let accountRes = await eosio.dfuseClient.apiRequest("/v1/chain/get_account", "POST", null, {account_name: state.accountName})
+
+      let memberGroups = [];
+      for (let perm1 of accountRes.permissions) {
+        let level = 1;
+        function checkParentPerm(perm2) {
+          if (perm2.perm_name === "owner") return;
+          level++;
+          let parent = accountRes.permissions.filter( (perm3) => perm3.perm_name === perm2.parent)[0]
+          checkParentPerm(parent);
+        }
+        checkParentPerm(perm1);
+        memberGroups.push({
+          name: perm1.perm_name,
+          level: level
+        })
+      }
+      memberGroups.sort((a, b) => a.level > b.level)
+
       const query = "(auth:"+state.accountName+" OR receiver:"+state.accountName+")"
       let transactionRes = await eosio.dfuseClient.searchTransactions(query);
 
@@ -101,9 +119,12 @@ function OrgView(props) {
           trxToPush.data = data;
 
           const publicKey = trx.pub_keys[0];
+          const blockNum = trx.execution_trace.action_traces[0].block_num;
           let keyRes;
+          console.log(trx.execution_trace.action_traces[0].act.name, trx.execution_trace.action_traces[0].act.data, blockNum)
+          console.log(trx.pub_keys);
           try {
-            keyRes = await eosio.dfuseClient.stateKeyAccounts(publicKey, {block_num: 1});
+            keyRes = await eosio.dfuseClient.stateKeyAccounts(publicKey, {block_num: blockNum});
             console.log(keyRes);
           } catch(err) {
             console.error(err);
@@ -114,23 +135,6 @@ function OrgView(props) {
       }
 
       await Promise.all(transactionRes.transactions.map((trx, index) => parseTransaction(trx.lifecycle, index)));
-
-      let memberGroups = [];
-      for (let perm1 of accountRes.permissions) {
-        let level = 1;
-        function checkParentPerm(perm2) {
-          if (perm2.perm_name === "owner") return;
-          level++;
-          let parent = accountRes.permissions.filter( (perm3) => perm3.perm_name === perm2.parent)[0]
-          checkParentPerm(parent);
-        }
-        checkParentPerm(perm1);
-        memberGroups.push({
-          name: perm1.perm_name,
-          level: level
-        })
-      }
-      memberGroups.sort((a, b) => a.level > b.level)
 
       setState({
         accountName: state.accountName,
