@@ -25,13 +25,15 @@ const useStyles = makeStyles((theme) => ({
 function PeopleView(props) {
   const classes = useStyles();
 
-  const [state, setState] = useState({
+  const [stateAccount, setStateAccount] = useState({
     accountName: props.match.params.accountName,
     name: null,
     isMyAccount: false,
-    actions: [],
-    organizations: []
-  });
+    organizations: [],
+    memberGroups: [],
+    permissions: []
+  })
+  const [stateTrxs, setStateTrxs] = useState([])
 
   const history = useHistory();
 
@@ -46,81 +48,94 @@ function PeopleView(props) {
     }
 
     async function getAccount() {
-      let accountRes = await eosio.rpc.get_account(state.accountName);
-      if(accountRes.accountType === "organization") {
-        const orgPath = '/org/' + state.accountName;
+      let accountRes = await eosio.dfuseClient.apiRequest("/v1/chain/get_account", "POST", null, {account_name: stateAccount.accountName})
+      if (accountRes.accountType === "organization") {
+        const orgPath = '/org/' + stateAccount.accountName;
         history.push(orgPath);
       }
 
-      let actionsRes = await eosio.rpc.history_get_actions(
-        state.accountName,
-        -1,
-        -100
-      );
-      let actionsToSet = [];
-      console.log(actionsRes)
-      for (let action of actionsRes.actions) {
-        // console.log(action.action_trace.trx_id, action.action_trace.act.account, action.action_trace.act.name,
-        //   action.account_action_seq, // increases when new action in transaction. start 1
-        //   action.global_action_seq,
-        //   action.action_trace.action_ordinal, // increases when new action in transaction. start 1
-        //   action.action_trace.creator_action_ordinal // increases for all new actions including inline action. start 0
-        //   )
-        // Only look at top level actions, no inline actions
-        if (
-          !action.action_trace.error_code
-          // && action.action_trace.creator_action_ordinal === 0
-        ) {
-          let actionToPush = {
-            tx_id: action.action_trace.trx_id,
-            timestamp: action.block_time,
-            account: action.action_trace.act.account,
+      let memberGroups = [];
+      for (let perm1 of accountRes.permissions) {
+        let level = 1;
+        function checkParentPerm(perm2) {
+          if (perm2.perm_name === "owner") return;
+          level++;
+          let parent = accountRes.permissions.filter( (perm3) => perm3.perm_name === perm2.parent)[0]
+          checkParentPerm(parent);
+        }
+        checkParentPerm(perm1);
+        memberGroups.push({
+          name: perm1.perm_name,
+          level: level
+        })
+      }
+      memberGroups.sort((a, b) => a.level > b.level)
+      setStateAccount({
+        accountName: stateAccount.accountName,
+        name: accountRes.name,
+        isMyAccount: loggedinAccount === stateAccount.accountName,
+        organizations: accountRes.organizations,
+        memberGroups: memberGroups,
+        permissions: accountRes.permissions
+      })
+
+      const query = "(auth:"+stateAccount.accountName+" OR receiver:"+stateAccount.accountName+")"
+      let transactionRes = await eosio.dfuseClient.searchTransactions(query);
+
+      let trxsToSet = [];
+
+      for (let trxItem of transactionRes.transactions) {
+        let trx = trxItem.lifecycle;
+        if (trx.transaction_status === "executed" && trx.pub_keys) {
+          const receiverAccount = trx.execution_trace.action_traces[0].act.account;
+          let trxToPush = {
+            tx_id: trx.id,
+            timestamp: trx.execution_block_header.timestamp,
+            account: receiverAccount
           };
-          const auth = action.action_trace.act.authorization[0].actor;
-          if (auth === actionToPush.account) actionToPush.direction = "self";
-          else if (auth === state.accountName)
-            actionToPush.direction = "outbound";
-          else actionToPush.direction = "inbound";
+          
+          const sentFrom = trx.execution_trace.action_traces[0].act.authorization[0].actor;
+          if (sentFrom === receiverAccount) trxToPush.direction = "self";
+          else if (sentFrom === stateAccount.accountName)
+            trxToPush.direction = "outbound";
+          else trxToPush.direction = "inbound";
 
           const [type, data] = getType(
-            actionToPush,
-            action.action_trace.act.name,
-            action.action_trace.act.data
+            trxToPush,
+            trx.execution_trace.action_traces[0].act.name,
+            trx.execution_trace.action_traces[0].act.data
           );
-          actionToPush.type = type;
-          actionToPush.data = data;
-          actionsToSet.push(actionToPush);
+          trxToPush.type = type;
+          trxToPush.data = data;
+
+          trxToPush.pubKey = trx.pub_keys[0];
+          trxToPush.blockNum = trx.execution_trace.action_traces[0].block_num;
+
+          trxsToSet.push(trxToPush)
         }
       }
 
-      setState({
-        accountName: state.accountName,
-        name: accountRes.name,
-        isMyAccount: loggedinAccount === state.accountName,
-        actions: actionsToSet,
-        organizations: accountRes.organizations,
-      });
+      await setStateTrxs(trxsToSet);
     }
 
     getAccount();
-  }, [props.eosio, state.accountName, history]);
+  }, [props.eosio, stateAccount.accountName, history]);
 
   return (
     <Grid container className={classes.root} spacing={0}>
       <Grid key={0} item xs={6}>
         <PeopleViewProfile
-          accountName={state.accountName}
-          name={state.name}
-          isMyAccount={state.isMyAccount}
-          organizations={state.organizations}
+          accountName={stateAccount.accountName}
+          name={stateAccount.name}
+          isMyAccount={stateAccount.isMyAccount}
+          organizations={stateAccount.organizations}
           history={props.history}
         />
       </Grid>
       <Grid key={1} item xs={6}>
         <TransactionsTable
-          accountName={state.accountName}
-          transactions={state.actions}
-          history={props.history}
+          accountName={stateAccount.accountName}
+          transactions={stateTrxs}
           org={false}
         />
       </Grid>

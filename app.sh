@@ -19,6 +19,7 @@ function startdocker {
 
     # TODO should remove logs process each time
     # kill $(ps aux | grep -i "docker-compose logs" | awk '{print $2}')
+    echo "Starting logging script (sudo required)"
     sudo bash -c "REACT_APP_NODE_ENV=$ENV docker-compose logs -f -t >> '$PARENT_PATH/temp/docker-compose.log' &"
 }
 
@@ -42,14 +43,21 @@ function install {
 
     cd "$PARENT_PATH/front-end"
     npm install
+
+    echo ""
+    echo "Dockerfiles built"
+    echo "npm packages installed"
+    echo "You can run './app.sh init fast' next time (unless docker or npm packages are changed)"
+    echo ""
 }
 
 function init {
+    SUPERFAST=${1-}
     reset
     startdocker "docker"
 
     cd "$PARENT_PATH/blockchain"
-    ./init_reset_eosio.sh
+    ./init_reset_eosio.sh $SUPERFAST
 
     upprint
 }
@@ -60,13 +68,14 @@ function help {
     echo "    app.sh [commands]"
     echo ""
     echo "Commands:"
-    echo "    init       - initializes the project"
-    echo "    init fast  - initializes the project without reinstalling all packages and building containers"
-    echo "    install    - installs all dependancies"
-    echo "    up         - starts application components through docker compose"
-    echo "    up prod    - starts application execution on production server"
-    echo "    down       - stops application components gracefully"
-    echo "    reset      - resets all application data including blockchain history and database"
+    echo "    init           - installs all containers and packages, starts services, compiles contracts and initalizes the blockchain"
+    echo "    init fast      - starts services, compiles contracts and initalizes the blockchain"
+    echo "    init superfast - starts services and initializes the blockchain"
+    echo "    install        - installs all containers and packages"
+    echo "    up             - starts application components"
+    echo "    up prod        - starts application execution on production server"
+    echo "    down           - stops application components gracefully"
+    echo "    reset          - resets all application data including blockchain history and database"
 }
 
 function upprint {
@@ -84,7 +93,7 @@ function upprint {
 
 function reset {
     stop
-    echo "This will reset the blockchain and all databases!!!"
+    echo "This will reset the blockchain and all databases!!! (sudo required)"
     read -p "Do you want to continue (y/n)? " CHOICE
     if [ "$CHOICE" == 'y' ]; then
         if [ -d "$PARENT_PATH/temp" ]
@@ -112,8 +121,9 @@ elif [ "$ARG1" == "down" ]; then
     stop
 elif [ "$ARG1" == "init" ]; then
     if [ "$ARG2" == "fast" ]; then
-        stop
         init
+    elif [ "$ARG2" == "superfast" ]; then
+        init "superfast"
     else
         stop
         install

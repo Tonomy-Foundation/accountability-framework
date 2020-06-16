@@ -13,16 +13,9 @@ const ws = require('ws');
 const settings = require('../settings');
 
 class Eosio {
-    constructor(network = { nodeos: settings.eosio.nodeos, dfuse: settings.eosio.dfuse }) {
+    constructor(network = { nodeos: settings.eosio.nodeos, dfuseOptions: settings.dfuseOptions }) {
         let rpc = fetch ? new JsonRpc(network.nodeos, {fetch}) : new JsonRpc(network.nodeos);
         this.rpc = rpc;
-
-        let dfuseOptions = {
-            apiKey: "web_abcdef123456789",
-            authUrl: "null://",
-            secure: false,
-            network: network.dfuse
-        }
         if (settings.isLiveEnvironment()) settings.secure = true;
         if (fetch) {
             dfuseOptions.httpClientOptions = {
