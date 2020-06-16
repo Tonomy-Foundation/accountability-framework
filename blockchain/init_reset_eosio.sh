@@ -30,8 +30,10 @@ else
     cd ../eosio.token
     ./build.sh
 
+    echo ""
     echo "Smart contracts have been built"
-    echo "You can run `./app.sh init superfast` next time (unless contracts are changed)"
+    echo "You can run './app.sh init superfast' next time (unless contracts are changed)"
+    echo ""
 fi
 
 # allow for block production to start

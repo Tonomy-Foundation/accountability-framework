@@ -44,9 +44,11 @@ function install {
     cd "$PARENT_PATH/front-end"
     npm install
 
+    echo ""
     echo "Dockerfiles built"
     echo "npm packages installed"
-    echo "You can run `./app.sh init fast` next time (unless docker or npm packages are changed)"
+    echo "You can run './app.sh init fast' next time (unless docker or npm packages are changed)"
+    echo ""
 }
 
 function init {

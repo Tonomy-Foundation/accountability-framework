@@ -42,10 +42,12 @@ IMPORTANT: The first time you run the app, it will initialize the blockchain, ex
 
 The following services will run
 
-- http://localhost:4000:   nodejs express middleware API
-- http://localhost:3000:   react app
-- http://localhost:8888:   nodeos http API to eosio blockchain node
-- http://localhost:27017:  mongodb database
+- http://localhost:3000:   React app
+- http://localhost:4000:   Nodejs express middleware API
+- http://localhost:8080:   Dfuse blockchain API and block explorer
+- http://localhost:8081:   Dfuse blockchain dashboard
+- http://localhost:8888:   Nodeos http API
+- http://localhost:27017:  Mongodb database
 - https://local.bloks.io/?nodeUrl=localhost:8888&systemDomain=eosio: bloks.io localblock explorer
 
 ### Production 
