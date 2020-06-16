@@ -22,11 +22,7 @@ RUN apt-get install -y curl \
 #    && echo '#!/bin/bash' > wasm-ld \
 #    && echo '`dirname $0`/wasm-ld.real --no-threads "$@"' >> wasm-ld \
 #    && chmod +x /usr/opt/eosio.cdt/1.7.0/bin/wasm-ld
-RUN cd /data \
+RUN cd / \
     # "y" will initialize to run a producing node, "n" will connect to existing node
     && (echo "y" && cat) | dfuseeos init
-RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' producer/config.ini \
-    && sed -i '9i plugin = eosio::history_plugin' producer/config.ini \
-    && sed -i '10i plugin = eosio::history_api_plugin' producer/config.ini \
-    && sed -i '11i filter-on=*' producer/config.ini \
-    && sed -i '12i filter-out=eosio:onblock:' producer/config.ini
+RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' producer/config.ini

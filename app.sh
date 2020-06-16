@@ -43,6 +43,10 @@ function install {
 
     cd "$PARENT_PATH/front-end"
     npm install
+
+    echo "Dockerfiles built"
+    echo "npm packages installed"
+    echo "You can run `./app.sh init fast` next time (unless docker or npm packages are changed)"
 }
 
 function init {
@@ -115,7 +119,6 @@ elif [ "$ARG1" == "down" ]; then
     stop
 elif [ "$ARG1" == "init" ]; then
     if [ "$ARG2" == "fast" ]; then
-        stop
         init
     elif [ "$ARG2" == "superfast" ]; then
         init "superfast"
