@@ -19,7 +19,7 @@ function startdocker {
 
     # TODO should remove logs process each time
     # kill $(ps aux | grep -i "docker-compose logs" | awk '{print $2}')
-    echo "Starting logging script with sudo privledges"
+    echo "Starting logging script (sudo required)"
     sudo bash -c "REACT_APP_NODE_ENV=$ENV docker-compose logs -f -t >> '$PARENT_PATH/temp/docker-compose.log' &"
 }
 
@@ -46,7 +46,7 @@ function install {
 }
 
 function init {
-    SUPERFAST=$1
+    SUPERFAST=${1-}
     reset
     startdocker "docker"
 
@@ -62,11 +62,11 @@ function help {
     echo "    app.sh [commands]"
     echo ""
     echo "Commands:"
-    echo "    init           - installs all containers and packages, starts services and initalizes the blockchain"
-    echo "    init fast      - starts services and initalizes the blockchain"
-    echo "    init superfast - initializes the blockchain"
+    echo "    init           - installs all containers and packages, starts services, compiles contracts and initalizes the blockchain"
+    echo "    init fast      - starts services, compiles contracts and initalizes the blockchain"
+    echo "    init superfast - starts services and initializes the blockchain"
     echo "    install        - installs all containers and packages"
-    echo "    up             - starts application components through docker compose"
+    echo "    up             - starts application components"
     echo "    up prod        - starts application execution on production server"
     echo "    down           - stops application components gracefully"
     echo "    reset          - resets all application data including blockchain history and database"
@@ -87,7 +87,7 @@ function upprint {
 
 function reset {
     stop
-    echo "This will reset the blockchain and all databases!!!"
+    echo "This will reset the blockchain and all databases!!! (sudo required)"
     read -p "Do you want to continue (y/n)? " CHOICE
     if [ "$CHOICE" == 'y' ]; then
         if [ -d "$PARENT_PATH/temp" ]

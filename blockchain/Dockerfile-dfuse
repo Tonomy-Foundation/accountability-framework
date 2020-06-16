@@ -22,7 +22,7 @@ RUN apt-get install -y curl \
 #    && echo '#!/bin/bash' > wasm-ld \
 #    && echo '`dirname $0`/wasm-ld.real --no-threads "$@"' >> wasm-ld \
 #    && chmod +x /usr/opt/eosio.cdt/1.7.0/bin/wasm-ld
-RUN cd / \
+RUN cd /data \
     # "y" will initialize to run a producing node, "n" will connect to existing node
     && (echo "y" && cat) | dfuseeos init
 RUN sed -i 's/127.0.0.1:8888/0.0.0.0:8888/g' producer/config.ini \
