@@ -25,27 +25,26 @@ const useStyles = makeStyles((theme) => ({
 function OrgView(props) {
   const classes = useStyles();
 
-  const [state, setState] = useState({
+  const [stateAccount, setStateAccount] = useState({
     accountName: props.match.params.accountName,
     name: null,
     isMyAccount: false,
-    actions: [],
     organizations: [],
     memberGroups: [],
     permissions: []
-  });
+  })
 
   const [memberGroup, setMemberGroup] = useState({
     selected: null,
     members: []
   });
+  const [stateTrxs, setStateTrxs] = useState([])
 
   const selectMemberGroup = (selectedGroupName) => {
     const selected = selectedGroupName === memberGroup.selected ? null : selectedGroupName;
     let members = []
     if (selected) {
-      // console.log(state.permissions)
-      let permission = state.permissions.filter( (perm) => perm.perm_name === selectedGroupName)[0];
+      let permission = stateAccount.permissions.filter( (perm) => perm.perm_name === selectedGroupName)[0];
       for(let account of permission.required_auth.accounts) {
         members.push({
           name: account.permission.actor,
@@ -71,7 +70,7 @@ function OrgView(props) {
     }
 
     async function getAccount() {
-      let accountRes = await eosio.dfuseClient.apiRequest("/v1/chain/get_account", "POST", null, {account_name: state.accountName})
+      let accountRes = await eosio.dfuseClient.apiRequest("/v1/chain/get_account", "POST", null, {account_name: stateAccount.accountName})
 
       let memberGroups = [];
       for (let perm1 of accountRes.permissions) {
@@ -89,8 +88,16 @@ function OrgView(props) {
         })
       }
       memberGroups.sort((a, b) => a.level > b.level)
+      setStateAccount({
+        accountName: stateAccount.accountName,
+        name: accountRes.name,
+        isMyAccount: loggedinAccount === stateAccount.accountName,
+        organizations: accountRes.organizations,
+        memberGroups: memberGroups,
+        permissions: accountRes.permissions
+      })
 
-      const query = "(auth:"+state.accountName+" OR receiver:"+state.accountName+")"
+      const query = "(auth:"+stateAccount.accountName+" OR receiver:"+stateAccount.accountName+")"
       let transactionRes = await eosio.dfuseClient.searchTransactions(query);
 
       let trxsToSet = new Array(transactionRes.transactions.length);
@@ -106,7 +113,7 @@ function OrgView(props) {
           
           const sentFrom = trx.execution_trace.action_traces[0].act.authorization[0].actor;
           if (sentFrom === receiverAccount) trxToPush.direction = "self";
-          else if (sentFrom === state.accountName)
+          else if (sentFrom === stateAccount.accountName)
             trxToPush.direction = "outbound";
           else trxToPush.direction = "inbound";
 
@@ -121,53 +128,52 @@ function OrgView(props) {
           const publicKey = trx.pub_keys[0];
           const blockNum = trx.execution_trace.action_traces[0].block_num;
           let keyRes;
-          console.log(trx.execution_trace.action_traces[0].act.name, trx.execution_trace.action_traces[0].act.data, blockNum)
-          console.log(trx.pub_keys);
           try {
             keyRes = await eosio.dfuseClient.stateKeyAccounts(publicKey, {block_num: blockNum});
-            console.log(keyRes);
+            if (keyRes && keyRes.account_names[0]) trxToPush.auth = keyRes.account_names[0];
+            else trxToPush.auth = "";
           } catch(err) {
-            console.error(err);
+            console.error("error searching for key", {key: publicKey, block_num: blockNum}, err);
           }
-          if (keyRes && keyRes.account_names[0]) trxToPush.auth = keyRes.account_names[0];
           trxsToSet[index]=trxToPush;
         }
       }
 
       await Promise.all(transactionRes.transactions.map((trx, index) => parseTransaction(trx.lifecycle, index)));
 
-      setState({
-        accountName: state.accountName,
-        name: accountRes.name,
-        isMyAccount: loggedinAccount === state.accountName,
-        actions: trxsToSet,
-        organizations: accountRes.organizations,
-        memberGroups: memberGroups,
-        permissions: accountRes.permissions
-      });
+      setStateTrxs(trxsToSet);
+      // setState({
+      //   accountName: state.accountName,
+      //   name: accountRes.name,
+      //   isMyAccount: loggedinAccount === state.accountName,
+      //   actions: trxsToSet,
+      //   organizations: accountRes.organizations,
+      //   memberGroups: memberGroups,
+      //   permissions: accountRes.permissions
+      // });
     }
 
     getAccount();
-  }, [props.eosio, state.accountName]);
+  }, [props.eosio]);
 
   return (
     <Grid container className={classes.root} spacing={0}>
       <Grid key={0} item xs={6}>
         <OrgViewProfile
-          accountName={state.accountName}
-          name={state.name}
-          isMyAccount={state.isMyAccount}
-          organizations={state.organizations}
+          accountName={stateAccount.accountName}
+          name={stateAccount.name}
+          isMyAccount={stateAccount.isMyAccount}
+          organizations={stateAccount.organizations}
           description="Duis accumsan venenatis dui, tristique rhoncus elit posuere ut. Vivamus erat lacus, rutrum et iaculis sed, interdum vitae purus. Aliquam turpis nisl, dictum ac mi vel, eleifend placerat sapien."
           selectMemberGroup={selectMemberGroup}
-          memberGroups={state.memberGroups}
+          memberGroups={stateAccount.memberGroups}
         />
       </Grid>
       <Grid key={1} item xs={6}>
         {!memberGroup.selected && (
           <TransactionsTable
-            accountName={state.accountName}
-            transactions={state.actions}
+            accountName={stateAccount.accountName}
+            transactions={stateTrxs}
             history={props.history}
             org
           />
