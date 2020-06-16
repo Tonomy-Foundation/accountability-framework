@@ -6,6 +6,7 @@ import Eosio from "../services/Eosio";
 import TransactionsTable from "../components/TransactionsTable";
 import OrgViewProfile from "../components/OrgViewProfile";
 import OrgMembers from "../components/OrgMembers";
+import { useHistory } from "react-router-dom";
 
 function mapStateToProps(state) {
   return {
@@ -58,6 +59,8 @@ function OrgView(props) {
     })
   };
 
+  const history = useHistory();
+
   useEffect(() => {
     let eosio;
     let loggedinAccount;
@@ -70,7 +73,10 @@ function OrgView(props) {
 
     async function getAccount() {
       let accountRes = await eosio.dfuseClient.apiRequest("/v1/chain/get_account", "POST", null, {account_name: stateAccount.accountName})
-
+      if (accountRes.accountType === "person") {
+        const orgPath = '/people/' + stateAccount.accountName;
+        history.push(orgPath);
+      }
       let memberGroups = [];
       for (let perm1 of accountRes.permissions) {
         let level = 1;
@@ -98,12 +104,11 @@ function OrgView(props) {
 
       const query = "(auth:"+stateAccount.accountName+" OR receiver:"+stateAccount.accountName+")"
       let transactionRes = await eosio.dfuseClient.searchTransactions(query);
-
       let trxsToSet = [];
 
       for (let trxItem of transactionRes.transactions) {
         let trx = trxItem.lifecycle;
-        if (trx.transaction_status === "executed") {
+        if (trx.transaction_status === "executed" && trx.pub_keys) {
           const receiverAccount = trx.execution_trace.action_traces[0].act.account;
           let trxToPush = {
             tx_id: trx.id,
@@ -133,6 +138,8 @@ function OrgView(props) {
       }
 
       async function getAuth(trx, index) {
+        if (!trx.pubKey) return;
+
         const publicKey = trx.pubKey;
         const blockNum = trx.blockNum;
         let keyRes;
@@ -169,7 +176,6 @@ function OrgView(props) {
           <TransactionsTable
             accountName={stateAccount.accountName}
             transactions={stateTrxs}
-            history={props.history}
             org
           />
         )}

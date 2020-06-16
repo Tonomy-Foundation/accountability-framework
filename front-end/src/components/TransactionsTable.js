@@ -172,7 +172,6 @@ function TransactionsTable(props) {
   const history = useHistory();
 
   const routeToAccount = function(name) {
-    console.log(name)
     history.push("/people/" + name);
   }
   return (
@@ -278,9 +277,7 @@ function TransactionsTable(props) {
               </Typography>
               <Typography
                 className={classes.transactionAccount}
-                onClick={() => {
-                  routeToAccount(data.account);
-                }}
+                onClick={() => { routeToAccount(data.account); }}
               >
                 {data.account}
               </Typography>
@@ -293,9 +290,7 @@ function TransactionsTable(props) {
               {props.org && (
                 <Typography
                   className={classes.transactionAccount}
-                  onClick={() => {
-                    routeToAccount(data.auth);
-                  }}
+                  onClick={() => { routeToAccount(data.auth); }}
                 >
                   {data.auth}
                 </Typography>

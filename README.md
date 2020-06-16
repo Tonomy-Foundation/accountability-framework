@@ -24,6 +24,8 @@ Install all npm packages for FE and BE, and then initialize the blockchain with 
 ./app.sh init
 or
 ./app.sh init fast # same as above but does not reinstall software
+or
+./app.sh init superfast # same as above but does not recompile smart contract
 ```
 
 ---------
