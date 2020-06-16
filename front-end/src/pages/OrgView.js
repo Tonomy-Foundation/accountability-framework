@@ -33,7 +33,6 @@ function OrgView(props) {
     memberGroups: [],
     permissions: []
   })
-
   const [memberGroup, setMemberGroup] = useState({
     selected: null,
     members: []
@@ -100,9 +99,10 @@ function OrgView(props) {
       const query = "(auth:"+stateAccount.accountName+" OR receiver:"+stateAccount.accountName+")"
       let transactionRes = await eosio.dfuseClient.searchTransactions(query);
 
-      let trxsToSet = new Array(transactionRes.transactions.length);
+      let trxsToSet = [];
 
-      async function parseTransaction(trx, index) {
+      for (let trxItem of transactionRes.transactions) {
+        let trx = trxItem.lifecycle;
         if (trx.transaction_status === "executed") {
           const receiverAccount = trx.execution_trace.action_traces[0].act.account;
           let trxToPush = {
@@ -125,36 +125,31 @@ function OrgView(props) {
           trxToPush.type = type;
           trxToPush.data = data;
 
-          const publicKey = trx.pub_keys[0];
-          const blockNum = trx.execution_trace.action_traces[0].block_num;
-          let keyRes;
-          try {
-            keyRes = await eosio.dfuseClient.stateKeyAccounts(publicKey, {block_num: blockNum});
-            if (keyRes && keyRes.account_names[0]) trxToPush.auth = keyRes.account_names[0];
-            else trxToPush.auth = "";
-          } catch(err) {
-            console.error("error searching for key", {key: publicKey, block_num: blockNum}, err);
-          }
-          trxsToSet[index]=trxToPush;
+          trxToPush.pubKey = trx.pub_keys[0];
+          trxToPush.blockNum = trx.execution_trace.action_traces[0].block_num;
+
+          trxsToSet.push(trxToPush)
         }
       }
 
-      await Promise.all(transactionRes.transactions.map((trx, index) => parseTransaction(trx.lifecycle, index)));
+      async function getAuth(trx, index) {
+        const publicKey = trx.pubKey;
+        const blockNum = trx.blockNum;
+        let keyRes;
+        try {
+          keyRes = await eosio.dfuseClient.stateKeyAccounts(publicKey, {block_num: blockNum});
+          if (keyRes && keyRes.account_names[0]) trxsToSet[index].auth = keyRes.account_names[0];
+        } catch(err) {
+          console.error("error searching for key", {key: publicKey, block_num: blockNum}, err);
+        }
+      }
+      await Promise.all(trxsToSet.map((trx, index) => getAuth(trx, index)));
 
-      setStateTrxs(trxsToSet);
-      // setState({
-      //   accountName: state.accountName,
-      //   name: accountRes.name,
-      //   isMyAccount: loggedinAccount === state.accountName,
-      //   actions: trxsToSet,
-      //   organizations: accountRes.organizations,
-      //   memberGroups: memberGroups,
-      //   permissions: accountRes.permissions
-      // });
+      await setStateTrxs(trxsToSet);
     }
 
     getAccount();
-  }, [props.eosio]);
+  }, [props.eosio, stateAccount.accountName]);
 
   return (
     <Grid container className={classes.root} spacing={0}>
