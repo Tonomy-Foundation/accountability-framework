@@ -21,6 +21,7 @@ if (process.env.REACT_APP_NODE_ENV === "production") {
     settings.eosio.nodeos = "https://d1hxgr8mqh915l.cloudfront.net";
     settings.dfuseOptions.network = "";
     settings.eosio.blockExplorerUrl = "d1uzqj8k54wt9u.cloudfront.net";
+    settings.dfuseOptions.network = "d1hxgr8mqh915l.cloudfront.net"
 }
 
 export default settings;
