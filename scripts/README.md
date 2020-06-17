@@ -32,11 +32,11 @@ New EC2 instance
 Add to VPC and use security group
 
 ## CloudFront
-New CloudFront distribution
+New CloudFront distribution: Nodeos, React and Noedjs
 - Origin: ec2 instance url
 - Origin Protocol Policy: HTTP only
-- HTTP port: 8888
+- HTTP port: 8888, 5000 and 4000
 - Allowed HTTP Methods: GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE
-
+- Query String Forwarding and Caching: Forward all, cache based on all
 You can now connect with block explorer
 `https://local.bloks.io/?nodeUrl=du0rtkac8px3u.cloudfront.net&systemDomain=eosio`
