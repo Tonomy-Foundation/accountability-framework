@@ -8,7 +8,7 @@ set -o errexit   ## set -e : exit the script if any statement returns a non-true
 
 echo "Running wallet"
 keosd &
-sleep 0.4
+sleep 1
 
 echo "Creating key wallet"
 cleos wallet create --file /data/wallet.txt
