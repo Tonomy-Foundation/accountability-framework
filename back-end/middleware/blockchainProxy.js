@@ -12,8 +12,7 @@ const pre = async function(req, res, next) {
         return;
     }
 
-    const url = settings.dfuseOptions.secure ? "https://" : "http://" + settings.dfuseOptions.network + req.originalUrl;
-    
+    const url = settings.dfuseOptions.secure ? "https://" : "http://" + settings.dfuseOptions.network + req.url;
     options = {
         method: req.method,
         timeout: 10000
@@ -24,10 +23,8 @@ const pre = async function(req, res, next) {
         options.body = JSON.stringify(body);
         req.body = body;
     }
-    console.log("fetching from dfuse", url, options)
     const fetchResponse = await nodeFetch(url, options)
     const blockchainRes = await fetchResponse.json();
-    console.log(blockchainRes)
 
     req.blockchainRes = blockchainRes;
     req.blockchainResStatus = fetchResponse.status;
