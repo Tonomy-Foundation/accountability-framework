@@ -27,15 +27,20 @@ module.exports = async function (req, res) {
     .filter(transaction => transaction.lifecycle.transaction_status === "executed" && transaction.lifecycle.pub_keys)
     .map(transaction => {
       const transactionItem = trxItem.lifecycle;
-      const accountInfo = transactionItem.execution_trace.action_traces[0].act.account;
-      return accountInfo;
+      const accountName = transactionItem.execution_trace.action_traces[0].act.data.name;
+      const orgDoc = await accountController.findOne({ accountName: accountName });
+      return {
+        // mongodb fetch
+        name: orgDoc.name,
+        accountName: accountName
+      };
     });
 
-  // accountDocInfo = {
-  //   accountType: accountDoc.accountType,
-  //   name: accountDoc.name,
-  //   organizations: accountDoc.organizations
-  // };
+  accountDocInfo = {
+    accountType: accountDoc.accountType,
+    name: accountDoc.name,
+    organizations: accountInfo
+  };
 
   let retObj = req.addBlockchainRes(accountInfo);
   res.send(retObj);
