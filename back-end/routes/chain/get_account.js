@@ -13,7 +13,7 @@ module.exports = async function (req, res) {
   }
   // TODO: replace this with Dfuse API
   const accountDoc = await accountController.findOne({ accountName: accountName });
-  // Alternative to mongoDB
+// Alternative to mongoDB
   const query = `account:eosio action:neworg (data.active.accounts.permission.actor:${accountName} OR data.owner.accounts.permission.actor:${accountName})`;
   let transactionRes = await eosio.dfuseClient.searchTransactions(query);
   if (!accountDoc) {
@@ -28,26 +28,19 @@ module.exports = async function (req, res) {
     .map(transaction => {
       const transactionItem = transaction.lifecycle;
       const accountName = transactionItem.execution_trace.action_traces[0].act.data.name;
-      // const orgDoc = await accountController.findOne({ accountName });
-      return {
-        // mongodb fetch
-        // name: orgDoc.name,
-        accountName
-      };
+      return accountName;
     });
-  const accountInfo = await Promise.all(accountNamesInfo.map(async accountName => {
-    const orgDoc = await accountController.findOne({ accountName });
+  const orgInfo = await Promise.all(accountNamesInfo.map(async accountName => {
+    const orgDoc = await accountController.findOne({ accountName: accountName });
     return { name: orgDoc.name, accountName }
   }))
-
-  console.log(accountInfo);
 
   accountDocInfo = {
     accountType: accountDoc.accountType,
     name: accountDoc.name,
-    organizations: accountInfo
+    organizations: orgInfo
   };
 
-  let retObj = req.addBlockchainRes(accountInfo);
+  let retObj = req.addBlockchainRes(accountDocInfo);
   res.send(retObj);
 };
