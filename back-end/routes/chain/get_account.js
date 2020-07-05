@@ -16,20 +16,27 @@ module.exports = async function (req, res) {
   // Alternative to mongoDB
   const query = `account:eosio action:neworg (data.active.accounts.permission.actor:${accountName} OR data.owner.accounts.permission.actor:${accountName})`;
   let transactionRes = await eosio.dfuseClient.searchTransactions(query);
-  console.log(transactionRes);
-  debugger;
   if (!accountDoc) {
     res.status(404);
     res.send({ message: `Not found account with account name ${accountName}` });
     return; // not sure if this is needed...
   }
 
-  accountDocInfo = {
-    accountType: accountDoc.accountType,
-    name: accountDoc.name,
-    organizations: accountDoc.organizations
-  };
 
-  let retObj = req.addBlockchainRes(accountDocInfo);
+  const accountInfo = transactionRes.transactions
+    .filter(transaction => transaction.lifecycle.transaction_status === "executed" && transaction.lifecycle.pub_keys)
+    .map(transaction => {
+      const transactionItem = trxItem.lifecycle;
+      const accountInfo = transactionItem.execution_trace.action_traces[0].act.account;
+      return accountInfo;
+    });
+
+  // accountDocInfo = {
+  //   accountType: accountDoc.accountType,
+  //   name: accountDoc.name,
+  //   organizations: accountDoc.organizations
+  // };
+
+  let retObj = req.addBlockchainRes(accountInfo);
   res.send(retObj);
 };
