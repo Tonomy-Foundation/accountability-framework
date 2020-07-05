@@ -23,18 +23,24 @@ module.exports = async function (req, res) {
   }
 
 
-  const accountInfo = transactionRes.transactions
+  const accountNamesInfo = transactionRes.transactions
     .filter(transaction => transaction.lifecycle.transaction_status === "executed" && transaction.lifecycle.pub_keys)
     .map(transaction => {
-      const transactionItem = trxItem.lifecycle;
+      const transactionItem = transaction.lifecycle;
       const accountName = transactionItem.execution_trace.action_traces[0].act.data.name;
-      const orgDoc = await accountController.findOne({ accountName: accountName });
+      // const orgDoc = await accountController.findOne({ accountName });
       return {
         // mongodb fetch
-        name: orgDoc.name,
-        accountName: accountName
+        // name: orgDoc.name,
+        accountName
       };
     });
+  const accountInfo = await Promise.all(accountNamesInfo.map(async accountName => {
+    const orgDoc = await accountController.findOne({ accountName });
+    return { name: orgDoc.name, accountName }
+  }))
+
+  console.log(accountInfo);
 
   accountDocInfo = {
     accountType: accountDoc.accountType,
