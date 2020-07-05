@@ -13,7 +13,7 @@ module.exports = async function (req, res) {
   }
   // TODO: replace this with Dfuse API
   const accountDoc = await accountController.findOne({ accountName: accountName });
-// Alternative to mongoDB
+  // Alternative to mongoDB
   const query = `account:eosio action:neworg (data.active.accounts.permission.actor:${accountName} OR data.owner.accounts.permission.actor:${accountName})`;
   let transactionRes = await eosio.dfuseClient.searchTransactions(query);
   if (!accountDoc) {
@@ -22,25 +22,27 @@ module.exports = async function (req, res) {
     return; // not sure if this is needed...
   }
 
-
+  // get array of account names from dfuse tranactions log
   const accountNamesInfo = transactionRes.transactions
-    .filter(transaction => transaction.lifecycle.transaction_status === "executed" && transaction.lifecycle.pub_keys)
+    .filter(transaction => (transaction.lifecycle.transaction_status === "executed" && transaction.lifecycle.pub_keys))
     .map(transaction => {
       const transactionItem = transaction.lifecycle;
       const accountName = transactionItem.execution_trace.action_traces[0].act.data.name;
       return accountName;
     });
+
+  // get name from account name using mongodb
   const orgInfo = await Promise.all(accountNamesInfo.map(async accountName => {
     const orgDoc = await accountController.findOne({ accountName: accountName });
-    return { name: orgDoc.name, accountName }
+    return { name: orgDoc.name, accountName: accountName }
   }))
 
-  accountDocInfo = {
+  const accountDocInfo = {
     accountType: accountDoc.accountType,
     name: accountDoc.name,
     organizations: orgInfo
   };
 
-  let retObj = req.addBlockchainRes(accountDocInfo);
+  const retObj = req.addBlockchainRes(accountDocInfo);
   res.send(retObj);
 };
