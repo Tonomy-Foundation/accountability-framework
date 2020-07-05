@@ -31,9 +31,19 @@ module.exports = async function (req, res) {
       return accountName;
     });
 
+  if (!accountNamesInfo || accountNamesInfo.length === 0) {
+    res.status(404);
+    res.send({ message: `Not found account from dfuse with account name ${accountName}` });
+    return; // not sure if this is needed...
+  }
   // get name from account name using mongodb
   const orgInfo = await Promise.all(accountNamesInfo.map(async accountName => {
     const orgDoc = await accountController.findOne({ accountName: accountName });
+    if (!orgDoc) {
+      res.status(404);
+      res.send({ message: `Not found account with account name ${accountName}` });
+      return; // not sure if this is needed...
+    }
     return { name: orgDoc.name, accountName: accountName }
   }))
 
