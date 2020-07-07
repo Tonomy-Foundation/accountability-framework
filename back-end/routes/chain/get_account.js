@@ -11,15 +11,12 @@ module.exports = async function (req, res) {
     res.send({ message: 'req body should contain all the data!' });
     return;
   }
-  // TODO: replace this with Dfuse API
   const accountDoc = await accountController.findOne({ accountName: accountName });
-  // Alternative to mongoDB
   const query = `account:eosio action:neworg (data.active.accounts.permission.actor:${accountName} OR data.owner.accounts.permission.actor:${accountName})`;
   let transactionRes = await eosio.dfuseClient.searchTransactions(query);
   if (!accountDoc) {
     res.status(404);
     res.send({ message: `Not found account with account name ${accountName}` });
-    return; // not sure if this is needed...
   }
 
   // get array of account names from dfuse tranactions log
