@@ -1,34 +1,41 @@
 {
-  "name": "back-end",
-  "version": "0.0.1",
-  "description": "eosio nodejs backend",
-  "private": true,
-  "scripts": {
-    "start": "npm run-script config && REACT_APP_NODE_ENV=development nodemon server.js",
-    "docker": "npm run-script config && REACT_APP_NODE_ENV=docker nodemon server.js",
-    "bootstrap": "npm run-script config && REACT_APP_NODE_ENV=docker node test/bootstrap-accounts.js",
-    "config": ". ../config.sh"
-  },
-  "dependencies": {
-    "@dfuse/client": "^0.3.10",
-    "body-parser": "^1.19.0",
-    "cookie-parser": "~1.4.4",
-    "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "eosjs": "^20.0.3",
-    "eosjs-ecc": "^4.0.7",
-    "express": "^4.16.4",
-    "mongoose": "^5.9.10",
-    "morgan": "~1.9.1",
-    "winston": "^3.2.1",
-    "ws": "^7.3.0"
-  },
-  "devDependencies": {
-    "node-fetch": "^2.6.0",
-    "nodemon": "^2.0.3",
-    "prettier": "2.0.5",
-    "util": "^0.12.2"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "back-end",
+    "version": "0.0.1",
+    "description": "eosio nodejs backend",
+    "private": true,
+    "scripts": {
+        "start": "npm run-script config && REACT_APP_NODE_ENV=development nodemon server.js",
+        "docker": "npm run-script config && REACT_APP_NODE_ENV=docker nodemon server.js",
+        "bootstrap": "npm run-script config && REACT_APP_NODE_ENV=docker node test/bootstrap-accounts.js",
+        "config": ". ../config.sh"
+    },
+    "dependencies": {
+        "@dfuse/client": "^0.3.10",
+        "body-parser": "^1.19.0",
+        "cookie-parser": "~1.4.4",
+        "cors": "^2.8.5",
+        "debug": "~2.6.9",
+        "eosjs": "^20.0.3",
+        "eosjs-ecc": "^4.0.7",
+        "express": "^4.16.4",
+        "mongoose": "^5.9.10",
+        "morgan": "~1.9.1",
+        "node-fetch": "^2.6.0",
+        "winston": "^3.2.1",
+        "ws": "^7.3.0"
+    },
+    "devDependencies": {
+        "jslint": "^0.12.1",
+        "nodemon": "^2.0.3",
+        "prettier": "2.0.5",
+        "util": "^0.12.2"
+    },
+    "eslintConfig": {
+        "env": {
+            "es6": true,
+            "node": true
+        }
+    },
+    "author": "",
+    "license": "ISC"
 }

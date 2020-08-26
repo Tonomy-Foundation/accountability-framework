@@ -30,6 +30,7 @@ New EC2 instance
 - > 4Gb memory (t2.medium)
 - > 20Gb storage
 Add to VPC and use security group
+Set to have public DNS
 
 ## CloudFront
 New CloudFront distribution: Nodeos, React and Noedjs

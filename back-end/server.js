@@ -28,28 +28,28 @@ app.use(blockchainProxy.post);
 
 // Error handler
 app.use(function(err, req, res, next) {
-  console.error(err);
-  res.status(err.status || 500);
-  res.send(err.toString());
+    console.error(err);
+    res.status(err.status || 500);
+    res.send(err.toString());
 });
 
 try {
-  // mongoose.Promise = global.Promise;
-  mongoose.connect(settings.mongodb.url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }, (rej) => {
-    if (rej) {
-      console.error(rej.message);
-      process.exit();
-    }
-    console.log("Connected to database");
-    
-    app.listen(settings.port, () => {
-      console.log("Server listening on port " + settings.port);
+    // mongoose.Promise = global.Promise;
+    mongoose.connect(settings.mongodb.url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }, (rej) => {
+        if (rej) {
+            console.error(rej.message);
+            process.exit();
+        }
+        console.log("Connected to database");
+
+        app.listen(settings.port, () => {
+            console.log("Server listening on port " + settings.port);
+        });
     });
-  });
 } catch (err) {
-  console.error(err)
-  process.exit();
+    console.error(err)
+    process.exit();
 }

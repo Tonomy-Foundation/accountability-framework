@@ -19,18 +19,18 @@ const pre = async function(req, res, next) {
     }
     if (req.method === "POST" || req.method === "PUT") {
         let body = typeof req.body === "string" ? JSON.parse(req.body) : req.body
-        // body = JSON.stringify(body);
+            // body = JSON.stringify(body);
         options.body = JSON.stringify(body);
         req.body = body;
     }
-    const fetchResponse = await nodeFetch(url, options)
+    const fetchResponse = await nodeFetch(url, options);
     const blockchainRes = await fetchResponse.json();
 
     req.blockchainRes = blockchainRes;
     req.blockchainResStatus = fetchResponse.status;
 
-    req.addBlockchainRes = function(obj) {
-        let retObj = obj ? obj : {};
+    req.addBlockchainRes = function(obj = {}) {
+        let retObj = obj;
         for (let key in blockchainRes) {
             if (blockchainRes.hasOwnProperty(key)) {
                 retObj[key] = blockchainRes[key];
